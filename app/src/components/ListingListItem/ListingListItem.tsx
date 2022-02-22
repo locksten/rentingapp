@@ -29,7 +29,7 @@ export const ListingListItem: VFC<{ item: ListingListItem }> = ({ item }) => {
         <View style={tw("pt-1 w-full")}>
           <Title text={item.title} />
           <View style={tw("flex-row justify-between items-center")}>
-            <Text style={tw("font-semibold")}>€{item.cost}/day</Text>
+            <Text style={tw("font-semibold")}>{item.cost}€/day</Text>
             <View style={tw("flex-row items-center")}>
               <Text style={tw("text-gray-600")}>Alice Alison</Text>
               <View style={tw("w-1")} />

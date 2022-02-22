@@ -1,17 +1,16 @@
 import { AppImage } from "@components/AppImage"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { ListingListItem } from "@components/ListingListItem"
+import { MainButton } from "@components/MainButton"
 import { PersonCard } from "@components/PersonCard"
-import { CommonStackParams } from "@components/WithCommonStackScreens"
+import {
+  CommonStackNavigationProp,
+  CommonStackParams,
+} from "@components/WithCommonStackScreens"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 import { useTailwind } from "tailwind-rn/dist"
 
 const f: FeedbackListItem = {
@@ -41,6 +40,7 @@ export const ListingDetailsScreen: VFC<
   },
 }) => {
   const tw = useTailwind()
+  const { navigate } = useNavigation<CommonStackNavigationProp>()
   return (
     <View style={tw("flex-1")}>
       <FlatList
@@ -58,13 +58,12 @@ export const ListingDetailsScreen: VFC<
         ListFooterComponent={() => <View style={tw("h-4")} />}
       />
       <View style={tw("p-2 bg-white")}>
-        <TouchableOpacity
-          style={tw("p-2 bg-primary-500 items-center rounded-lg")}
-        >
-          <Text style={tw("text-white text-lg font-semibold")}>
-            Rent for €{item.cost} per day
-          </Text>
-        </TouchableOpacity>
+        <MainButton
+          text={`Rent for ${item.cost}€ per day`}
+          onPress={() =>
+            navigate("MakeRentingRequest", { id: item.id, listItem: item })
+          }
+        />
       </View>
     </View>
   )
@@ -97,11 +96,13 @@ export const MainDetails: VFC<{ item: ListingListItem }> = ({
       <View style={tw("px-4")}>
         <PersonCard
           renderBottom={() => (
-            <TouchableOpacity
-              style={tw("p-2 bg-primary-500 items-center rounded-lg")}
-            >
-              <Text style={tw("text-white font-semibold")}>Message</Text>
-            </TouchableOpacity>
+            <MainButton
+              secondary
+              text={"Message"}
+              onPress={() => {
+                console.log("message")
+              }}
+            />
           )}
         />
       </View>

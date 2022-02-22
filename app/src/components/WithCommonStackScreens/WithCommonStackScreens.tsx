@@ -6,9 +6,11 @@ import {
 import React, { FC } from "react"
 import { ListingDetailsScreen } from "@components/ListingDetailsScreen"
 import { ListingListItem } from "@components/ListingListItem"
+import { MakeRentingRequestScreen } from "@components/MakeRentingRequestScreen"
 
 export type CommonStackParams = {
   ListingDetail: { id: string; listItem: ListingListItem }
+  MakeRentingRequest: { id: string; listItem: ListingListItem }
 }
 
 const GenericlessCommonStack = () =>
@@ -32,6 +34,14 @@ export const WithCommonStackScreens: FC<{
         component={ListingDetailsScreen}
         options={() => ({
           title: "Listing",
+        })}
+      />
+      <Stack.Screen
+        name="MakeRentingRequest"
+        component={MakeRentingRequestScreen}
+        options={() => ({
+          title: "Request",
+          presentation: "modal",
         })}
       />
     </Stack.Navigator>
