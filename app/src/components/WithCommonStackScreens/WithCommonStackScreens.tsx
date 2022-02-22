@@ -1,0 +1,39 @@
+import { TypedNavigator } from "@react-navigation/native"
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack"
+import React, { FC } from "react"
+import { ListingDetailsScreen } from "@components/ListingDetailsScreen"
+import { ListingListItem } from "@components/ListingListItem"
+
+export type CommonStackParams = {
+  ListingDetail: { id: string; listItem: ListingListItem }
+}
+
+const GenericlessCommonStack = () =>
+  createNativeStackNavigator<CommonStackParams>()
+type CommonStack = ReturnType<typeof GenericlessCommonStack>
+
+export type CommonStackNavigationProp =
+  NativeStackNavigationProp<CommonStackParams>
+
+export const WithCommonStackScreens: FC<{
+  // https://github.com/react-navigation/react-navigation/issues/8139
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  stack: TypedNavigator<any, any, any, any, any>
+}> = ({ stack, children }) => {
+  const Stack = stack as CommonStack
+  return (
+    <Stack.Navigator>
+      {children}
+      <Stack.Screen
+        name="ListingDetail"
+        component={ListingDetailsScreen}
+        options={() => ({
+          title: "Listing",
+        })}
+      />
+    </Stack.Navigator>
+  )
+}
