@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES6",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "strictNullChecks": true,
+    "composite": true
+  },
+  "lib": ["es2015"],
+  "include": ["src"]
+}
