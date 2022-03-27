@@ -51,7 +51,7 @@ export const AppImage: VFC<
     ) : null
 
   return (
-    <View style={[tw(`flex-${horizontal ? "row" : "col"}`), style]}>
+    <View style={[tw(`${horizontal ? "flex-row" : "flex-col"}`), style]}>
       <Slot element={renderStart} />
       <TouchableOpacity
         disabled={!onPress}
@@ -65,8 +65,11 @@ export const AppImage: VFC<
         style={[
           {
             borderRadius,
+            borderWidth: 0.5,
+            borderColor: "#00000010",
           },
           tw("justify-center items-center"),
+          imageStyle,
         ]}
       >
         <Image
@@ -76,9 +79,7 @@ export const AppImage: VFC<
             {
               aspectRatio: aspectRatio,
               [mainAxisSizeName]: "100%",
-              borderWidth: 0.5,
               borderRadius: borderRadius,
-              borderColor: "#00000010",
             },
             tw("bg-gray-200 items-center"),
             imageStyle,

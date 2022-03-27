@@ -1,5 +1,6 @@
+import { AppText } from "@components/AppText"
 import React, { VFC } from "react"
-import { Text, TouchableOpacity } from "react-native"
+import { TouchableOpacity } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
 export const MainButton: VFC<{
@@ -19,7 +20,7 @@ export const MainButton: VFC<{
       ]}
       onPress={onPress}
     >
-      <Text
+      <AppText
         style={[
           tw("text-lg font-semibold"),
           secondary
@@ -28,7 +29,7 @@ export const MainButton: VFC<{
         ]}
       >
         {text}
-      </Text>
+      </AppText>
     </TouchableOpacity>
   )
 }

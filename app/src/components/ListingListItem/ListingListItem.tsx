@@ -1,9 +1,11 @@
 import { AppImage } from "@components/AppImage"
-import { pfp } from "@components/PersonCard"
+import { AppText } from "@components/AppText"
+import { names } from "@components/PersonCard"
+import { ProfilePicture } from "@components/ProfilePicture"
 import { CommonStackNavigationProp } from "@components/WithCommonStackScreens"
 import { useNavigation } from "@react-navigation/native"
 import React, { VFC } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
 export type ListingListItem = {
@@ -13,9 +15,29 @@ export type ListingListItem = {
   cost: number
 }
 
-export const ListingListItem: VFC<{ item: ListingListItem }> = ({ item }) => {
+export const items: ListingListItem[] = [
+  {
+    id: "0",
+    imageUri:
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    title: "Some camera or something or other",
+    cost: 5,
+  },
+  {
+    id: "1",
+    imageUri:
+      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
+    title: "Electra Townie Beach Cruiser Bike",
+    cost: 5,
+  },
+]
+
+export const ListingListItem: VFC<{
+  item: Omit<Partial<ListingListItem>, "id"> & { id: string }
+}> = ({ item: { id } }) => {
   const tw = useTailwind()
   const { navigate } = useNavigation<CommonStackNavigationProp>()
+  const item = { ...items[Number(id) % items.length], id: id }
   return (
     <AppImage
       vertical
@@ -29,16 +51,16 @@ export const ListingListItem: VFC<{ item: ListingListItem }> = ({ item }) => {
         <View style={tw("pt-1 w-full")}>
           <Title text={item.title} />
           <View style={tw("flex-row justify-between items-center")}>
-            <Text style={tw("font-semibold")}>{item.cost}€/day</Text>
-            <View style={tw("flex-row items-center")}>
-              <Text style={tw("text-gray-600")}>Alice Alison</Text>
+            <AppText style={tw("font-semibold pr-2")}>{item.cost}€/day</AppText>
+            <View style={tw("flex-row items-center flex-1")}>
+              <AppText
+                numberOfLines={1}
+                style={tw("flex-shrink text-gray-600")}
+              >
+                {names[Number(item.id) % names.length]}
+              </AppText>
               <View style={tw("w-1")} />
-              <AppImage
-                uri={pfp}
-                aspectRatio={1}
-                imageStyle={tw("h-7")}
-                borderRadius={999}
-              />
+              <ProfilePicture id={item.id} style={tw("h-8")} />
             </View>
           </View>
         </View>
@@ -50,7 +72,7 @@ export const ListingListItem: VFC<{ item: ListingListItem }> = ({ item }) => {
 export const Title: VFC<{ text: string }> = ({ text }) => {
   const tw = useTailwind()
   const Component: VFC<{ text?: string }> = ({ text }) => (
-    <Text
+    <AppText
       style={[
         tw("text-lg font-medium"),
         { lineHeight: 22 },
@@ -59,7 +81,7 @@ export const Title: VFC<{ text: string }> = ({ text }) => {
       numberOfLines={2}
     >
       {text ?? "\n"}
-    </Text>
+    </AppText>
   )
   return (
     <View style={tw("flex-row")}>

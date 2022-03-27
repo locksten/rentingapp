@@ -1,3 +1,4 @@
+import { AppText } from "@components/AppText"
 import { RootTabs } from "@components/RootTabNavigator"
 import {
   CommonStackParams,
@@ -9,7 +10,6 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
-import { Text } from "react-native"
 
 export type AccountScreenParams = CommonStackParams & {
   Home: undefined
@@ -32,4 +32,4 @@ export const AccountScreen: VFC<
 
 const HomeScreen: VFC<
   NativeStackScreenProps<AccountScreenParams, "Home">
-> = () => <Text>Account Home</Text>
+> = () => <AppText>Account Home</AppText>

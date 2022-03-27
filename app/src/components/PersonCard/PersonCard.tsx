@@ -1,15 +1,14 @@
+import { AppText } from "@components/AppText"
+import { ProfilePicture } from "@components/ProfilePicture"
 import Ionicons from "@expo/vector-icons/Ionicons"
-import { AppImage } from "@components/AppImage"
 import React, { VFC } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
-export const pfp =
-  "https://images.unsplash.com/photo-1621983266286-09645be8fd01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=64&q=80"
-
-export const PersonCard: VFC<{ renderBottom?: () => JSX.Element }> = ({
-  renderBottom,
-}) => {
+export const PersonCard: VFC<{
+  id: string
+  renderBottom?: () => JSX.Element
+}> = ({ id, renderBottom }) => {
   const tw = useTailwind()
   return (
     <View
@@ -18,7 +17,7 @@ export const PersonCard: VFC<{ renderBottom?: () => JSX.Element }> = ({
       )}
     >
       <View style={tw("w-full")}>
-        <NameAndPic name="Alice Alison" pfp={pfp} />
+        <NameAndPic id={id} />
         <View style={tw("h-4")} />
         <View style={tw("flex-row justify-around")}>
           <Ratings rating={4.3} ratingCount={12} />
@@ -31,20 +30,21 @@ export const PersonCard: VFC<{ renderBottom?: () => JSX.Element }> = ({
   )
 }
 
+export const names = ["Alice Alison", "Charlie Charmander"]
+
 const NameAndPic: VFC<{
-  name: string
-  pfp: string
-}> = ({ name, pfp }) => {
+  id: string
+}> = ({ id }) => {
   const tw = useTailwind()
   return (
-    <View style={tw("flex-row items-center justify-center")}>
-      <AppImage
-        uri={pfp}
-        aspectRatio={1}
-        imageStyle={tw("h-14")}
-        borderRadius={999}
-      />
-      <Text style={tw("pl-4 text-2xl font-semibold")}>{name}</Text>
+    <View style={tw(" items-center justify-center")}>
+      <ProfilePicture id={id} style={tw("h-16")} />
+      <AppText
+        numberOfLines={2}
+        style={tw("pt-1 text-2xl font-semibold flex-1")}
+      >
+        {names[Number(id) % names.length]}
+      </AppText>
     </View>
   )
 }
@@ -57,9 +57,9 @@ const Fact: VFC<{
   const tw = useTailwind()
   return (
     <View style={tw("items-center")}>
-      <Text style={tw("pb-1")}>{name}</Text>
+      <AppText style={tw("pb-1")}>{name}</AppText>
       <Ionicons name={icon} color={"black"} size={24} style={{ height: 24 }} />
-      <Text style={tw("pt-1 font-bold")}>{value}</Text>
+      <AppText style={tw("pt-1 font-bold")}>{value}</AppText>
     </View>
   )
 }
@@ -70,7 +70,7 @@ const Ratings: VFC<{ rating: number; ratingCount: number }> = ({
 }) => {
   return (
     <Fact
-      name="Rating"
+      name="Ratings"
       icon={"star-outline"}
       value={`${rating.toFixed(1)} (${ratingCount})`}
     />

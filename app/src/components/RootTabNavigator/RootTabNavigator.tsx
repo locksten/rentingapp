@@ -1,3 +1,9 @@
+import { AccountScreen, AccountScreenParams } from "@components/AccountScreen"
+import { BrowseScreen, BrowseScreenParams } from "@components/BrowseScreen"
+import {
+  MessagesScreen,
+  MessagesScreenParams,
+} from "@components/MessagesScreen"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import {
   BottomTabNavigationProp,
@@ -5,12 +11,6 @@ import {
 } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { VFC } from "react"
-import { AccountScreenParams, AccountScreen } from "@components/AccountScreen"
-import { BrowseScreen, BrowseScreenParams } from "@components/BrowseScreen"
-import {
-  MessagesScreen,
-  MessagesScreenParams,
-} from "@components/MessagesScreen"
 
 export type RootTabs = {
   Browse: NavigatorScreenParams<BrowseScreenParams>
@@ -23,7 +23,6 @@ export type RootTabsNavigationProp = BottomTabNavigationProp<RootTabs>
 export const RootTabNavigator: VFC = () => {
   const Tab = createBottomTabNavigator<RootTabs>()
   const isLoggedIn = false
-  // const { data: account } = useAccountDetail()
   return isLoggedIn === undefined ? null : (
     <Tab.Navigator
       initialRouteName={"Browse"}
@@ -55,7 +54,6 @@ export const RootTabNavigator: VFC = () => {
         name="Account"
         component={AccountScreen}
         options={{
-          // title: account?.username || "Account",
           title: "Account",
         }}
       />
