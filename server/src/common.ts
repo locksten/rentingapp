@@ -1,8 +1,8 @@
 import { ObjectRef } from "@pothos/core"
 
 export const nodeIsTypeOf = (objectRef: ObjectRef<unknown>) => ({
-  isTypeOf: (node: { __type: string }) => {
-    return node.__type === objectRef.name
+  isTypeOf: (node: { _type: string }) => {
+    return node._type === objectRef.name
   },
 })
 

@@ -114,20 +114,12 @@
   border-radius: 0.5rem
 }
 
-.rounded-xl {
-  border-radius: 0.75rem
-}
-
-.rounded-full {
-  border-radius: 9999px
-}
-
 .rounded-2xl {
   border-radius: 1rem
 }
 
-.rounded-3xl {
-  border-radius: 1.5rem
+.rounded-full {
+  border-radius: 9999px
 }
 
 .rounded-r-none {
@@ -296,6 +288,10 @@
   padding-bottom: 0.25rem
 }
 
+.text-base {
+  font-size: 16px
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem
@@ -309,10 +305,6 @@
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem
-}
-
-.text-base {
-  font-size: 16px
 }
 
 .font-bold {

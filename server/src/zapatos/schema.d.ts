@@ -71,11 +71,11 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
-      * **Listing.__type**
+      * **Listing._type**
       * - `text` in database
       * - Generated column
       */
-      __type: string;
+      _type: string;
     }
     export interface JSONSelectable {
       /**
@@ -121,11 +121,11 @@ declare module 'zapatos/schema' {
       */
       createdAt: db.TimestampTzString;
       /**
-      * **Listing.__type**
+      * **Listing._type**
       * - `text` in database
       * - Generated column
       */
-      __type: string;
+      _type: string;
     }
     export interface Whereable {
       /**
@@ -171,11 +171,11 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **Listing.__type**
+      * **Listing._type**
       * - `text` in database
       * - Generated column
       */
-      __type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -298,11 +298,11 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
-      * **User.__type**
+      * **User._type**
       * - `text` in database
       * - Generated column
       */
-      __type: string;
+      _type: string;
     }
     export interface JSONSelectable {
       /**
@@ -324,11 +324,11 @@ declare module 'zapatos/schema' {
       */
       createdAt: db.TimestampTzString;
       /**
-      * **User.__type**
+      * **User._type**
       * - `text` in database
       * - Generated column
       */
-      __type: string;
+      _type: string;
     }
     export interface Whereable {
       /**
@@ -350,11 +350,11 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **User.__type**
+      * **User._type**
       * - `text` in database
       * - Generated column
       */
-      __type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**

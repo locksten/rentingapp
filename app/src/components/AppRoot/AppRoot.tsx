@@ -3,16 +3,19 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { StatusBar } from "expo-status-bar"
 import React, { VFC } from "react"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { GraphQLProvider } from "src/graphql"
 import { TailwindProvider, useTailwind } from "tailwind-rn"
 import utilities from "tailwind.json"
 
 export const AppRoot: VFC = () => {
   return (
-    <TailwindProvider utilities={utilities}>
-      <SafeAreaProvider>
-        <Navigation />
-      </SafeAreaProvider>
-    </TailwindProvider>
+    <GraphQLProvider>
+      <TailwindProvider utilities={utilities}>
+        <SafeAreaProvider>
+          <Navigation />
+        </SafeAreaProvider>
+      </TailwindProvider>
+    </GraphQLProvider>
   )
 }
 

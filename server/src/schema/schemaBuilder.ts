@@ -5,10 +5,12 @@ import { AppContext } from "context"
 
 export const schemaBuilder = new SchemaBuilder<{
   Context: AppContext
+  DefaultFieldNullability: true
 }>({
   plugins: [RelayPlugin, DataloaderPlugin],
   relayOptions: {
     clientMutationId: "omit",
     cursorType: "String",
   },
+  defaultFieldNullability: true,
 })

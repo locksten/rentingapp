@@ -10,6 +10,7 @@ module.exports = function (api) {
           extensions: [".ts", ".tsx", ".json"],
           alias: {
             "@components": "./src/components",
+            "@gql": "./src/generated/gql",
           },
         },
       ],

@@ -1,7 +1,6 @@
 import { AppImage } from "@components/AppImage"
 import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
-import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { PersonCard } from "@components/PersonCard"
 import { RootTabsNavigationProp } from "@components/RootTabNavigator"
@@ -9,11 +8,13 @@ import {
   CommonStackNavigationProp,
   CommonStackParams,
 } from "@components/WithCommonStackScreens"
+import { DocumentType, gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
-import { FlatList, StyleSheet, Text, View } from "react-native"
+import { FlatList, StyleSheet, View } from "react-native"
 import { useTailwind } from "tailwind-rn/dist"
+import { useQuery } from "urql"
 
 const f: FeedbackListItem = {
   id: "",
@@ -32,15 +33,42 @@ const feedback: FeedbackListItem[] = [
   { ...f, id: "4" },
 ]
 
+export const Listing = gql(/* GraphQL */ `
+  query Listing($nodeId: ID!) {
+    node(id: $nodeId) {
+      __typename
+      id
+      ... on Listing {
+        title
+        description
+        imageUrl
+        dayPriceEuroCents
+      }
+    }
+  }
+`)
+
 export const ListingDetailsScreen: VFC<
   NativeStackScreenProps<CommonStackParams, "ListingDetail">
 > = ({
   route: {
-    params: { listItem: item },
+    params: { id },
   },
 }) => {
   const tw = useTailwind()
   const { navigate } = useNavigation<CommonStackNavigationProp>()
+
+  const [{ data, fetching, error }] = useQuery({
+    query: Listing,
+    variables: { nodeId: id },
+    requestPolicy: "cache-and-network",
+  })
+  const item = data?.node?.__typename === "Listing" ? data.node : undefined
+
+  if (fetching) return <AppText>Loading</AppText>
+  if (error || !item?.__typename)
+    return <AppText>Error {error?.message}</AppText>
+
   return (
     <View style={tw("flex-1")}>
       <FlatList
@@ -59,9 +87,9 @@ export const ListingDetailsScreen: VFC<
       />
       <View style={tw("p-2 bg-white")}>
         <MainButton
-          text={`Rent for ${item.cost}€ per day`}
+          text={`Rent for ${item.dayPriceEuroCents}€ per day`}
           onPress={() =>
-            navigate("MakeRentingRequest", { id: item.id, listItem: item })
+            navigate("MakeRentingRequest", { id: item.id, listItem: {} as any })
           }
         />
       </View>
@@ -69,16 +97,21 @@ export const ListingDetailsScreen: VFC<
   )
 }
 
-export const MainDetails: VFC<{ item: ListingListItem }> = ({
-  item: { imageUri, title, id },
-}) => {
+export const MainDetails: VFC<{
+  item: Omit<
+    NonNullable<DocumentType<typeof Listing>["node"]> & {
+      __typename: "Listing"
+    },
+    "__typename"
+  >
+}> = ({ item: { id, imageUrl, title, description } }) => {
   const tw = useTailwind()
   const { navigate } = useNavigation<RootTabsNavigationProp>()
   return (
     <View style={tw("justify-between")}>
       <AppImage
         horizontal
-        uri={imageUri}
+        uri={imageUrl}
         aspectRatio={16 / 9}
         borderRadius={0}
         imageStyle={tw("border-x-0 border-t-0")}
@@ -90,13 +123,7 @@ export const MainDetails: VFC<{ item: ListingListItem }> = ({
         <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText>
       </View>
       <View style={tw("h-1")} />
-      <AppText style={tw("px-4")}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pretium
-        vel orci ac tincidunt. Maecenas eu leo at arcu tempor dictum fermentum
-        vel felis. Sed sit amet tincidunt massa, eu pretium arcu. In et eros sit
-        amet enim pellentesque porttitor. Morbi imperdiet mollis placerat. Morbi
-        aliquet tortor viverra, ultricies purus nec, mollis orci.
-      </AppText>
+      {description && <AppText style={tw("px-4")}>{description}</AppText>}
       <View style={tw("h-4")} />
       <View style={tw("px-4")}>
         <PersonCard

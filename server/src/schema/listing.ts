@@ -1,5 +1,5 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
-import { idSort, nodeResolveId } from "common"
+import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
@@ -12,6 +12,7 @@ export const ListingRef = schemaBuilder.objectRef<Listing>("Listing")
 
 export const Listing = schemaBuilder.loadableNode(ListingRef, {
   ...nodeResolveId,
+  ...nodeIsTypeOf(ListingRef),
   ...idSort,
   load: (ids: number[], { pool }) =>
     db.select("Listing", { id: dc.isIn(ids) }).run(pool),

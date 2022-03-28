@@ -11,7 +11,7 @@ import { useTailwind } from "tailwind-rn"
 
 export const AppImage: VFC<
   {
-    uri?: string
+    uri?: string | null
     aspectRatio: number
     renderStart?: () => JSX.Element
     renderEnd?: () => JSX.Element
@@ -73,7 +73,7 @@ export const AppImage: VFC<
         ]}
       >
         <Image
-          source={{ uri }}
+          source={{ uri: uri ?? undefined }}
           resizeMode="cover"
           style={[
             {

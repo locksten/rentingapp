@@ -149,22 +149,6 @@
 			"borderBottomLeftRadius": 8
 		}
 	},
-	"rounded-xl": {
-		"style": {
-			"borderTopLeftRadius": 12,
-			"borderTopRightRadius": 12,
-			"borderBottomRightRadius": 12,
-			"borderBottomLeftRadius": 12
-		}
-	},
-	"rounded-full": {
-		"style": {
-			"borderTopLeftRadius": 9999,
-			"borderTopRightRadius": 9999,
-			"borderBottomRightRadius": 9999,
-			"borderBottomLeftRadius": 9999
-		}
-	},
 	"rounded-2xl": {
 		"style": {
 			"borderTopLeftRadius": 16,
@@ -173,12 +157,12 @@
 			"borderBottomLeftRadius": 16
 		}
 	},
-	"rounded-3xl": {
+	"rounded-full": {
 		"style": {
-			"borderTopLeftRadius": 24,
-			"borderTopRightRadius": 24,
-			"borderBottomRightRadius": 24,
-			"borderBottomLeftRadius": 24
+			"borderTopLeftRadius": 9999,
+			"borderTopRightRadius": 9999,
+			"borderBottomRightRadius": 9999,
+			"borderBottomLeftRadius": 9999
 		}
 	},
 	"rounded-r-none": {
@@ -408,6 +392,11 @@
 			"paddingBottom": 4
 		}
 	},
+	"text-base": {
+		"style": {
+			"fontSize": 16
+		}
+	},
 	"text-lg": {
 		"style": {
 			"fontSize": 18,
@@ -424,11 +413,6 @@
 		"style": {
 			"fontSize": 24,
 			"lineHeight": 32
-		}
-	},
-	"text-base": {
-		"style": {
-			"fontSize": 16
 		}
 	},
 	"font-bold": {

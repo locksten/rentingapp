@@ -9,7 +9,7 @@ import { ListingListItem } from "@components/ListingListItem"
 import { MakeRentingRequestScreen } from "@components/MakeRentingRequestScreen"
 
 export type CommonStackParams = {
-  ListingDetail: { id: string; listItem: ListingListItem }
+  ListingDetail: { id: string }
   MakeRentingRequest: { id: string; listItem: ListingListItem }
 }
 

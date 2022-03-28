@@ -3,6 +3,7 @@ import { AppText } from "@components/AppText"
 import { names } from "@components/PersonCard"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { CommonStackNavigationProp } from "@components/WithCommonStackScreens"
+import { DocumentType, gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
 import React, { VFC } from "react"
 import { View } from "react-native"
@@ -32,32 +33,51 @@ export const items: ListingListItem[] = [
   },
 ]
 
+const ListingListItemFragment = gql(/* GraphQL */ `
+  fragment ListingListItemFragment on Listing {
+    __typename
+    id
+    title
+    imageUrl
+    dayPriceEuroCents
+    owner {
+      __typename
+      id
+      name
+    }
+  }
+`)
+
 export const ListingListItem: VFC<{
-  item: Omit<Partial<ListingListItem>, "id"> & { id: string }
-}> = ({ item: { id } }) => {
+  item: DocumentType<typeof ListingListItemFragment>
+}> = ({ item }) => {
+  const { id, title, imageUrl, dayPriceEuroCents, owner } = item
   const tw = useTailwind()
   const { navigate } = useNavigation<CommonStackNavigationProp>()
-  const item = { ...items[Number(id) % items.length], id: id }
   return (
     <AppImage
       vertical
-      uri={item.imageUri}
+      uri={imageUrl}
       aspectRatio={16 / 9}
       imageStyle={tw("h-32")}
       onPress={() => {
-        navigate("ListingDetail", { id: item.id, listItem: item })
+        navigate("ListingDetail", { id })
       }}
       renderEnd={() => (
         <View style={tw("pt-1 w-full")}>
-          <Title text={item.title} />
+          {title && <Title text={title} />}
           <View style={tw("flex-row justify-between items-center")}>
-            <AppText style={tw("font-semibold pr-2")}>{item.cost}€/day</AppText>
+            {dayPriceEuroCents && (
+              <AppText style={tw("font-semibold pr-2")}>
+                {dayPriceEuroCents}€/day
+              </AppText>
+            )}
             <View style={tw("flex-row items-center flex-1")}>
               <AppText
                 numberOfLines={1}
                 style={tw("flex-shrink text-gray-600")}
               >
-                {names[Number(item.id) % names.length]}
+                {owner?.name}
               </AppText>
               <View style={tw("w-1")} />
               <ProfilePicture id={item.id} style={tw("h-8")} />
