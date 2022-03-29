@@ -6,6 +6,12 @@ export const nodeIsTypeOf = (objectRef: ObjectRef<unknown>) => ({
   },
 })
 
+export const objectIsTypeOf = (objectRef: ObjectRef<unknown>) => ({
+  isTypeOf: (object: { _type: string }) => {
+    return object._type === objectRef.name
+  },
+})
+
 export const nodeResolveId = {
   id: {
     resolve: <T>(node: { id: T }) => node.id,

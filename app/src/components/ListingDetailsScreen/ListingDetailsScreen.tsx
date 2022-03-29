@@ -3,7 +3,6 @@ import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
 import { PersonCard } from "@components/PersonCard"
-import { RootTabsNavigationProp } from "@components/RootTabNavigator"
 import {
   CommonStackNavigationProp,
   CommonStackParams,
@@ -43,6 +42,9 @@ export const Listing = gql(/* GraphQL */ `
         description
         imageUrl
         dayPriceEuroCents
+        owner {
+          ...PersonCardFragment
+        }
       }
     }
   }
@@ -104,9 +106,8 @@ export const MainDetails: VFC<{
     },
     "__typename"
   >
-}> = ({ item: { id, imageUrl, title, description } }) => {
+}> = ({ item: { imageUrl, title, description, owner } }) => {
   const tw = useTailwind()
-  const { navigate } = useNavigation<RootTabsNavigationProp>()
   return (
     <View style={tw("justify-between")}>
       <AppImage
@@ -125,20 +126,7 @@ export const MainDetails: VFC<{
       <View style={tw("h-1")} />
       {description && <AppText style={tw("px-4")}>{description}</AppText>}
       <View style={tw("h-4")} />
-      <View style={tw("px-4")}>
-        <PersonCard
-          id={id}
-          renderBottom={() => (
-            <MainButton
-              secondary
-              text={"Message"}
-              onPress={() => {
-                navigate("Messages", { screen: "Chat", initial: false })
-              }}
-            />
-          )}
-        />
-      </View>
+      <View style={tw("px-4")}>{owner && <PersonCard person={owner} />}</View>
       <View style={tw("h-4")} />
     </View>
   )

@@ -1,15 +1,43 @@
 import { AppText } from "@components/AppText"
+import { MainButton } from "@components/MainButton"
 import { ProfilePicture } from "@components/ProfilePicture"
+import { RootTabsNavigationProp } from "@components/RootTabNavigator"
 import Ionicons from "@expo/vector-icons/Ionicons"
+import { DocumentType, gql } from "@gql/gql"
+import { useNavigation } from "@react-navigation/native"
 import React, { VFC } from "react"
 import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
+const PersonCardFragment = gql(/* GraphQL */ `
+  fragment PersonCardFragment on User {
+    __typename
+    id
+    isMe
+    name
+    listingCount
+  }
+`)
+
 export const PersonCard: VFC<{
-  id: string
-  renderBottom?: () => JSX.Element
-}> = ({ id, renderBottom }) => {
+  person: DocumentType<typeof PersonCardFragment>
+}> = ({ person }) => {
   const tw = useTailwind()
+  const { navigate } = useNavigation<RootTabsNavigationProp>()
+  const { id, isMe, listingCount, name } = person
+
+  const NameAndPic = (
+    <View style={tw(" items-center justify-center")}>
+      <ProfilePicture id={id} style={tw("h-16")} />
+      <AppText
+        numberOfLines={2}
+        style={tw("pt-1 text-2xl font-semibold flex-1")}
+      >
+        {name}
+      </AppText>
+    </View>
+  )
+
   return (
     <View
       style={tw(
@@ -17,37 +45,28 @@ export const PersonCard: VFC<{
       )}
     >
       <View style={tw("w-full")}>
-        <NameAndPic id={id} />
+        {NameAndPic}
         <View style={tw("h-4")} />
-        <View style={tw("flex-row justify-around")}>
+        <View style={tw("flex-row justify-around pb-4")}>
           <Ratings rating={4.3} ratingCount={12} />
           <Rentings asOwner={23} asRenter={8} />
-          <Listings listingCount={12} />
+          <Listings listingCount={listingCount} />
         </View>
-        {renderBottom && <View style={tw("pt-4")}>{renderBottom?.()}</View>}
+        {isMe || (
+          <MainButton
+            secondary
+            text={"Message"}
+            onPress={() => {
+              navigate("Messages", { screen: "Chat", initial: false })
+            }}
+          />
+        )}
       </View>
     </View>
   )
 }
 
 export const names = ["Alice Alison", "Charlie Charmander"]
-
-const NameAndPic: VFC<{
-  id: string
-}> = ({ id }) => {
-  const tw = useTailwind()
-  return (
-    <View style={tw(" items-center justify-center")}>
-      <ProfilePicture id={id} style={tw("h-16")} />
-      <AppText
-        numberOfLines={2}
-        style={tw("pt-1 text-2xl font-semibold flex-1")}
-      >
-        {names[Number(id) % names.length]}
-      </AppText>
-    </View>
-  )
-}
 
 const Fact: VFC<{
   icon: keyof typeof Ionicons["glyphMap"]
@@ -86,6 +105,8 @@ const Rentings: VFC<{ asOwner: number; asRenter: number }> = ({
   )
 }
 
-const Listings: VFC<{ listingCount: number }> = ({ listingCount }) => {
+const Listings: VFC<{ listingCount?: number | null }> = ({
+  listingCount = 0,
+}) => {
   return <Fact name="Listings" icon={"list"} value={`${listingCount}`} />
 }

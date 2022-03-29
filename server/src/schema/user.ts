@@ -18,6 +18,13 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     db.select("User", { id: dc.isIn(ids) }).run(pool),
   fields: (t) => ({
     name: t.exposeString("name"),
+    isMe: t.boolean({
+      resolve: ({ id }, _args, { auth }) => id === auth?.id,
+    }),
+    listingCount: t.int({
+      resolve: ({ id }, _args, { pool }) =>
+        db.count("Listing", { ownerId: id }).run(pool),
+    }),
   }),
 })
 
