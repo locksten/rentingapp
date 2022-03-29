@@ -54,6 +54,11 @@
 			"height": 40
 		}
 	},
+	"h-2": {
+		"style": {
+			"height": 8
+		}
+	},
 	"w-4": {
 		"style": {
 			"width": 16
@@ -69,6 +74,11 @@
 			"width": 4
 		}
 	},
+	"w-2": {
+		"style": {
+			"width": 8
+		}
+	},
 	"flex-1": {
 		"style": {
 			"flexGrow": 1,
@@ -81,9 +91,19 @@
 			"flexShrink": 1
 		}
 	},
+	"flex-shrink-0": {
+		"style": {
+			"flexShrink": 0
+		}
+	},
 	"flex-grow": {
 		"style": {
 			"flexGrow": 1
+		}
+	},
+	"flex-grow-0": {
+		"style": {
+			"flexGrow": 0
 		}
 	},
 	"flex-row": {
@@ -94,6 +114,11 @@
 	"flex-col": {
 		"style": {
 			"flexDirection": "column"
+		}
+	},
+	"content-center": {
+		"style": {
+			"alignContent": "center"
 		}
 	},
 	"content-end": {
@@ -114,6 +139,11 @@
 	"items-center": {
 		"style": {
 			"alignItems": "center"
+		}
+	},
+	"items-stretch": {
+		"style": {
+			"alignItems": "stretch"
 		}
 	},
 	"justify-start": {
@@ -139,6 +169,11 @@
 	"justify-around": {
 		"style": {
 			"justifyContent": "space-around"
+		}
+	},
+	"self-stretch": {
+		"style": {
+			"alignSelf": "stretch"
 		}
 	},
 	"rounded-lg": {
@@ -342,6 +377,12 @@
 			"paddingBottom": 12
 		}
 	},
+	"py-2": {
+		"style": {
+			"paddingTop": 8,
+			"paddingBottom": 8
+		}
+	},
 	"pl-4": {
 		"style": {
 			"paddingLeft": 16
@@ -390,6 +431,16 @@
 	"pb-1": {
 		"style": {
 			"paddingBottom": 4
+		}
+	},
+	"pt-2": {
+		"style": {
+			"paddingTop": 8
+		}
+	},
+	"pb-4": {
+		"style": {
+			"paddingBottom": 16
 		}
 	},
 	"text-base": {

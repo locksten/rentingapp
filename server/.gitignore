@@ -4,6 +4,9 @@
 
 docker/rentingapp/postgres/volume
 
+firebaseAdminKey.json
+
+
 coverage/
 
 build/

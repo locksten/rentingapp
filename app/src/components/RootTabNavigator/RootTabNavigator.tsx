@@ -4,6 +4,14 @@ import {
   MessagesScreen,
   MessagesScreenParams,
 } from "@components/MessagesScreen"
+import {
+  MyListingsScreen,
+  MyListingsScreenParams,
+} from "@components/MyListingsScreen"
+import {
+  MyRentalsScreen,
+  MyRentalsScreenParams,
+} from "@components/MyRentalsScreen"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import {
   BottomTabNavigationProp,
@@ -11,19 +19,22 @@ import {
 } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { VFC } from "react"
+import { useCurrentUser } from "src/auth"
 
 export type RootTabs = {
   Browse: NavigatorScreenParams<BrowseScreenParams>
   Messages: NavigatorScreenParams<MessagesScreenParams>
   Account: NavigatorScreenParams<AccountScreenParams>
+  MyListings: NavigatorScreenParams<MyListingsScreenParams>
+  MyRentals: NavigatorScreenParams<MyRentalsScreenParams>
 }
 
 export type RootTabsNavigationProp = BottomTabNavigationProp<RootTabs>
 
 export const RootTabNavigator: VFC = () => {
   const Tab = createBottomTabNavigator<RootTabs>()
-  const isLoggedIn = false
-  return isLoggedIn === undefined ? null : (
+  const user = useCurrentUser()
+  return (
     <Tab.Navigator
       initialRouteName={"Browse"}
       screenOptions={({ route }) => ({
@@ -34,6 +45,10 @@ export const RootTabNavigator: VFC = () => {
               return <Ionicons name={"md-search"} color={color} size={size} />
             case "Messages":
               return <Ionicons name={"mail"} color={color} size={size} />
+            case "MyListings":
+              return <Ionicons name={"arrow-up"} color={color} size={size} />
+            case "MyRentals":
+              return <Ionicons name={"arrow-down"} color={color} size={size} />
             case "Account":
               return <Ionicons name={"person"} color={color} size={size} />
           }
@@ -45,11 +60,29 @@ export const RootTabNavigator: VFC = () => {
         component={BrowseScreen}
         options={{ title: "Browse" }}
       />
-      <Tab.Screen
-        name="Messages"
-        component={MessagesScreen}
-        options={{ title: "Messages" }}
-      />
+      {user && (
+        <>
+          <Tab.Screen
+            name="Messages"
+            component={MessagesScreen}
+            options={{ title: "Messages" }}
+          />
+          <Tab.Screen
+            name="MyRentals"
+            component={MyRentalsScreen}
+            options={{
+              title: "My Rentlas",
+            }}
+          />
+          <Tab.Screen
+            name="MyListings"
+            component={MyListingsScreen}
+            options={{
+              title: "My Listings",
+            }}
+          />
+        </>
+      )}
       <Tab.Screen
         name="Account"
         component={AccountScreen}

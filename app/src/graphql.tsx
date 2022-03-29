@@ -1,7 +1,15 @@
+import { authExchange } from "@urql/exchange-auth"
 import { cacheExchange } from "@urql/exchange-graphcache"
 import type { IntrospectionData } from "@urql/exchange-graphcache/dist/types/ast"
 import React, { FC } from "react"
-import { createClient, dedupExchange, fetchExchange, Provider } from "urql"
+import { getAuthState } from "src/auth"
+import {
+  createClient,
+  dedupExchange,
+  fetchExchange,
+  makeOperation,
+  Provider,
+} from "urql"
 import rawSchema from "./generated/graphql-schema.json"
 
 const schema = rawSchema as IntrospectionData
@@ -14,6 +22,33 @@ const client = createClient({
   url: "http://localhost:4000/graphql",
   exchanges: [
     dedupExchange,
+    authExchange({
+      getAuth: async () => {
+        const currentUser = getAuthState().currentUser
+        if (!currentUser?.displayName) return null
+        const token = (await currentUser?.getIdToken()) ?? null
+        return token ? { token, refreshToken: null } : null
+      },
+      addAuthToOperation: ({ operation, authState }: any) => {
+        if (!authState?.token) return operation
+
+        const fetchOptions =
+          typeof operation.context.fetchOptions === "function"
+            ? operation.context.fetchOptions()
+            : operation.context.fetchOptions || {}
+
+        return makeOperation(operation.kind, operation, {
+          ...operation.context,
+          fetchOptions: {
+            ...fetchOptions,
+            headers: {
+              ...fetchOptions.headers,
+              Authorization: `Bearer ${authState.token}`,
+            },
+          },
+        })
+      },
+    }),
     cacheExchange({
       schema,
       resolvers: {

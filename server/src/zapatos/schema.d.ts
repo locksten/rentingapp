@@ -292,6 +292,12 @@ declare module 'zapatos/schema' {
       */
       name: string;
       /**
+      * **User.isAdmin**
+      * - `bool` in database
+      * - Nullable, default: `false`
+      */
+      isAdmin: boolean | null;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -317,6 +323,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       name: string;
+      /**
+      * **User.isAdmin**
+      * - `bool` in database
+      * - Nullable, default: `false`
+      */
+      isAdmin: boolean | null;
       /**
       * **User.createdAt**
       * - `timestamptz` in database
@@ -344,6 +356,12 @@ declare module 'zapatos/schema' {
       */
       name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **User.isAdmin**
+      * - `bool` in database
+      * - Nullable, default: `false`
+      */
+      isAdmin?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -370,6 +388,12 @@ declare module 'zapatos/schema' {
       */
       name: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **User.isAdmin**
+      * - `bool` in database
+      * - Nullable, default: `false`
+      */
+      isAdmin?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -389,6 +413,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **User.isAdmin**
+      * - `bool` in database
+      * - Nullable, default: `false`
+      */
+      isAdmin?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment>;
       /**
       * **User.createdAt**
       * - `timestamptz` in database

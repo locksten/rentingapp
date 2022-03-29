@@ -54,7 +54,8 @@ const ListingInput = schemaBuilder.inputType("ListingInput", {
 
 schemaBuilder.mutationType({
   fields: (t) => ({
-    createListing: t.field({
+    createListing: t.authField({
+      authScopes: { user: true },
       type: Listing,
       args: {
         input: t.arg({ type: ListingInput, required: true }),
@@ -62,7 +63,7 @@ schemaBuilder.mutationType({
       resolve: async (
         _root,
         { input: { title, description, imageUrl, dayPriceEuroCents } },
-        { pool },
+        { pool, auth },
       ) =>
         await db
           .insert("Listing", {
@@ -70,7 +71,7 @@ schemaBuilder.mutationType({
             description,
             imageUrl,
             dayPriceEuroCents,
-            ownerId: "alice",
+            ownerId: auth.id,
           })
           .run(pool),
     }),

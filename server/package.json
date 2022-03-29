@@ -25,11 +25,13 @@
     "@pothos/core": "^3.3.3",
     "@pothos/plugin-dataloader": "^3.3.1",
     "@pothos/plugin-relay": "^3.6.0",
+    "@pothos/plugin-scope-auth": "^3.4.2",
     "@urql/introspection": "^0.3.1",
     "apollo-server-express": "^3.5.0",
     "cross-fetch": "^3.1.4",
     "dataloader": "^2.0.0",
     "express": "^4.17.2",
+    "firebase-admin": "^10.0.2",
     "graphql": "^16.2.0",
     "pg": "^8.7.1"
   },

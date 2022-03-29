@@ -2,6 +2,7 @@ drop table if exists "User" cascade;
 create table "User" (
     "id" text primary key,
     "name" text not null,
+    "isAdmin" boolean default FALSE,
     "createdAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('User') stored
 );
