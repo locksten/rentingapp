@@ -21,4 +21,5 @@ export const getToken = ({ authorization }: IncomingHttpHeaders) =>
 export const decodedFirebaseTokenFromHeader = (headers: IncomingHttpHeaders) =>
   decodeFirebaseToken(getToken(headers))
 
-export const getFirebaseUserById = (id?: string) => id && getAuth().getUser(id)
+export const getFirebaseUserById = (id?: string) =>
+  id ? getAuth().getUser(id) : undefined

@@ -1,16 +1,17 @@
+import { CreateListingScreen } from "@components/CreateListingScreen"
+import { ListingDetailsScreen } from "@components/ListingDetailsScreen"
+import { MakeRentingRequestScreen } from "@components/MakeRentingRequestScreen"
 import { TypedNavigator } from "@react-navigation/native"
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack"
 import React, { FC } from "react"
-import { ListingDetailsScreen } from "@components/ListingDetailsScreen"
-import { ListingListItem } from "@components/ListingListItem"
-import { MakeRentingRequestScreen } from "@components/MakeRentingRequestScreen"
 
 export type CommonStackParams = {
   ListingDetail: { id: string }
-  MakeRentingRequest: { id: string; listItem: ListingListItem }
+  MakeRentingRequest: { id: string }
+  CreateListing: undefined
 }
 
 const GenericlessCommonStack = () =>
@@ -42,6 +43,13 @@ export const WithCommonStackScreens: FC<{
         options={() => ({
           title: "Request",
           presentation: "modal",
+        })}
+      />
+      <Stack.Screen
+        name="CreateListing"
+        component={CreateListingScreen}
+        options={() => ({
+          title: "Create Listing",
         })}
       />
     </Stack.Navigator>

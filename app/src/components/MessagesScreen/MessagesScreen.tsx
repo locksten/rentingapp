@@ -1,6 +1,8 @@
 import { AppImage } from "@components/AppImage"
+import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
+import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
 import { AppText } from "@components/AppText"
-import { items } from "@components/ListingListItem"
+import { items } from "@components/ListingListItem/ListingListItem"
 import { names } from "@components/PersonCard"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { RootTabs } from "@components/RootTabNavigator"
@@ -11,7 +13,6 @@ import {
 } from "@components/WithCommonStackScreens"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
-import { useHeaderHeight } from "@react-navigation/elements"
 import { useNavigation } from "@react-navigation/native"
 import {
   createNativeStackNavigator,
@@ -19,14 +20,7 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { ScrollView, TextInput, TouchableOpacity, View } from "react-native"
 import { useTailwind } from "tailwind-rn/dist"
 
 export type MessagesScreenParams = CommonStackParams & {
@@ -113,12 +107,12 @@ const HomeScreen: VFC<
               >
                 <View style={tw("-ml-16 pr-8 items-end")}>
                   <AppImage
-                    uri={items[Number(itemId) % items.length].imageUri}
+                    uri={items[0].imageUri}
                     aspectRatio={16 / 9}
                     imageStyle={tw("h-full rounded-r-none")}
                   />
                   <ProfilePicture
-                    id={personId}
+                    uri={"https://www.example.com"}
                     style={tw("absolute h-full")}
                     imageStyle={{
                       borderWidth: 0.5,
@@ -166,20 +160,9 @@ const ChatScreen: VFC<
   NativeStackScreenProps<MessagesScreenParams, "Chat">
 > = () => {
   const tw = useTailwind()
-  const headerHeight = useHeaderHeight()
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={headerHeight}
-      style={tw("flex-1")}
-    >
-      <ScrollView
-        contentContainerStyle={tw("flex-grow justify-end")}
-        keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
-        ref={(ref) => {
-          ref?.scrollToEnd({ animated: false })
-        }}
-      >
+    <AppKeyboardAvoidingView>
+      <AppKeyboardAvoidingViewScrollView>
         <SeparatedBy separator={<View style={tw("h-4")} />} start end>
           {[...Array(15).keys()]
             .map((i) => ({
@@ -208,7 +191,7 @@ const ChatScreen: VFC<
               )
             })}
         </SeparatedBy>
-      </ScrollView>
+      </AppKeyboardAvoidingViewScrollView>
       <View style={tw("p-2 bg-white border-t border-neutral-200")}>
         <View
           style={tw(
@@ -235,6 +218,6 @@ const ChatScreen: VFC<
           </TouchableOpacity>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </AppKeyboardAvoidingView>
   )
 }

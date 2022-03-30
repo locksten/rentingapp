@@ -9,6 +9,7 @@ import { getIntrospectionQuery } from "graphql"
 import fetch from "cross-fetch"
 import { schema } from "schema/schema"
 import { newAppContext } from "context"
+import { getFirebaseUserById } from "auth"
 
 const server = new ApolloServer({
   schema,

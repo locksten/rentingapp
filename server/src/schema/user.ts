@@ -1,4 +1,5 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
+import { getFirebaseUserById } from "auth"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
 import { Listing } from "schema/listing"
@@ -20,6 +21,9 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     name: t.exposeString("name"),
     isMe: t.boolean({
       resolve: ({ id }, _args, { auth }) => id === auth?.id,
+    }),
+    imageUrl: t.string({
+      resolve: async ({ id }) => (await getFirebaseUserById(id))?.photoURL,
     }),
     listingCount: t.int({
       resolve: ({ id }, _args, { pool }) =>

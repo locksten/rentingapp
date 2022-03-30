@@ -20,7 +20,7 @@ export const MainButton: VFC<MainButtonProps> = ({
   return (
     <TouchableOpacity
       style={[
-        tw("p-1 items-center rounded-lg"),
+        tw("py-1 px-2 items-center rounded-lg"),
         secondary
           ? [tw("bg-primary-100"), onPress ? undefined : tw("bg-gray-100")]
           : [tw("bg-primary-500"), onPress ? undefined : tw("bg-gray-500")],

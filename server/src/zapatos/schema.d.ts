@@ -59,6 +59,12 @@ declare module 'zapatos/schema' {
       */
       dayPriceEuroCents: number;
       /**
+      * **Listing.depositEuroCents**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      depositEuroCents: number | null;
+      /**
       * **Listing.ownerId**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -108,6 +114,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       dayPriceEuroCents: number;
+      /**
+      * **Listing.depositEuroCents**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      depositEuroCents: number | null;
       /**
       * **Listing.ownerId**
       * - `text` in database
@@ -159,6 +171,12 @@ declare module 'zapatos/schema' {
       */
       dayPriceEuroCents?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.depositEuroCents**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      depositEuroCents?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing.ownerId**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -209,6 +227,12 @@ declare module 'zapatos/schema' {
       */
       dayPriceEuroCents: number | db.Parameter<number> | db.SQLFragment;
       /**
+      * **Listing.depositEuroCents**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      depositEuroCents?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
       * **Listing.ownerId**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -252,6 +276,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       dayPriceEuroCents?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Listing.depositEuroCents**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      depositEuroCents?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
       /**
       * **Listing.ownerId**
       * - `text` in database

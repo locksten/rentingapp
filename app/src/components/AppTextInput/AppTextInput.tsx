@@ -11,10 +11,9 @@ export const AppTextInput: VFC<TextInputProps & { label: string }> = ({
   return (
     <View style={tw("w-full")}>
       <AppText>{label}</AppText>
-      <TextInput
-        style={tw("text-lg px-2 py-2 bg-gray-200 rounded-lg")}
-        {...props}
-      />
+      <View style={tw("bg-gray-200 rounded-lg px-2 py-2")}>
+        <TextInput style={tw("text-lg")} {...props} />
+      </View>
     </View>
   )
 }

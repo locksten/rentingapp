@@ -60,7 +60,7 @@ export const RootTabNavigator: VFC = () => {
         component={BrowseScreen}
         options={{ title: "Browse" }}
       />
-      {user && (
+      {!!user && (
         <>
           <Tab.Screen
             name="Messages"

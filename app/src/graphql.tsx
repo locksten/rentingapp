@@ -2,6 +2,7 @@ import { authExchange } from "@urql/exchange-auth"
 import { cacheExchange } from "@urql/exchange-graphcache"
 import type { IntrospectionData } from "@urql/exchange-graphcache/dist/types/ast"
 import React, { FC } from "react"
+import { Platform } from "react-native"
 import { getAuthState } from "src/auth"
 import {
   createClient,
@@ -19,7 +20,9 @@ const nodeTypes = (
 ).possibleTypes.map(({ name }: any) => name)
 
 const client = createClient({
-  url: "http://localhost:4000/graphql",
+  url: `http://${
+    Platform.OS === "android" ? "10.0.2.2" : "localhost"
+  }:4000/graphql`,
   exchanges: [
     dedupExchange,
     authExchange({
@@ -51,6 +54,13 @@ const client = createClient({
     }),
     cacheExchange({
       schema,
+      updates: {
+        Mutation: {
+          createListing(_result, _args, cache, _info) {
+            cache.invalidate("Query", "me")
+          },
+        },
+      },
       resolvers: {
         Query: {
           node: (_, { id }, cache) => ({

@@ -21,6 +21,7 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
     description: t.exposeString("description"),
     imageUrl: t.exposeString("imageUrl"),
     dayPriceEuroCents: t.exposeInt("dayPriceEuroCents"),
+    depositEuroCents: t.exposeInt("depositEuroCents"),
   }),
 })
 
@@ -49,6 +50,7 @@ const ListingInput = schemaBuilder.inputType("ListingInput", {
     description: t.string({ required: true }),
     imageUrl: t.string({ required: true }),
     dayPriceEuroCents: t.int({ required: true }),
+    depositEuroCents: t.int({ required: false }),
   }),
 })
 
@@ -62,16 +64,25 @@ schemaBuilder.mutationType({
       },
       resolve: async (
         _root,
-        { input: { title, description, imageUrl, dayPriceEuroCents } },
+        {
+          input: {
+            title,
+            description,
+            imageUrl,
+            dayPriceEuroCents,
+            depositEuroCents,
+          },
+        },
         { pool, auth },
       ) =>
         await db
           .insert("Listing", {
             title,
             description,
+            ownerId: auth.id,
             imageUrl,
             dayPriceEuroCents,
-            ownerId: auth.id,
+            depositEuroCents,
           })
           .run(pool),
     }),

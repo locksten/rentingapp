@@ -18,7 +18,7 @@ export const FeedbackListItem: VFC<{ item: FeedbackListItem }> = ({
   const tw = useTailwind()
   return (
     <View style={tw("p-4 flex-row bg-white")}>
-      <ProfilePicture id={id} style={tw("h-14")} />
+      <ProfilePicture uri={"https://www.example.com"} style={tw("h-14")} />
       <View style={tw("flex-1 pl-4")}>
         <AppText style={tw("text-lg font-semibold")}>
           {names[Number(id) % names.length]}

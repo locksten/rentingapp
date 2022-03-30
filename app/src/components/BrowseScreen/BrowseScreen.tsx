@@ -1,6 +1,7 @@
+import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
-import { HorizontalFlatList } from "@components/HorizontalFlatList"
 import { ListingListItem } from "@components/ListingListItem"
+import { MainButton } from "@components/MainButton"
 import { RootTabs } from "@components/RootTabNavigator"
 import { SeparatedBy } from "@components/SeparatedBy"
 import {
@@ -57,7 +58,7 @@ const HomeScreen: VFC<
 > = () => {
   const tw = useTailwind()
 
-  const [{ data, fetching, error }] = useQuery({
+  const [{ data, fetching, error }, re] = useQuery({
     query: Listings,
     requestPolicy: "cache-and-network",
   })
@@ -70,10 +71,19 @@ const HomeScreen: VFC<
   return (
     <ScrollView>
       <SeparatedBy separator={<View style={tw("h-8")} />} start end>
-        <HorizontalFlatList
+        <MainButton
+          text="re"
+          onPress={() => {
+            re({ requestPolicy: "network-only" })
+          }}
+        />
+        <AppFlatList
+          horizontal
           title="Listings"
           data={filterNodes(items)?.map((i) => i.node)}
-          renderItem={({ item }) => <ListingListItem item={item} />}
+          renderItem={({ item }) => (
+            <ListingListItem.ListItemHorizontal item={item} />
+          )}
           keyExtractor={(i) => i.id}
         />
       </SeparatedBy>

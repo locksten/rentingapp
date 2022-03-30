@@ -15,6 +15,7 @@ const PersonCardFragment = gql(/* GraphQL */ `
     id
     isMe
     name
+    imageUrl
     listingCount
   }
 `)
@@ -24,11 +25,11 @@ export const PersonCard: VFC<{
 }> = ({ person }) => {
   const tw = useTailwind()
   const { navigate } = useNavigation<RootTabsNavigationProp>()
-  const { id, isMe, listingCount, name } = person
+  const { id, isMe, listingCount, name, imageUrl } = person
 
   const NameAndPic = (
     <View style={tw(" items-center justify-center")}>
-      <ProfilePicture id={id} style={tw("h-16")} />
+      <ProfilePicture uri={imageUrl} style={tw("h-16")} />
       <AppText
         numberOfLines={2}
         style={tw("pt-1 text-2xl font-semibold flex-1")}

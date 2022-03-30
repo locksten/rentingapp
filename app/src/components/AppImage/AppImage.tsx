@@ -9,22 +9,22 @@ import {
 } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
-export const AppImage: VFC<
-  {
-    uri?: string | null
-    aspectRatio: number
-    renderStart?: () => JSX.Element
-    renderEnd?: () => JSX.Element
-    onPress?: () => void
-    borderRadius?: number
-    style?: StyleProp<ViewStyle>
-    imageStyle?: StyleProp<ImageStyle>
-  } & (
-    | { vertical?: false; horizontal?: false }
-    | { vertical: true; horizontal?: false }
-    | { vertical?: false; horizontal: true }
-  )
-> = ({
+export type AppImageProps = {
+  uri?: string | null
+  aspectRatio: number
+  renderStart?: () => JSX.Element
+  renderEnd?: () => JSX.Element
+  onPress?: () => void
+  borderRadius?: number
+  style?: StyleProp<ViewStyle>
+  imageStyle?: StyleProp<ImageStyle>
+} & (
+  | { vertical?: false; horizontal?: false }
+  | { vertical: true; horizontal?: false }
+  | { vertical?: false; horizontal: true }
+)
+
+export const AppImage: VFC<AppImageProps> = ({
   uri,
   aspectRatio,
   renderStart,

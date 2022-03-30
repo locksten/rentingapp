@@ -28,7 +28,7 @@ export type AppContext = {
 export const newAppContext = async (
   ctx: ExpressContext,
 ): Promise<AppContext> => {
-  console.log(ctx.req.headers.authorization)
+  // console.log(ctx.req.headers.authorization)
   const token = await decodedFirebaseTokenFromHeader(ctx.req.headers)
   const user = token && (await getFirebaseUserById(token.uid))
   let auth: AppContext["auth"]

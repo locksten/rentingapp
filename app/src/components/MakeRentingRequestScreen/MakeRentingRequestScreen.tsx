@@ -13,7 +13,7 @@ export const MakeRentingRequestScreen: VFC<
   NativeStackScreenProps<CommonStackParams, "MakeRentingRequest">
 > = ({
   route: {
-    params: { listItem: item },
+    params: { id },
   },
 }) => {
   const tw = useTailwind()
@@ -43,7 +43,7 @@ export const MakeRentingRequestScreen: VFC<
               durationDays
                 ? `Request for ${
                     durationDays === 1 ? "a day" : `${durationDays} days`
-                  } for ${item.cost * durationDays}€`
+                  } for ${/*item.cost*/ 5 * durationDays}€`
                 : `Pick a Date`
             }
           />

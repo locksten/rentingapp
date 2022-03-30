@@ -90,9 +90,7 @@ export const ListingDetailsScreen: VFC<
       <View style={tw("p-2 bg-white")}>
         <MainButton
           text={`Rent for ${item.dayPriceEuroCents}€ per day`}
-          onPress={() =>
-            navigate("MakeRentingRequest", { id: item.id, listItem: {} as any })
-          }
+          onPress={() => navigate("MakeRentingRequest", { id: item.id })}
         />
       </View>
     </View>
@@ -124,9 +122,9 @@ export const MainDetails: VFC<{
         <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText>
       </View>
       <View style={tw("h-1")} />
-      {description && <AppText style={tw("px-4")}>{description}</AppText>}
+      {!!description && <AppText style={tw("px-4")}>{description}</AppText>}
       <View style={tw("h-4")} />
-      <View style={tw("px-4")}>{owner && <PersonCard person={owner} />}</View>
+      <View style={tw("px-4")}>{!!owner && <PersonCard person={owner} />}</View>
       <View style={tw("h-4")} />
     </View>
   )

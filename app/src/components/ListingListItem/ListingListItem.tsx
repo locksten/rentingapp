@@ -1,22 +1,22 @@
-import { AppImage } from "@components/AppImage"
 import { AppText } from "@components/AppText"
-import { names } from "@components/PersonCard"
-import { ProfilePicture } from "@components/ProfilePicture"
-import { CommonStackNavigationProp } from "@components/WithCommonStackScreens"
+import { ListingListItemTitle } from "@components/ListingListItem/ListingListItemTitle"
+import { MainButton } from "@components/MainButton"
 import { DocumentType, gql } from "@gql/gql"
-import { useNavigation } from "@react-navigation/native"
 import React, { VFC } from "react"
 import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
+import { ListingListItemImage } from "./ListingListItemImage"
+import { ListingListItemOwner } from "./ListingListItemOwner"
+import { ListingListItemPrice } from "./ListingListItemPrice"
 
-export type ListingListItem = {
+export type ListingListItemType = {
   id: string
   title: string
   imageUri: string
   cost: number
 }
 
-export const items: ListingListItem[] = [
+export const items: ListingListItemType[] = [
   {
     id: "0",
     imageUri:
@@ -44,69 +44,56 @@ const ListingListItemFragment = gql(/* GraphQL */ `
       __typename
       id
       name
+      isMe
+      ...ListingListItemOwnerFragment
     }
   }
 `)
 
-export const ListingListItem: VFC<{
+export const ListingListItemHorizontal: VFC<{
   item: DocumentType<typeof ListingListItemFragment>
 }> = ({ item }) => {
   const { id, title, imageUrl, dayPriceEuroCents, owner } = item
   const tw = useTailwind()
-  const { navigate } = useNavigation<CommonStackNavigationProp>()
   return (
-    <AppImage
-      vertical
-      uri={imageUrl}
-      aspectRatio={16 / 9}
-      imageStyle={tw("h-32")}
-      onPress={() => {
-        navigate("ListingDetail", { id })
-      }}
-      renderEnd={() => (
-        <View style={tw("pt-1 w-full")}>
-          {title && <Title text={title} />}
-          <View style={tw("flex-row justify-between items-center")}>
-            {dayPriceEuroCents && (
-              <AppText style={tw("font-semibold pr-2")}>
-                {dayPriceEuroCents}€/day
-              </AppText>
-            )}
-            <View style={tw("flex-row items-center flex-1")}>
-              <AppText
-                numberOfLines={1}
-                style={tw("flex-shrink text-gray-600")}
-              >
-                {owner?.name}
-              </AppText>
-              <View style={tw("w-1")} />
-              <ProfilePicture id={item.id} style={tw("h-8")} />
-            </View>
-          </View>
+    <View>
+      <ListingListItemImage
+        id={id}
+        uri={imageUrl}
+        vertical
+        imageStyle={tw("h-32")}
+      />
+      <View style={tw("pt-1 w-full")}>
+        <ListingListItemTitle text={title} reserveHeight />
+        <View style={tw("flex-row justify-between items-center")}>
+          <ListingListItemPrice price={dayPriceEuroCents} />
+          {!!owner && <ListingListItemOwner owner={owner} />}
         </View>
-      )}
-    />
+      </View>
+    </View>
   )
 }
 
-export const Title: VFC<{ text: string }> = ({ text }) => {
+export const ListingListItemVertical: VFC<{
+  item: DocumentType<typeof ListingListItemFragment>
+}> = ({ item }) => {
+  const { id, title, imageUrl, dayPriceEuroCents, owner } = item
   const tw = useTailwind()
-  const Component: VFC<{ text?: string }> = ({ text }) => (
-    <AppText
-      style={[
-        tw("text-lg font-medium"),
-        { lineHeight: 22 },
-        !text && { width: 0 },
-      ]}
-      numberOfLines={2}
-    >
-      {text ?? "\n"}
-    </AppText>
-  )
   return (
-    <View style={tw("flex-row")}>
-      <Component />
-      <Component text={text} />
+    <View style={tw("px-4")}>
+      <ListingListItemImage id={id} uri={imageUrl} horizontal />
+      <View style={tw("pt-1 w-full")}>
+        <ListingListItemTitle text={title} />
+        <View style={tw("flex-row justify-between items-center")}>
+          <ListingListItemPrice price={dayPriceEuroCents} />
+          {!!owner &&
+            (owner.isMe ? (
+              <AppText>name reserved / renting</AppText>
+            ) : (
+              <ListingListItemOwner owner={owner} />
+            ))}
+        </View>
+      </View>
     </View>
   )
 }
