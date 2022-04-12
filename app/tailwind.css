@@ -384,6 +384,10 @@
   padding-bottom: 8rem
 }
 
+.pb-0 {
+  padding-bottom: 0px
+}
+
 .text-base {
   font-size: 16px
 }

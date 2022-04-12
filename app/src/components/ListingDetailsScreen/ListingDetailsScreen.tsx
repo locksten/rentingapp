@@ -43,6 +43,7 @@ export const Listing = gql(/* GraphQL */ `
         imageUrl
         dayPriceEuroCents
         owner {
+          isMe
           ...PersonCardFragment
         }
       }
@@ -87,12 +88,14 @@ export const ListingDetailsScreen: VFC<
         )}
         ListFooterComponent={() => <View style={tw("h-4")} />}
       />
-      <View style={tw("p-2 bg-white")}>
-        <MainButton
-          text={`Rent for ${item.dayPriceEuroCents}€ per day`}
-          onPress={() => navigate("MakeRentingRequest", { id: item.id })}
-        />
-      </View>
+      {!item.owner?.isMe && item.dayPriceEuroCents && (
+        <View style={tw("p-2 bg-white")}>
+          <MainButton
+            text={`Rent for ${item.dayPriceEuroCents / 100}€ per day`}
+            onPress={() => navigate("MakeRentingRequest", { id: item.id })}
+          />
+        </View>
+      )}
     </View>
   )
 }
@@ -119,7 +122,7 @@ export const MainDetails: VFC<{
       <AppText style={tw("px-4 text-xl font-medium")}>{title}</AppText>
       <View style={tw("h-1")} />
       <View style={tw("px-4 flex-row items-center opacity-60")}>
-        <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText>
+        {/* <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText> */}
       </View>
       <View style={tw("h-1")} />
       {!!description && <AppText style={tw("px-4")}>{description}</AppText>}

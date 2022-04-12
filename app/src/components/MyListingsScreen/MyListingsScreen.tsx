@@ -51,6 +51,11 @@ export const MyListings = gql(/* GraphQL */ `
             __typename
             id
             ...ListingListItemFragment
+            rentings {
+              __typename
+              id
+              rentingRequestStatus
+            }
           }
         }
       }
@@ -74,7 +79,7 @@ const HomeScreen: VFC<
 
   return (
     <View style={tw("pt-4")}>
-      <View style={tw("px-4 pb-4")}>
+      <View style={tw("px-4")}>
         <MainButton
           text="New Listing"
           onPress={() => {
@@ -83,10 +88,26 @@ const HomeScreen: VFC<
         />
       </View>
       <AppFlatList
-        title="MyListings"
         data={filterNodes(items)?.map((i) => i.node)}
         renderItem={({ item }) => (
-          <ListingListItem.ListItemVertical item={item} />
+          <ListingListItem.ListItemVertical
+            item={item}
+            renderStatus={() => {
+              const status = item.rentings?.rentingRequestStatus
+
+              return (
+                <View style={tw("flex-row")}>
+                  {status === "Pending" && (
+                    <MainButton secondary text={"Decline"} onPress={() => {}} />
+                  )}
+                  <View style={tw("w-2")} />
+                  {status === "Pending" && (
+                    <MainButton text={"Accept"} onPress={() => {}} />
+                  )}
+                </View>
+              )
+            }}
+          />
         )}
         keyExtractor={(i) => i.id}
       />

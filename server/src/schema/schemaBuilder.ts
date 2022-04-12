@@ -16,7 +16,7 @@ export const schemaBuilder = new SchemaBuilder<{
   }
   DefaultFieldNullability: true
 }>({
-  plugins: [ScopeAuthPlugin, RelayPlugin, DataloaderPlugin],
+  plugins: [RelayPlugin, ScopeAuthPlugin, DataloaderPlugin],
   authScopes: async (context) => {
     return {
       user: !!context.auth,
@@ -29,3 +29,7 @@ export const schemaBuilder = new SchemaBuilder<{
   },
   defaultFieldNullability: true,
 })
+
+schemaBuilder.queryType({})
+
+schemaBuilder.mutationType({})

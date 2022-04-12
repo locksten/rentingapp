@@ -71,7 +71,7 @@ export const RootTabNavigator: VFC = () => {
             name="MyRentals"
             component={MyRentalsScreen}
             options={{
-              title: "My Rentlas",
+              title: "My Rentals",
             }}
           />
           <Tab.Screen

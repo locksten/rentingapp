@@ -17,6 +17,8 @@ const PersonCardFragment = gql(/* GraphQL */ `
     name
     imageUrl
     listingCount
+    rentingOwnerCount
+    rentingRenterCount
   }
 `)
 
@@ -25,7 +27,15 @@ export const PersonCard: VFC<{
 }> = ({ person }) => {
   const tw = useTailwind()
   const { navigate } = useNavigation<RootTabsNavigationProp>()
-  const { id, isMe, listingCount, name, imageUrl } = person
+  const {
+    id,
+    isMe,
+    listingCount,
+    name,
+    imageUrl,
+    rentingOwnerCount,
+    rentingRenterCount,
+  } = person
 
   const NameAndPic = (
     <View style={tw(" items-center justify-center")}>
@@ -49,8 +59,8 @@ export const PersonCard: VFC<{
         {NameAndPic}
         <View style={tw("h-4")} />
         <View style={tw("flex-row justify-around pb-4")}>
-          <Ratings rating={4.3} ratingCount={12} />
-          <Rentings asOwner={23} asRenter={8} />
+          <Ratings rating={0} ratingCount={0} />
+          <Rentings asOwner={rentingOwnerCount} asRenter={rentingRenterCount} />
           <Listings listingCount={listingCount} />
         </View>
         {isMe || (
@@ -97,9 +107,9 @@ const Ratings: VFC<{ rating: number; ratingCount: number }> = ({
   )
 }
 
-const Rentings: VFC<{ asOwner: number; asRenter: number }> = ({
-  asOwner,
-  asRenter,
+const Rentings: VFC<{ asOwner?: number | null; asRenter?: number | null }> = ({
+  asOwner = 0,
+  asRenter = 0,
 }) => {
   return (
     <Fact name="Rentings" icon={"repeat"} value={`${asOwner}↑ ${asRenter}↓`} />

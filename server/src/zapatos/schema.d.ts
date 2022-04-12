@@ -18,6 +18,18 @@ declare module 'zapatos/schema' {
 
   /* --- enums --- */
 
+  export type RentingPaymentStatus = 'Canceled' | 'Completed' | 'Pending';
+  export namespace every {
+    export type RentingPaymentStatus = ['Canceled', 'Completed', 'Pending'];
+  }
+  export type RentingRequestStatus = 'Accepted' | 'Declidned' | 'Pending';
+  export namespace every {
+    export type RentingRequestStatus = ['Accepted', 'Declidned', 'Pending'];
+  }
+  export type RentingReturnStatus = 'Canceled' | 'Completed';
+  export namespace every {
+    export type RentingReturnStatus = ['Canceled', 'Completed'];
+  }
 
   /* --- tables --- */
 
@@ -303,6 +315,347 @@ declare module 'zapatos/schema' {
   }
 
   /**
+   * **Renting**
+   * - Table in database
+   */
+  export namespace Renting {
+    export type Table = 'Renting';
+    export interface Selectable {
+      /**
+      * **Renting.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Renting_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Renting.listingId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      listingId: number;
+      /**
+      * **Renting.ownerId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ownerId: string;
+      /**
+      * **Renting.renterId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      renterId: string;
+      /**
+      * **Renting.scheduledStartTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledStartTime: Date;
+      /**
+      * **Renting.scheduledEndTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledEndTime: Date;
+      /**
+      * **Renting.rentingRequestStatus**
+      * - `RentingRequestStatus` in database
+      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      */
+      rentingRequestStatus: RentingRequestStatus | null;
+      /**
+      * **Renting.rentingPaymentStatus**
+      * - `RentingPaymentStatus` in database
+      * - Nullable, no default
+      */
+      rentingPaymentStatus: RentingPaymentStatus | null;
+      /**
+      * **Renting.rentingReturnStatus**
+      * - `RentingReturnStatus` in database
+      * - Nullable, no default
+      */
+      rentingReturnStatus: RentingReturnStatus | null;
+      /**
+      * **Renting.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: Date;
+      /**
+      * **Renting._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **Renting.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Renting_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Renting.listingId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      listingId: number;
+      /**
+      * **Renting.ownerId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ownerId: string;
+      /**
+      * **Renting.renterId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      renterId: string;
+      /**
+      * **Renting.scheduledStartTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledStartTime: db.TimestampTzString;
+      /**
+      * **Renting.scheduledEndTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledEndTime: db.TimestampTzString;
+      /**
+      * **Renting.rentingRequestStatus**
+      * - `RentingRequestStatus` in database
+      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      */
+      rentingRequestStatus: RentingRequestStatus | null;
+      /**
+      * **Renting.rentingPaymentStatus**
+      * - `RentingPaymentStatus` in database
+      * - Nullable, no default
+      */
+      rentingPaymentStatus: RentingPaymentStatus | null;
+      /**
+      * **Renting.rentingReturnStatus**
+      * - `RentingReturnStatus` in database
+      * - Nullable, no default
+      */
+      rentingReturnStatus: RentingReturnStatus | null;
+      /**
+      * **Renting.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: db.TimestampTzString;
+      /**
+      * **Renting._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface Whereable {
+      /**
+      * **Renting.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Renting_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.listingId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      listingId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.ownerId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ownerId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.renterId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      renterId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.scheduledStartTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledStartTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.scheduledEndTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledEndTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.rentingRequestStatus**
+      * - `RentingRequestStatus` in database
+      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      */
+      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingRequestStatus | db.Parameter<RentingRequestStatus> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.rentingPaymentStatus**
+      * - `RentingPaymentStatus` in database
+      * - Nullable, no default
+      */
+      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.rentingReturnStatus**
+      * - `RentingReturnStatus` in database
+      * - Nullable, no default
+      */
+      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingReturnStatus | db.Parameter<RentingReturnStatus> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **Renting.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Renting_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.listingId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      listingId: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **Renting.ownerId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ownerId: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **Renting.renterId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      renterId: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **Renting.scheduledStartTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledStartTime: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
+      /**
+      * **Renting.scheduledEndTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledEndTime: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
+      /**
+      * **Renting.rentingRequestStatus**
+      * - `RentingRequestStatus` in database
+      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      */
+      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.rentingPaymentStatus**
+      * - `RentingPaymentStatus` in database
+      * - Nullable, no default
+      */
+      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.rentingReturnStatus**
+      * - `RentingReturnStatus` in database
+      * - Nullable, no default
+      */
+      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **Renting.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Renting_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.listingId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      listingId?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Renting.ownerId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      ownerId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Renting.renterId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      renterId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Renting.scheduledStartTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledStartTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
+      /**
+      * **Renting.scheduledEndTime**
+      * - `timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      scheduledEndTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
+      /**
+      * **Renting.rentingRequestStatus**
+      * - `RentingRequestStatus` in database
+      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      */
+      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.rentingPaymentStatus**
+      * - `RentingPaymentStatus` in database
+      * - Nullable, no default
+      */
+      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.rentingReturnStatus**
+      * - `RentingReturnStatus` in database
+      * - Nullable, no default
+      */
+      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+    }
+    export type UniqueIndex = 'Renting_pkey';
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
    * **User**
    * - Table in database
    */
@@ -465,58 +818,66 @@ declare module 'zapatos/schema' {
 
   /* === cross-table types === */
 
-  export type Table = Listing.Table | User.Table;
-  export type Selectable = Listing.Selectable | User.Selectable;
-  export type JSONSelectable = Listing.JSONSelectable | User.JSONSelectable;
-  export type Whereable = Listing.Whereable | User.Whereable;
-  export type Insertable = Listing.Insertable | User.Insertable;
-  export type Updatable = Listing.Updatable | User.Updatable;
-  export type UniqueIndex = Listing.UniqueIndex | User.UniqueIndex;
-  export type Column = Listing.Column | User.Column;
-  export type AllBaseTables = [Listing.Table, User.Table];
+  export type Table = Listing.Table | Renting.Table | User.Table;
+  export type Selectable = Listing.Selectable | Renting.Selectable | User.Selectable;
+  export type JSONSelectable = Listing.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
+  export type Whereable = Listing.Whereable | Renting.Whereable | User.Whereable;
+  export type Insertable = Listing.Insertable | Renting.Insertable | User.Insertable;
+  export type Updatable = Listing.Updatable | Renting.Updatable | User.Updatable;
+  export type UniqueIndex = Listing.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
+  export type Column = Listing.Column | Renting.Column | User.Column;
+  export type AllBaseTables = [Listing.Table, Renting.Table, User.Table];
   export type AllForeignTables = [];
   export type AllViews = [];
   export type AllMaterializedViews = [];
-  export type AllTablesAndViews = [Listing.Table, User.Table];
+  export type AllTablesAndViews = [Listing.Table, Renting.Table, User.Table];
 
 
   export type SelectableForTable<T extends Table> = {
     Listing: Listing.Selectable;
+    Renting: Renting.Selectable;
     User: User.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
     Listing: Listing.JSONSelectable;
+    Renting: Renting.JSONSelectable;
     User: User.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
     Listing: Listing.Whereable;
+    Renting: Renting.Whereable;
     User: User.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
     Listing: Listing.Insertable;
+    Renting: Renting.Insertable;
     User: User.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
     Listing: Listing.Updatable;
+    Renting: Renting.Updatable;
     User: User.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
     Listing: Listing.UniqueIndex;
+    Renting: Renting.UniqueIndex;
     User: User.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
     Listing: Listing.Column;
+    Renting: Renting.Column;
     User: User.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
     Listing: Listing.SQL;
+    Renting: Renting.SQL;
     User: User.SQL;
   }[T];
 

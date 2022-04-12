@@ -71,12 +71,14 @@ const HomeScreen: VFC<
   return (
     <ScrollView>
       <SeparatedBy separator={<View style={tw("h-8")} />} start end>
-        <MainButton
-          text="re"
-          onPress={() => {
-            re({ requestPolicy: "network-only" })
-          }}
-        />
+        <View style={tw("px-4")}>
+          <MainButton
+            text="Refresh"
+            onPress={() => {
+              re({ requestPolicy: "network-only" })
+            }}
+          />
+        </View>
         <AppFlatList
           horizontal
           title="Listings"

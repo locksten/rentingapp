@@ -76,7 +76,8 @@ export const ListingListItemHorizontal: VFC<{
 
 export const ListingListItemVertical: VFC<{
   item: DocumentType<typeof ListingListItemFragment>
-}> = ({ item }) => {
+  renderStatus?: () => JSX.Element
+}> = ({ item, renderStatus }) => {
   const { id, title, imageUrl, dayPriceEuroCents, owner } = item
   const tw = useTailwind()
   return (
@@ -86,12 +87,9 @@ export const ListingListItemVertical: VFC<{
         <ListingListItemTitle text={title} />
         <View style={tw("flex-row justify-between items-center")}>
           <ListingListItemPrice price={dayPriceEuroCents} />
-          {!!owner &&
-            (owner.isMe ? (
-              <AppText>name reserved / renting</AppText>
-            ) : (
-              <ListingListItemOwner owner={owner} />
-            ))}
+          {renderStatus
+            ? renderStatus()
+            : !!owner && <ListingListItemOwner owner={owner} />}
         </View>
       </View>
     </View>
