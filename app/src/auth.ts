@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import * as SecureStore from "expo-secure-store"
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app"
 import {
   Auth,
@@ -11,8 +12,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { getReactNativePersistence } from "firebase/auth/react-native"
-import { useEffect, useRef } from "react"
-import { useForceUpdate } from "src/utils"
+import { useEffect, useReducer, useRef } from "react"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQ51basYw88ojUlEH62Qak0l-e9vOiwXE",
@@ -36,38 +36,52 @@ if (!getApps().length) {
   auth = getAuth()
 }
 
-export const onAuthStateChange = (fn: () => Promise<void>) => {
-  return onAuthStateChanged(auth, async () => {
+export const getAuthState = () => auth
+
+export const onAuthStateChange = (fn: () => Promise<void>) =>
+  onAuthStateChanged(auth, async () => {
     await fn()
+  })
+
+{
+  const unsubscribe = onAuthStateChange(async () => {
+    unsubscribe()
+    try {
+      if (!auth.currentUser) {
+        const { email, password } = await getEmailPassword()
+        if (!(email && password)) return
+        await signInWithEmailAndPassword(auth, email, password)
+      }
+    } catch (e) {}
   })
 }
 
-export const getAuthState = () => auth
-
-// const userCredentialKey = "UserCredential"
-
-const setUserCredential = (value: any) => {
-  // SecureStore.setItemAsync(userCredentialKey, JSON.stringify(value))
+export const saveEmailPassword = async (email: string, password: string) => {
+  await SecureStore.setItemAsync("email", email)
+  await SecureStore.setItemAsync("password", password)
 }
 
-export const getUserCredential = () => {
-  // SecureStore.getItemAsync(JSON.parse(userCredentialKey))
+export const getEmailPassword = async () => ({
+  email: await SecureStore.getItemAsync("email"),
+  password: await SecureStore.getItemAsync("password"),
+})
+
+export const clearEmailPassword = async () => {
+  await SecureStore.deleteItemAsync("email")
+  await SecureStore.deleteItemAsync("password")
 }
 
-export const clearUserCredential = () => {
-  // SecureStore.deleteItemAsync(userCredentialKey)
+export const emailSignIn = async (email: string, password: string) => {
+  await signInWithEmailAndPassword(auth, email, password)
+  await saveEmailPassword(email, password)
 }
-
-export const emailSignIn = async (email: string, password: string) =>
-  await setUserCredential(
-    await signInWithEmailAndPassword(auth, email, password),
-  )
 
 export const emailSignUp = async (
   email: string,
   password: string,
   displayName: string,
 ) => {
+  await createUserWithEmailAndPassword(auth, email, password)
   if (!displayName) throw new Error("Name is required")
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, {
@@ -75,12 +89,16 @@ export const emailSignUp = async (
     photoURL:
       "https://images.unsplash.com/photo-1621983266286-09645be8fd01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=64&q=80",
   })
-  await setUserCredential(credential)
+  await saveEmailPassword(email, password)
 }
 
 export const signOut = async () => {
-  await clearUserCredential()
   await firebaseSignOut(auth)
+  await clearEmailPassword()
+}
+
+export const useForceUpdate = () => {
+  return useReducer(() => ({}), {})[1] as () => void
 }
 
 export const useAuthState = () => {
@@ -91,7 +109,7 @@ export const useAuthState = () => {
     return onAuthStateChange(async () => {
       if (mountedRef.current) update()
     })
-  }, [])
+  }, [update])
 
   useEffect(() => {
     return () => {

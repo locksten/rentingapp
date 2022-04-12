@@ -32,6 +32,8 @@ const client = createClient({
         const token = (await currentUser?.getIdToken()) ?? null
         return token ? { token, refreshToken: null } : null
       },
+      didAuthError: ({ error }) =>
+        error.message.startsWith("[GraphQL] Not authorized"),
       addAuthToOperation: ({ operation, authState }: any) => {
         if (!authState?.token) return operation
 
