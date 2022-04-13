@@ -1,6 +1,8 @@
+import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
+import { MediumListWidth } from "@components/MediumListWidth"
 import { PersonLine } from "@components/PersonLine"
 import { Pill } from "@components/Pill"
 import { RentingPeriod } from "@components/RentingPeriod"
@@ -90,32 +92,34 @@ const HomeScreen: VFC<
   )
 
   return (
-    <FlatList
-      ListHeaderComponent={items?.length ? createListing : undefined}
-      contentContainerStyle={tw("flex-grow")}
-      ListEmptyComponent={
-        <View style={tw("flex-1 justify-center")}>{createListing}</View>
-      }
-      data={filterNodes(items)?.map((i) => i.node)}
-      renderItem={({ item }) => (
-        <ListingListItem.ListItemVertical
-          item={item}
-          renderStatus={() => <></>}
-          renderStatuses={() => {
-            return (
-              <View>
-                <SeparatedBy separator={<View style={tw("h-2")} />} start>
-                  {sortByUpdatedAt(item.rentings)?.map((renting) => (
-                    <OwnerRenting key={renting.id} renting={renting} />
-                  ))}
-                </SeparatedBy>
-              </View>
-            )
-          }}
-        />
-      )}
-      keyExtractor={(i) => i.id}
-    />
+    <MediumListWidth>
+      <AppFlatList
+        ListHeaderComponent={items?.length ? createListing : undefined}
+        contentContainerStyle={tw("flex-grow")}
+        ListEmptyComponent={
+          <View style={tw("flex-1 justify-center")}>{createListing}</View>
+        }
+        data={filterNodes(items)?.map((i) => i.node)}
+        renderItem={({ item }) => (
+          <ListingListItem.ListItemVertical
+            item={item}
+            renderStatus={() => <></>}
+            renderStatuses={() => {
+              return (
+                <View>
+                  <SeparatedBy separator={<View style={tw("h-2")} />} start>
+                    {sortByUpdatedAt(item.rentings)?.map((renting) => (
+                      <OwnerRenting key={renting.id} renting={renting} />
+                    ))}
+                  </SeparatedBy>
+                </View>
+              )
+            }}
+          />
+        )}
+        keyExtractor={(i) => i.id}
+      />
+    </MediumListWidth>
   )
 }
 
@@ -241,7 +245,7 @@ export const OwnerRenting: VFC<{
           tw("opacity-50"),
       ]}
     >
-      <View style={tw("flex-row items-center")}>
+      <View style={tw("flex-row items-center justify-between")}>
         <PersonLine person={renter} pfpLeft />
         <View style={tw("w-1")} />
         <RentingPeriod renting={renting} />

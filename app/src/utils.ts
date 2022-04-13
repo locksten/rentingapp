@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { format, formatISO, parseJSON } from "date-fns"
 import React from "react"
 import { useReducer } from "react"
+import { useMediaQuery } from "react-responsive"
 import { OperationContext } from "urql"
 
 export const isTruthy = <T>(val?: T | null): val is T => !!val
@@ -49,3 +50,11 @@ export const sortByUpdatedAt = <T extends { updatedAt?: string | null }>(
           (a.updatedAt ? new Date(a.updatedAt).getTime() : 0),
       )
     : undefined
+
+export const useDeviceSize = () => ({
+  sm: useMediaQuery({ minDeviceWidth: 640 }),
+  md: useMediaQuery({ minDeviceWidth: 768 }),
+  lg: useMediaQuery({ minDeviceWidth: 1024 }),
+  xl: useMediaQuery({ minDeviceWidth: 1280 }),
+  "2xl": useMediaQuery({ minDeviceWidth: 1536 }),
+})

@@ -78,6 +78,22 @@
   width: 8rem
 }
 
+.max-w-xl {
+  max-width: 36rem
+}
+
+.max-w-lg {
+  max-width: 32rem
+}
+
+.max-w-2xl {
+  max-width: 42rem
+}
+
+.max-w-md {
+  max-width: 28rem
+}
+
 .flex-1 {
   flex: 1 1 0%
 }
@@ -242,6 +258,11 @@
 .border-neutral-300 {
   --tw-border-opacity: 1;
   border-color: rgb(212 212 212 / var(--tw-border-opacity))
+}
+
+.border-emerald-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(110 231 183 / var(--tw-border-opacity))
 }
 
 .bg-gray-200 {

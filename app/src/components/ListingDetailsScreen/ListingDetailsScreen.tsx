@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
+import { useDeviceSize } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -103,27 +104,40 @@ export const MainDetails: VFC<{
   >
 }> = ({ item: { imageUrl, title, description, owner, rating, feedback } }) => {
   const tw = useTailwind()
+  const device = useDeviceSize()
   return (
-    <View style={tw("justify-between")}>
+    <View style={tw("items-center")}>
+      {!!device.lg && <View style={tw("h-2")} />}
       <AppImage
         uri={imageUrl}
         aspectRatio={16 / 9}
-        borderRadius={0}
-        style={tw("border-x-0 border-t-0")}
+        borderRadius={device.lg ? undefined : 0}
+        style={[
+          tw("border-x-0 border-t-0 w-full"),
+          device.lg && tw("max-w-xl"),
+        ]}
       />
-      <View style={tw("h-1")} />
-      <AppText style={tw("px-4 text-xl font-medium")}>{title}</AppText>
-      <View style={tw("h-1")} />
-      <View style={tw("px-4 flex-row items-center opacity-60")}>
-        {/* <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText> */}
+      <View style={tw("w-full items-center")}>
+        <View style={tw("h-1")} />
+        <View style={tw("w-full")}>
+          <AppText style={tw("px-4 text-xl font-medium")}>{title}</AppText>
+          <View style={tw("h-1")} />
+          <View style={tw("px-4 flex-row items-center opacity-60")}>
+            {/* <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText> */}
+          </View>
+          <View style={tw("h-1")} />
+          {!!description && <AppText style={tw("px-4")}>{description}</AppText>}
+        </View>
+        <View style={tw("h-4")} />
+        <View style={tw("px-4 w-full max-w-md")}>
+          {!!owner && <PersonCard person={owner} />}
+        </View>
+        <View style={tw("h-4")} />
       </View>
-      <View style={tw("h-1")} />
-      {!!description && <AppText style={tw("px-4")}>{description}</AppText>}
-      <View style={tw("h-4")} />
-      <View style={tw("px-4")}>{!!owner && <PersonCard person={owner} />}</View>
-      <View style={tw("h-4")} />
       {!!feedback?.edges.length && (
-        <View style={tw("flex-row bg-white p-2 justify-center items-center")}>
+        <View
+          style={tw("flex-row bg-white p-2 justify-center items-center w-full")}
+        >
           {!!rating && (
             <AppText style={tw("pt-0.5")}>{rating.toFixed(1)}</AppText>
           )}

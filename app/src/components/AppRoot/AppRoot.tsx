@@ -1,3 +1,4 @@
+import "@expo/match-media"
 import { RootTabNavigator } from "@components/RootTabNavigator"
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { StatusBar } from "expo-status-bar"

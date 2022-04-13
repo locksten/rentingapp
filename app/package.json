@@ -17,6 +17,7 @@
     "dev:tailwind": "concurrently \"tailwindcss --input input.css --output tailwind.css --no-autoprefixer --watch\" \"tailwind-rn --watch\""
   },
   "dependencies": {
+    "@expo/match-media": "^0.3.0",
     "@graphql-codegen/gql-tag-operations-preset": "^1.2.1",
     "@react-native-async-storage/async-storage": "~1.15.0 ",
     "@react-navigation/bottom-tabs": "^6.0.9",
@@ -26,6 +27,7 @@
     "@urql/exchange-graphcache": "^4.3.6",
     "date-fns": "^2.28.0",
     "expo": "~44.0.0",
+    "expo-screen-orientation": "~4.1.1",
     "expo-secure-store": "~11.1.0",
     "expo-status-bar": "~1.2.0",
     "firebase": "^9.6.10",
@@ -33,11 +35,12 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "react-native-calendars": "^1.1278.0",
+    "react-native-calendars": "1.1282.0-snapshot.370",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
+    "react-responsive": "^9.0.0-beta.6",
     "tailwind-rn": "^4.2.0",
     "urql": "^2.0.6"
   },

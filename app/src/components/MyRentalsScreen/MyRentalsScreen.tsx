@@ -3,6 +3,7 @@ import { AppText } from "@components/AppText"
 import { CancelRentingButton } from "@components/CancelRenting"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
+import { MediumListWidth } from "@components/MediumListWidth"
 import { Pill } from "@components/Pill"
 import { RentingPeriod } from "@components/RentingPeriod"
 import { RootTabs } from "@components/RootTabNavigator"
@@ -92,65 +93,68 @@ const HomeScreen: VFC<
 
   return (
     <View style={tw("pt-4")}>
-      <View style={tw("px-4")}></View>
-      <AppFlatList
-        data={sortByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
-        renderItem={({ item }) => {
-          const endDate = parseJSONDate(item.scheduledEndTime)
-          return (
-            <ListingListItem.ListItemVertical
-              item={item.listing!}
-              renderStatus={() => <RentingPeriod renting={item} />}
-              renderStatuses={() => {
-                const status = {
-                  RequestPending: <CancelRentingButton rentingId={item.id} />,
-                  RequestDeclined: <Pill color="red">Declined</Pill>,
-                  PaymentPending: (
-                    <View style={tw("flex-row")}>
-                      <CancelRentingButton rentingId={item.id} />
-                      <View style={tw("w-1")} />
-                      <MainButton
-                        text="Pay"
-                        onPress={() => {
-                          navigate("PayForRenting", { id: item.id })
-                        }}
-                      />
+      <MediumListWidth>
+        <AppFlatList
+          data={sortByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
+          renderItem={({ item }) => {
+            const endDate = parseJSONDate(item.scheduledEndTime)
+            return (
+              <ListingListItem.ListItemVertical
+                item={item.listing!}
+                renderStatus={() => <RentingPeriod renting={item} />}
+                renderStatuses={() => {
+                  const status = {
+                    RequestPending: <CancelRentingButton rentingId={item.id} />,
+                    RequestDeclined: <Pill color="red">Declined</Pill>,
+                    PaymentPending: (
+                      <View style={tw("flex-row")}>
+                        <CancelRentingButton rentingId={item.id} />
+                        <View style={tw("w-1")} />
+                        <MainButton
+                          text="Pay"
+                          onPress={() => {
+                            navigate("PayForRenting", { id: item.id })
+                          }}
+                        />
+                      </View>
+                    ),
+                    ReturnPending: !!endDate && (
+                      <Pill>
+                        Return in{" "}
+                        {formatDistanceToNowStrict(endDate, { unit: "day" })}
+                      </Pill>
+                    ),
+                    Returned: (
+                      <View style={tw("flex-row items-center")}>
+                        <Pill color="green">Returned</Pill>
+                        {!item.renterFeedback && (
+                          <View style={tw("pl-2")}>
+                            <MainButton
+                              text="Leave Feedback"
+                              onPress={() => {
+                                navigate("LeaveFeedback", {
+                                  rentingId: item.id,
+                                })
+                              }}
+                            />
+                          </View>
+                        )}
+                      </View>
+                    ),
+                    Canceled: <Pill color="gray">Canceled</Pill>,
+                  }
+                  return (
+                    <View style={tw("flex-row items-center justify-end pt-2")}>
+                      {item.rentingStatus && status[item.rentingStatus]}
                     </View>
-                  ),
-                  ReturnPending: !!endDate && (
-                    <Pill>
-                      Return in{" "}
-                      {formatDistanceToNowStrict(endDate, { unit: "day" })}
-                    </Pill>
-                  ),
-                  Returned: (
-                    <View style={tw("flex-row items-center")}>
-                      <Pill color="green">Returned</Pill>
-                      {!item.renterFeedback && (
-                        <View style={tw("pl-2")}>
-                          <MainButton
-                            text="Leave Feedback"
-                            onPress={() => {
-                              navigate("LeaveFeedback", { rentingId: item.id })
-                            }}
-                          />
-                        </View>
-                      )}
-                    </View>
-                  ),
-                  Canceled: <Pill color="gray">Canceled</Pill>,
-                }
-                return (
-                  <View style={tw("flex-row items-center justify-end pt-2")}>
-                    {item.rentingStatus && status[item.rentingStatus]}
-                  </View>
-                )
-              }}
-            />
-          )
-        }}
-        keyExtractor={(i) => i.id}
-      />
+                  )
+                }}
+              />
+            )
+          }}
+          keyExtractor={(i) => i.id}
+        />
+      </MediumListWidth>
     </View>
   )
 }

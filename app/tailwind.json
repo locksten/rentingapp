@@ -99,6 +99,26 @@
 			"width": 128
 		}
 	},
+	"max-w-xl": {
+		"style": {
+			"maxWidth": 576
+		}
+	},
+	"max-w-lg": {
+		"style": {
+			"maxWidth": 512
+		}
+	},
+	"max-w-2xl": {
+		"style": {
+			"maxWidth": 672
+		}
+	},
+	"max-w-md": {
+		"style": {
+			"maxWidth": 448
+		}
+	},
 	"flex-1": {
 		"style": {
 			"flexGrow": 1,
@@ -349,6 +369,15 @@
 			"borderRightColor": "rgb(212 212 212 / var(--tw-border-opacity))",
 			"borderBottomColor": "rgb(212 212 212 / var(--tw-border-opacity))",
 			"borderLeftColor": "rgb(212 212 212 / var(--tw-border-opacity))"
+		}
+	},
+	"border-emerald-300": {
+		"style": {
+			"--tw-border-opacity": 1,
+			"borderTopColor": "rgb(110 231 183 / var(--tw-border-opacity))",
+			"borderRightColor": "rgb(110 231 183 / var(--tw-border-opacity))",
+			"borderBottomColor": "rgb(110 231 183 / var(--tw-border-opacity))",
+			"borderLeftColor": "rgb(110 231 183 / var(--tw-border-opacity))"
 		}
 	},
 	"bg-gray-200": {
