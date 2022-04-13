@@ -75,7 +75,7 @@ export const ListingDetailsScreen: VFC<
         ItemSeparatorComponent={() => (
           <View
             style={[
-              tw("border-gray-200"),
+              tw("border-neutral-200"),
               { borderWidth: StyleSheet.hairlineWidth },
             ]}
           />
@@ -106,11 +106,10 @@ export const MainDetails: VFC<{
   return (
     <View style={tw("justify-between")}>
       <AppImage
-        horizontal
         uri={imageUrl}
         aspectRatio={16 / 9}
         borderRadius={0}
-        imageStyle={tw("border-x-0 border-t-0")}
+        style={tw("border-x-0 border-t-0")}
       />
       <View style={tw("h-1")} />
       <AppText style={tw("px-4 text-xl font-medium")}>{title}</AppText>

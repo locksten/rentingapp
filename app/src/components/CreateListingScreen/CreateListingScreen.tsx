@@ -50,11 +50,10 @@ export const CreateListingScreen: VFC<
         <View style={tw("flex-1")}>
           <View style={tw("justify-between")}>
             <AppImage
-              horizontal
               uri={imageUrl}
               aspectRatio={16 / 9}
               borderRadius={0}
-              imageStyle={tw("border-x-0 border-t-0")}
+              style={tw("border-x-0 border-t-0")}
             />
             <View style={tw("p-4")}>
               <SeparatedBy separator={<View style={tw("h-2")} />}>

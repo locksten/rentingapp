@@ -55,12 +55,7 @@ export const ListingListItemHorizontal: VFC<{
   const tw = useTailwind()
   return (
     <View>
-      <ListingListItemImage
-        id={id}
-        uri={imageUrl}
-        vertical
-        imageStyle={tw("h-32")}
-      />
+      <ListingListItemImage id={id} uri={imageUrl} style={tw("h-32")} />
       <View style={tw("pt-1 w-full")}>
         <ListingListItemTitle text={title} reserveHeight />
         <View style={tw("flex-row justify-between items-center")}>
@@ -81,7 +76,7 @@ export const ListingListItemVertical: VFC<{
   const tw = useTailwind()
   return (
     <View style={tw("px-4")}>
-      <ListingListItemImage id={id} uri={imageUrl} horizontal />
+      <ListingListItemImage id={id} uri={imageUrl} />
       <View style={tw("pt-1 w-full")}>
         <ListingListItemTitle text={title} />
         <View style={tw("flex-row justify-between items-center")}>
