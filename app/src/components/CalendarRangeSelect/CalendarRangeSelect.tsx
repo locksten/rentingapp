@@ -14,8 +14,9 @@ import { useTailwind } from "tailwind-rn/dist"
 export const CalendarRangeSelect: VFC<{
   start?: Date
   end?: Date
+  disabledDates?: string[] | null
   onChange: (start?: Date, end?: Date) => void
-}> = ({ start, end, onChange }) => {
+}> = ({ start, end, disabledDates, onChange }) => {
   const tw = useTailwind()
 
   const selected = {
@@ -38,16 +39,7 @@ export const CalendarRangeSelect: VFC<{
     {},
   )
 
-  const disabledDateList = [
-    "2022-03-09",
-    "2022-03-20",
-    "2022-03-21",
-    "2022-03-22",
-    "2022-03-17",
-    "2022-03-18",
-  ]
-
-  const disabledDays = disabledDateList?.reduce(
+  const disabledDays = disabledDates?.reduce(
     (obj, d) => ({ ...obj, [d]: { disabled: true } }),
     {},
   )
@@ -55,12 +47,19 @@ export const CalendarRangeSelect: VFC<{
   const surroundsDisabled = (start?: Date, end?: Date) =>
     start &&
     end &&
-    !!disabledDateList.find((d) =>
-      isWithinInterval(new Date(d), { start, end }),
-    )
+    !!disabledDates?.find((d) => isWithinInterval(new Date(d), { start, end }))
 
   const update = (start?: Date, end?: Date) => {
-    !surroundsDisabled(start, end) && onChange(start, end)
+    !(
+      start &&
+      disabledDates?.includes(formatISO(start, { representation: "date" }))
+    ) &&
+      !(
+        end &&
+        disabledDates?.includes(formatISO(end, { representation: "date" }))
+      ) &&
+      !surroundsDisabled(start, end) &&
+      onChange(start, end)
   }
 
   return (
@@ -136,8 +135,8 @@ export const useCalendarRangeSelect = () => {
 
   return {
     rangeSelectCalendarProps,
-    start,
-    end,
+    start: start ?? end,
+    end: end ?? start,
     durationDays:
       (start && end && 1 + differenceInDays(end, start)) ??
       (start || end ? 1 : undefined),

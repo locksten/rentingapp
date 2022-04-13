@@ -45,7 +45,7 @@
     "@babel/core": "^7.12.9",
     "@graphql-codegen/cli": "2.3.0",
     "@graphql-codegen/typescript": "2.4.1",
-    "@graphql-codegen/typescript-operations": "2.2.1",
+    "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-urql": "^3.4.1",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",

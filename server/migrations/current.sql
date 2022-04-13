@@ -17,17 +17,13 @@ create table "Listing" (
     "depositEuroCents" int,
     "ownerId" text references "User" ("id") not null,
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Listing') stored
 );
 
-drop type if exists "RentingRequestStatus" cascade;
-create type "RentingRequestStatus" as enum ('Pending', 'Accepted', 'Declined');
 
-drop type if exists "RentingPaymentStatus" cascade;
-create type "RentingPaymentStatus" as enum ('Pending', 'Completed', 'Canceled');
-
-drop type if exists "RentingReturnStatus" cascade;
-create type "RentingReturnStatus" as enum ('Completed', 'Canceled');
+drop type if exists "RentingStatus" cascade;
+create type "RentingStatus" as enum ('RequestPending', 'RequestDeclined', 'PaymentPending', 'ReturnPending', 'Returned', 'Canceled');
 
 drop table if exists "Renting" cascade;
 create table "Renting" (
@@ -37,9 +33,8 @@ create table "Renting" (
     "renterId" text references "User" ("id") not null,
     "scheduledStartTime" timestamp with time zone not null,
     "scheduledEndTime" timestamp with time zone not null,
-    "rentingRequestStatus" "RentingRequestStatus" default 'Pending',
-    "rentingPaymentStatus" "RentingPaymentStatus",
-    "rentingReturnStatus" "RentingReturnStatus",
+    "rentingStatus" "RentingStatus" default 'RequestPending',
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Renting') stored
 );

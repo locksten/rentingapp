@@ -22,6 +22,7 @@
     "jwt_access_secret": "DEV_jwt_access_secret"
   },
   "dependencies": {
+    "date-fns": "^2.28.0",
     "@pothos/core": "^3.3.3",
     "@pothos/plugin-dataloader": "^3.3.1",
     "@pothos/plugin-relay": "^3.6.0",

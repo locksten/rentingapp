@@ -1,4 +1,5 @@
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
+import { pool } from "context"
 import { db, dc } from "database"
 import { Listing } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
@@ -10,6 +11,17 @@ export type Renting = QRenting.JSONSelectable
 
 export const RentingRef = schemaBuilder.objectRef<Renting>("Renting")
 
+export const RentingStatus = schemaBuilder.enumType("RentingStatus", {
+  values: [
+    "RequestPending",
+    "RequestDeclined",
+    "PaymentPending",
+    "ReturnPending",
+    "Returned",
+    "Canceled",
+  ] as const,
+})
+
 export const Renting = schemaBuilder.loadableNode(RentingRef, {
   ...nodeResolveId,
   ...nodeIsTypeOf(RentingRef),
@@ -19,16 +31,25 @@ export const Renting = schemaBuilder.loadableNode(RentingRef, {
   fields: (t) => ({
     scheduledStartTime: t.exposeString("scheduledStartTime"),
     scheduledEndTime: t.exposeString("scheduledEndTime"),
-    rentingRequestStatus: t.exposeString("rentingRequestStatus"),
-    rentingPaymentStatus: t.exposeString("rentingPaymentStatus"),
-    rentingReturnStatus: t.exposeString("rentingReturnStatus"),
+    updatedAt: t.field({
+      type: "String",
+      resolve: ({ updatedAt }) => db.toDate(updatedAt).toISOString(),
+    }),
+    rentingStatus: t.field({
+      type: RentingStatus,
+      resolve: ({ rentingStatus }) => rentingStatus,
+    }),
+    owner: t.field({
+      type: User,
+      resolve: ({ ownerId }) => ownerId,
+    }),
     renter: t.field({
       type: User,
       resolve: ({ renterId }) => renterId,
     }),
     listing: t.field({
       type: Listing,
-      resolve: ({ id }) => id,
+      resolve: ({ listingId }) => listingId,
     }),
   }),
 })
@@ -65,9 +86,132 @@ schemaBuilder.mutationFields((t) => ({
         listingId: listing.id,
         ownerId: listing.ownerId,
         scheduledStartTime: db.toDate(scheduledStartTime as any)!,
-        scheduledEndTime: db.toDate(scheduledStartTime as any)!,
+        scheduledEndTime: db.toDate(scheduledEndTime as any)!,
       }
       return (await db.insert("Renting", [i]).run(pool)).at(0)
+    },
+  }),
+}))
+
+const DeclineRentingInput = schemaBuilder.inputType("DeclineRentingInput", {
+  fields: (t) => ({
+    rentingId: t.globalID({ required: true }),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  declineRentingRequest: t.field({
+    type: Renting,
+    args: {
+      input: t.arg({ type: DeclineRentingInput, required: true }),
+    },
+    resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
+      const id = Number(rentingId.id)
+      const renting = await db.selectOne("Renting", { id }).run(pool)
+      if (!renting) return
+      if (auth?.user?.id !== renting.ownerId) return
+      if (renting.rentingStatus !== "RequestPending") return
+      return (
+        await db
+          .update("Renting", { rentingStatus: "RequestDeclined" }, { id })
+          .run(pool)
+      ).at(0)
+    },
+  }),
+}))
+
+const AcceptRentingInput = schemaBuilder.inputType("AcceptRentingInput", {
+  fields: (t) => ({
+    rentingId: t.globalID({ required: true }),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  acceptRentingRequest: t.field({
+    type: Renting,
+    args: {
+      input: t.arg({ type: AcceptRentingInput, required: true }),
+    },
+    resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
+      const id = Number(rentingId.id)
+      const renting = await db.selectOne("Renting", { id }).run(pool)
+      if (!renting) return
+      if (auth?.user?.id !== renting.ownerId) return
+      if (renting.rentingStatus !== "RequestPending") return
+      return (
+        await db
+          .update("Renting", { rentingStatus: "PaymentPending" }, { id })
+          .run(pool)
+      ).at(0)
+    },
+  }),
+}))
+
+const CancelRentingInput = schemaBuilder.inputType("CancelRentingInput", {
+  fields: (t) => ({
+    rentingId: t.globalID({ required: true }),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  cancelRenting: t.field({
+    type: Renting,
+    args: {
+      input: t.arg({ type: CancelRentingInput, required: true }),
+    },
+    resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
+      const id = Number(rentingId.id)
+      const renting = await db.selectOne("Renting", { id }).run(pool)
+      if (!renting) return
+      if (
+        !(
+          auth?.user?.id === renting.renterId &&
+          (renting.rentingStatus === "RequestPending" ||
+            renting.rentingStatus === "PaymentPending")
+        )
+      )
+        return
+      return (
+        await db
+          .update("Renting", { rentingStatus: "Canceled" }, { id })
+          .run(pool)
+      ).at(0)
+    },
+  }),
+}))
+
+const AcceptRentingReturnInput = schemaBuilder.inputType(
+  "AcceptRentingReturnInput",
+  {
+    fields: (t) => ({
+      rentingId: t.globalID({ required: true }),
+    }),
+  },
+)
+
+schemaBuilder.mutationFields((t) => ({
+  acceptRentingReturn: t.field({
+    type: Renting,
+    args: {
+      input: t.arg({ type: AcceptRentingReturnInput, required: true }),
+    },
+    resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
+      const id = Number(rentingId.id)
+      const renting = await db.selectOne("Renting", { id }).run(pool)
+      if (!renting) return
+      if (
+        !(
+          auth?.user?.id === renting.ownerId &&
+          renting.rentingStatus === "ReturnPending"
+        )
+      )
+        return
+
+      return (
+        await db
+          .update("Renting", { rentingStatus: "Returned" }, { id })
+          .run(pool)
+      ).at(0)
     },
   }),
 }))

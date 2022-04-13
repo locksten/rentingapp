@@ -5,8 +5,8 @@ import React, { VFC } from "react"
 import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
-const ListingListItemOwnerFragment = gql(/* GraphQL */ `
-  fragment ListingListItemOwnerFragment on User {
+const PersonLineFragment = gql(/* GraphQL */ `
+  fragment PersonLineFragment on User {
     __typename
     id
     name
@@ -15,17 +15,23 @@ const ListingListItemOwnerFragment = gql(/* GraphQL */ `
   }
 `)
 
-export const ListingListItemOwner: VFC<{
-  owner: DocumentType<typeof ListingListItemOwnerFragment>
-}> = ({ owner: { name, imageUrl } }) => {
+export const PersonLine: VFC<{
+  person?: DocumentType<typeof PersonLineFragment> | null
+  pfpLeft?: boolean
+}> = ({ person, pfpLeft }) => {
   const tw = useTailwind()
-  return (
-    <View style={tw("flex-row items-center")}>
+  return person ? (
+    <View
+      style={[
+        pfpLeft ? tw("flex-row-reverse") : tw("flex-row"),
+        tw("items-center"),
+      ]}
+    >
       <AppText numberOfLines={1} style={tw("flex-shrink text-gray-600")}>
-        {name}
+        {person.name}
       </AppText>
       <View style={tw("w-1")} />
-      <ProfilePicture uri={imageUrl} style={tw("h-8")} />
+      <ProfilePicture uri={person.imageUrl} style={tw("h-8")} />
     </View>
-  )
+  ) : null
 }

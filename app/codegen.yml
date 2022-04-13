@@ -6,3 +6,5 @@ documents:
 generates:
   ./src/generated/gql/:
     preset: gql-tag-operations-preset
+    config:
+      dedupeFragments: true

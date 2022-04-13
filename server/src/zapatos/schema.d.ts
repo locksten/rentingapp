@@ -18,17 +18,9 @@ declare module 'zapatos/schema' {
 
   /* --- enums --- */
 
-  export type RentingPaymentStatus = 'Canceled' | 'Completed' | 'Pending';
+  export type RentingStatus = 'Canceled' | 'PaymentPending' | 'RequestDeclined' | 'RequestPending' | 'ReturnPending' | 'Returned';
   export namespace every {
-    export type RentingPaymentStatus = ['Canceled', 'Completed', 'Pending'];
-  }
-  export type RentingRequestStatus = 'Accepted' | 'Declidned' | 'Pending';
-  export namespace every {
-    export type RentingRequestStatus = ['Accepted', 'Declidned', 'Pending'];
-  }
-  export type RentingReturnStatus = 'Canceled' | 'Completed';
-  export namespace every {
-    export type RentingReturnStatus = ['Canceled', 'Completed'];
+    export type RentingStatus = ['Canceled', 'PaymentPending', 'RequestDeclined', 'RequestPending', 'ReturnPending', 'Returned'];
   }
 
   /* --- tables --- */
@@ -89,6 +81,12 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
+      * **Listing.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
+      /**
       * **Listing._type**
       * - `text` in database
       * - Generated column
@@ -144,6 +142,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **Listing.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **Listing._type**
       * - `text` in database
@@ -201,6 +205,12 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing._type**
       * - `text` in database
       * - Generated column
@@ -256,6 +266,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Listing.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -306,6 +322,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Listing.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'Listing_pkey';
     export type Column = keyof Selectable;
@@ -358,29 +380,23 @@ declare module 'zapatos/schema' {
       */
       scheduledEndTime: Date;
       /**
-      * **Renting.rentingRequestStatus**
-      * - `RentingRequestStatus` in database
-      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      * **Renting.rentingStatus**
+      * - `RentingStatus` in database
+      * - Nullable, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingRequestStatus: RentingRequestStatus | null;
-      /**
-      * **Renting.rentingPaymentStatus**
-      * - `RentingPaymentStatus` in database
-      * - Nullable, no default
-      */
-      rentingPaymentStatus: RentingPaymentStatus | null;
-      /**
-      * **Renting.rentingReturnStatus**
-      * - `RentingReturnStatus` in database
-      * - Nullable, no default
-      */
-      rentingReturnStatus: RentingReturnStatus | null;
+      rentingStatus: RentingStatus | null;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt: Date;
+      /**
+      * **Renting.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
       /**
       * **Renting._type**
       * - `text` in database
@@ -426,29 +442,23 @@ declare module 'zapatos/schema' {
       */
       scheduledEndTime: db.TimestampTzString;
       /**
-      * **Renting.rentingRequestStatus**
-      * - `RentingRequestStatus` in database
-      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      * **Renting.rentingStatus**
+      * - `RentingStatus` in database
+      * - Nullable, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingRequestStatus: RentingRequestStatus | null;
-      /**
-      * **Renting.rentingPaymentStatus**
-      * - `RentingPaymentStatus` in database
-      * - Nullable, no default
-      */
-      rentingPaymentStatus: RentingPaymentStatus | null;
-      /**
-      * **Renting.rentingReturnStatus**
-      * - `RentingReturnStatus` in database
-      * - Nullable, no default
-      */
-      rentingReturnStatus: RentingReturnStatus | null;
+      rentingStatus: RentingStatus | null;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **Renting.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **Renting._type**
       * - `text` in database
@@ -494,29 +504,23 @@ declare module 'zapatos/schema' {
       */
       scheduledEndTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **Renting.rentingRequestStatus**
-      * - `RentingRequestStatus` in database
-      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      * **Renting.rentingStatus**
+      * - `RentingStatus` in database
+      * - Nullable, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingRequestStatus | db.Parameter<RentingRequestStatus> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Renting.rentingPaymentStatus**
-      * - `RentingPaymentStatus` in database
-      * - Nullable, no default
-      */
-      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | db.SQLFragment | db.ParentColumn>;
-      /**
-      * **Renting.rentingReturnStatus**
-      * - `RentingReturnStatus` in database
-      * - Nullable, no default
-      */
-      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingReturnStatus | db.Parameter<RentingReturnStatus> | db.SQLFragment | db.ParentColumn>;
+      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingStatus | db.Parameter<RentingStatus> | db.SQLFragment | db.ParentColumn>;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
       * **Renting._type**
       * - `text` in database
@@ -562,29 +566,23 @@ declare module 'zapatos/schema' {
       */
       scheduledEndTime: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment;
       /**
-      * **Renting.rentingRequestStatus**
-      * - `RentingRequestStatus` in database
-      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      * **Renting.rentingStatus**
+      * - `RentingStatus` in database
+      * - Nullable, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **Renting.rentingPaymentStatus**
-      * - `RentingPaymentStatus` in database
-      * - Nullable, no default
-      */
-      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment;
-      /**
-      * **Renting.rentingReturnStatus**
-      * - `RentingReturnStatus` in database
-      * - Nullable, no default
-      */
-      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment;
+      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -624,29 +622,23 @@ declare module 'zapatos/schema' {
       */
       scheduledEndTime?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment>;
       /**
-      * **Renting.rentingRequestStatus**
-      * - `RentingRequestStatus` in database
-      * - Nullable, default: `'Pending'::"RentingRequestStatus"`
+      * **Renting.rentingStatus**
+      * - `RentingStatus` in database
+      * - Nullable, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingRequestStatus?: RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingRequestStatus | db.Parameter<RentingRequestStatus> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **Renting.rentingPaymentStatus**
-      * - `RentingPaymentStatus` in database
-      * - Nullable, no default
-      */
-      rentingPaymentStatus?: RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingPaymentStatus | db.Parameter<RentingPaymentStatus> | null | db.DefaultType | db.SQLFragment>;
-      /**
-      * **Renting.rentingReturnStatus**
-      * - `RentingReturnStatus` in database
-      * - Nullable, no default
-      */
-      rentingReturnStatus?: RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingReturnStatus | db.Parameter<RentingReturnStatus> | null | db.DefaultType | db.SQLFragment>;
+      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment>;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'Renting_pkey';
     export type Column = keyof Selectable;

@@ -1,12 +1,10 @@
-import { AppText } from "@components/AppText"
 import { ListingListItemTitle } from "@components/ListingListItem/ListingListItemTitle"
-import { MainButton } from "@components/MainButton"
+import { PersonLine } from "@components/PersonLine"
 import { DocumentType, gql } from "@gql/gql"
 import React, { VFC } from "react"
 import { View } from "react-native"
 import { useTailwind } from "tailwind-rn"
 import { ListingListItemImage } from "./ListingListItemImage"
-import { ListingListItemOwner } from "./ListingListItemOwner"
 import { ListingListItemPrice } from "./ListingListItemPrice"
 
 export type ListingListItemType = {
@@ -45,7 +43,7 @@ const ListingListItemFragment = gql(/* GraphQL */ `
       id
       name
       isMe
-      ...ListingListItemOwnerFragment
+      ...PersonLineFragment
     }
   }
 `)
@@ -67,7 +65,7 @@ export const ListingListItemHorizontal: VFC<{
         <ListingListItemTitle text={title} reserveHeight />
         <View style={tw("flex-row justify-between items-center")}>
           <ListingListItemPrice price={dayPriceEuroCents} />
-          {!!owner && <ListingListItemOwner owner={owner} />}
+          <PersonLine person={owner} />
         </View>
       </View>
     </View>
@@ -77,7 +75,8 @@ export const ListingListItemHorizontal: VFC<{
 export const ListingListItemVertical: VFC<{
   item: DocumentType<typeof ListingListItemFragment>
   renderStatus?: () => JSX.Element
-}> = ({ item, renderStatus }) => {
+  renderStatuses?: () => JSX.Element
+}> = ({ item, renderStatus, renderStatuses }) => {
   const { id, title, imageUrl, dayPriceEuroCents, owner } = item
   const tw = useTailwind()
   return (
@@ -87,10 +86,9 @@ export const ListingListItemVertical: VFC<{
         <ListingListItemTitle text={title} />
         <View style={tw("flex-row justify-between items-center")}>
           <ListingListItemPrice price={dayPriceEuroCents} />
-          {renderStatus
-            ? renderStatus()
-            : !!owner && <ListingListItemOwner owner={owner} />}
+          {renderStatus ? renderStatus() : <PersonLine person={owner} />}
         </View>
+        {renderStatuses?.()}
       </View>
     </View>
   )

@@ -1,6 +1,7 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
+import { eachDayOfInterval, formatISO } from "date-fns"
 import { Renting } from "schema/renting"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
@@ -23,6 +24,33 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
     imageUrl: t.exposeString("imageUrl"),
     dayPriceEuroCents: t.exposeInt("dayPriceEuroCents"),
     depositEuroCents: t.exposeInt("depositEuroCents"),
+    updatedAt: t.field({
+      type: "String",
+      resolve: ({ updatedAt }) => db.toDate(updatedAt).toISOString(),
+    }),
+    unavailableDays: t.field({
+      type: ["String"],
+      resolve: async ({ id }, _args, { pool }) => {
+        const rentings = await db
+          .select("Renting", {
+            listingId: id,
+            rentingStatus: dc.isIn(["PaymentPending", "ReturnPending"]),
+          })
+          .run(pool)
+        return [
+          ...new Set(
+            rentings
+              .flatMap(({ scheduledStartTime, scheduledEndTime }) =>
+                eachDayOfInterval({
+                  start: db.toDate(scheduledStartTime),
+                  end: db.toDate(scheduledEndTime),
+                }),
+              )
+              .map((d) => formatISO(d, { representation: "date" })),
+          ),
+        ]
+      },
+    }),
     owner: t.field({
       type: User,
       resolve: ({ ownerId }) => ownerId,
@@ -32,9 +60,9 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
 
 schemaBuilder.objectFields(Listing, (t) => ({
   rentings: t.field({
-    type: Renting,
+    type: [Renting],
     resolve: ({ id }, _args, { pool }) =>
-      db.selectOne("Renting", { listingId: id }).run(pool),
+      db.select("Renting", { listingId: id }).run(pool),
   }),
 }))
 
