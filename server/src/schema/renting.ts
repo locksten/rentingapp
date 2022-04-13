@@ -1,5 +1,4 @@
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
-import { pool } from "context"
 import { db, dc } from "database"
 import { Listing } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
@@ -93,17 +92,20 @@ schemaBuilder.mutationFields((t) => ({
   }),
 }))
 
-const DeclineRentingInput = schemaBuilder.inputType("DeclineRentingInput", {
-  fields: (t) => ({
-    rentingId: t.globalID({ required: true }),
-  }),
-})
+const DeclineRentingRequestInput = schemaBuilder.inputType(
+  "DeclineRentingRequestInput",
+  {
+    fields: (t) => ({
+      rentingId: t.globalID({ required: true }),
+    }),
+  },
+)
 
 schemaBuilder.mutationFields((t) => ({
   declineRentingRequest: t.field({
     type: Renting,
     args: {
-      input: t.arg({ type: DeclineRentingInput, required: true }),
+      input: t.arg({ type: DeclineRentingRequestInput, required: true }),
     },
     resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
       const id = Number(rentingId.id)
@@ -120,17 +122,20 @@ schemaBuilder.mutationFields((t) => ({
   }),
 }))
 
-const AcceptRentingInput = schemaBuilder.inputType("AcceptRentingInput", {
-  fields: (t) => ({
-    rentingId: t.globalID({ required: true }),
-  }),
-})
+const AcceptRentingRequestInput = schemaBuilder.inputType(
+  "AcceptRentingRequestInput",
+  {
+    fields: (t) => ({
+      rentingId: t.globalID({ required: true }),
+    }),
+  },
+)
 
 schemaBuilder.mutationFields((t) => ({
   acceptRentingRequest: t.field({
     type: Renting,
     args: {
-      input: t.arg({ type: AcceptRentingInput, required: true }),
+      input: t.arg({ type: AcceptRentingRequestInput, required: true }),
     },
     resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
       const id = Number(rentingId.id)
@@ -210,6 +215,39 @@ schemaBuilder.mutationFields((t) => ({
       return (
         await db
           .update("Renting", { rentingStatus: "Returned" }, { id })
+          .run(pool)
+      ).at(0)
+    },
+  }),
+}))
+
+const PayForRentingInput = schemaBuilder.inputType("PayForRentingInput", {
+  fields: (t) => ({
+    rentingId: t.globalID({ required: true }),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  payForRenting: t.field({
+    type: Renting,
+    args: {
+      input: t.arg({ type: PayForRentingInput, required: true }),
+    },
+    resolve: async (_root, { input: { rentingId } }, { pool, auth }) => {
+      const id = Number(rentingId.id)
+      const renting = await db.selectOne("Renting", { id }).run(pool)
+      if (!renting) return
+      if (
+        !(
+          auth?.user?.id === renting.renterId &&
+          renting.rentingStatus === "PaymentPending"
+        )
+      )
+        return
+
+      return (
+        await db
+          .update("Renting", { rentingStatus: "ReturnPending" }, { id })
           .run(pool)
       ).at(0)
     },

@@ -30,6 +30,8 @@ export const makeRentingRequest = gql(/* GraphQL */ `
     makeRentingRequest(input: $input) {
       __typename
       id
+      rentingStatus
+      updatedAt
     }
   }
 `)
@@ -46,7 +48,6 @@ export const MakeRentingRequestScreen: VFC<
   const { rangeSelectCalendarProps, durationDays, start, end } =
     useCalendarRangeSelect()
 
-  console.log(start, end)
   const [{ data }] = useQuery({
     query: ListingRentalRequest,
     variables: { nodeId: id },
@@ -65,7 +66,6 @@ export const MakeRentingRequestScreen: VFC<
       <View style={tw("p-2")}>
         <MainButton
           onPress={async () => {
-            console.log(start, end)
             if (!(start && end)) return
             await makeRequest({
               input: {

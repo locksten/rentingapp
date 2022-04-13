@@ -2,6 +2,7 @@ import { AppText } from "@components/AppText"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { PersonLine } from "@components/PersonLine"
+import { Pill } from "@components/Pill"
 import { RentingPeriod } from "@components/RentingPeriod"
 import { RootTabs } from "@components/RootTabNavigator"
 import { SeparatedBy } from "@components/SeparatedBy"
@@ -135,6 +136,7 @@ const OwnerRentingFragment = gql(/* GraphQL */ `
     rentingStatus
     scheduledStartTime
     scheduledEndTime
+    updatedAt
     renter {
       __typename
       id
@@ -144,20 +146,33 @@ const OwnerRentingFragment = gql(/* GraphQL */ `
 `)
 
 export const declineRentingRequest = gql(/* GraphQL */ `
-  mutation declineRentingRequest($input: DeclineRentingInput!) {
+  mutation declineRentingRequest($input: DeclineRentingRequestInput!) {
     declineRentingRequest(input: $input) {
       __typename
       rentingStatus
+      updatedAt
       id
     }
   }
 `)
 
 export const acceptRentingRequest = gql(/* GraphQL */ `
-  mutation acceptRentingRequest($input: AcceptRentingInput!) {
+  mutation acceptRentingRequest($input: AcceptRentingRequestInput!) {
     acceptRentingRequest(input: $input) {
       __typename
       rentingStatus
+      updatedAt
+      id
+    }
+  }
+`)
+
+export const acceptRentingReturn = gql(/* GraphQL */ `
+  mutation acceptRentingReturn($input: AcceptRentingReturnInput!) {
+    acceptRentingReturn(input: $input) {
+      __typename
+      rentingStatus
+      updatedAt
       id
     }
   }
@@ -168,6 +183,7 @@ export const OwnerRenting: VFC<{
 }> = ({ renting }) => {
   const [_, declineRequest] = useMutation(declineRentingRequest)
   const [__, acceptRequest] = useMutation(acceptRentingRequest)
+  const [___, acceptReturn] = useMutation(acceptRentingReturn)
 
   const tw = useTailwind()
 
@@ -193,27 +209,46 @@ export const OwnerRenting: VFC<{
         />
       </View>
     ),
-    RequestDeclined: <AppText>Declined</AppText>,
-    PaymentPending: <AppText>Awaiting Payment</AppText>,
+    RequestDeclined: <Pill color="gray">Declined</Pill>,
+    PaymentPending: <Pill color="green">Awaiting Payment</Pill>,
     ReturnPending: (
       <MainButton
         text="Accept Return"
-        onPress={() => {
-          console.log("Navigate to leaave feedback")
-          // acceptRequest({ input: { rentingId } })
+        onPress={async () => {
+          await acceptReturn({ input: { rentingId } })
+          console.log("Navigate to leave feedback")
         }}
       />
     ),
-    Returned: <AppText>Returned</AppText>,
-    Canceled: <AppText>Canceled</AppText>,
+    Returned: true ? (
+      <Pill color="green">Returned</Pill>
+    ) : (
+      <MainButton
+        text="Leave Feedback"
+        onPress={async () => {
+          console.log("Navigate to leave feedback")
+        }}
+      />
+    ),
+    Canceled: <Pill color="gray">Canceled</Pill>,
   }
 
   return (
-    <View style={tw("flex-row justify-between items-center")}>
-      <PersonLine person={renter} pfpLeft />
-      <View style={tw("w-1")} />
+    <View
+      style={[
+        (rentingStatus === "Canceled" ||
+          rentingStatus === "Returned" ||
+          rentingStatus === "RequestDeclined") &&
+          tw("opacity-50"),
+      ]}
+    >
       <View style={tw("flex-row items-center")}>
+        <PersonLine person={renter} pfpLeft />
+        <View style={tw("w-1")} />
         <RentingPeriod renting={renting} />
+      </View>
+      <View style={tw("h-1")} />
+      <View style={tw("flex-row justify-between items-center")}>
         <View style={tw("w-2")} />
         {rentingStatus && status[rentingStatus]}
       </View>

@@ -1,7 +1,6 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
 import { ListingListItem } from "@components/ListingListItem"
-import { MainButton } from "@components/MainButton"
 import { RootTabs } from "@components/RootTabNavigator"
 import { SeparatedBy } from "@components/SeparatedBy"
 import {
@@ -14,8 +13,8 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
-import React, { VFC } from "react"
-import { ScrollView, View } from "react-native"
+import React, { useEffect, VFC } from "react"
+import { RefreshControl, ScrollView, View } from "react-native"
 import { filterNodes } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
@@ -58,27 +57,34 @@ const HomeScreen: VFC<
 > = () => {
   const tw = useTailwind()
 
-  const [{ data, fetching, error }, re] = useQuery({
+  const [{ data, fetching, error }, refetch] = useQuery({
     query: Listings,
     requestPolicy: "cache-and-network",
   })
 
   const items = data?.listings?.edges
 
-  if (fetching) return <AppText>Loading</AppText>
   if (error) return <AppText>Error {error.message}</AppText>
 
+  const [refreshing, setRefreshing] = React.useState(false)
+  useEffect(() => {
+    setRefreshing(fetching)
+  }, [fetching])
+
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true)
+            refetch({ requestPolicy: "network-only" })
+          }}
+        />
+      }
+    >
       <SeparatedBy separator={<View style={tw("h-8")} />} start end>
-        <View style={tw("px-4")}>
-          <MainButton
-            text="Refresh"
-            onPress={() => {
-              re({ requestPolicy: "network-only" })
-            }}
-          />
-        </View>
+        <View style={tw("px-4")}></View>
         <AppFlatList
           horizontal
           title="Listings"

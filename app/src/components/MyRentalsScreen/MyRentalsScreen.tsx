@@ -3,6 +3,7 @@ import { AppText } from "@components/AppText"
 import { CancelRentingButton } from "@components/CancelRenting"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
+import { Pill } from "@components/Pill"
 import { RentingPeriod } from "@components/RentingPeriod"
 import { RootTabs } from "@components/RootTabNavigator"
 import {
@@ -87,10 +88,11 @@ const HomeScreen: VFC<
         renderItem={({ item }) => (
           <ListingListItem.ListItemVertical
             item={item.listing!}
-            renderStatus={() => {
+            renderStatus={() => <RentingPeriod renting={item} />}
+            renderStatuses={() => {
               const status = {
                 RequestPending: <CancelRentingButton rentingId={item.id} />,
-                RequestDeclined: <AppText>Declined</AppText>,
+                RequestDeclined: <Pill color="red">Declined</Pill>,
                 PaymentPending: (
                   <View style={tw("flex-row")}>
                     <CancelRentingButton rentingId={item.id} />
@@ -98,12 +100,12 @@ const HomeScreen: VFC<
                     <MainButton
                       text="Pay"
                       onPress={() => {
-                        console.log("Navigate to payment screen")
+                        navigate("PayForRenting", { id: item.id })
                       }}
                     />
                   </View>
                 ),
-                ReturnPending: <AppText>Return in X days</AppText>,
+                ReturnPending: <Pill>Return in X days</Pill>,
                 Returned: (
                   <MainButton
                     text="Leave Feedback"
@@ -112,12 +114,10 @@ const HomeScreen: VFC<
                     }}
                   />
                 ),
-                Canceled: <AppText>Canceled</AppText>,
+                Canceled: <Pill color="gray">Canceled</Pill>,
               }
               return (
-                <View style={tw("flex-row items-center")}>
-                  <RentingPeriod renting={item} />
-                  <View style={tw("w-2")} />
+                <View style={tw("flex-row items-center justify-end pt-2")}>
                   {item.rentingStatus && status[item.rentingStatus]}
                 </View>
               )

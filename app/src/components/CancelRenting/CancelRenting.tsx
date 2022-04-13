@@ -9,6 +9,7 @@ export const cancelRenting = gql(/* GraphQL */ `
     cancelRenting(input: $input) {
       __typename
       rentingStatus
+      updatedAt
       id
     }
   }

@@ -58,6 +58,9 @@ const client = createClient({
       schema,
       updates: {
         Mutation: {
+          declineRentingRequest(_result, _args, cache, _info) {
+            cache.invalidate("Query", "me")
+          },
           createListing(_result, _args, cache, _info) {
             cache.invalidate("Query", "me")
           },

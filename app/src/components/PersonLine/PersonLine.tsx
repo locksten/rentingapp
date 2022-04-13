@@ -24,7 +24,7 @@ export const PersonLine: VFC<{
     <View
       style={[
         pfpLeft ? tw("flex-row-reverse") : tw("flex-row"),
-        tw("items-center"),
+        tw("items-center flex-shrink"),
       ]}
     >
       <AppText numberOfLines={1} style={tw("flex-shrink text-gray-600")}>

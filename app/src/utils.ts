@@ -24,14 +24,13 @@ export const useRefetchOnFocus = (
   const navigation = useNavigation()
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      console.log("REFETCH")
       refetch({ requestPolicy: "network-only" })
     })
     return unsubscribe
   }, [navigation])
 }
 
-export const prseJSONDate = (date?: string | null) =>
+export const parseJSONDate = (date?: string | null) =>
   date ? parseJSON(date) : undefined
 
 export const formatISODate = (date?: Date | number | null | string) =>
