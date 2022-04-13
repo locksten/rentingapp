@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { format, formatISO, parseJSON } from "date-fns"
 import React from "react"
 import { useReducer } from "react"
+import { Platform } from "react-native"
 import { useMediaQuery } from "react-responsive"
 import { OperationContext } from "urql"
 
@@ -58,3 +59,5 @@ export const useDeviceSize = () => ({
   xl: useMediaQuery({ minDeviceWidth: 1280 }),
   "2xl": useMediaQuery({ minDeviceWidth: 1536 }),
 })
+
+export const isWeb = Platform.OS === "web"

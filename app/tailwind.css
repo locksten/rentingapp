@@ -10,6 +10,10 @@
   display: flex
 }
 
+.hidden {
+  display: none
+}
+
 .h-2 {
   height: 0.5rem
 }
@@ -52,6 +56,14 @@
 
 .h-0\.5 {
   height: 0.125rem
+}
+
+.h-64 {
+  height: 16rem
+}
+
+.h-48 {
+  height: 12rem
 }
 
 .w-2 {
@@ -160,6 +172,10 @@
 
 .justify-around {
   justify-content: space-around
+}
+
+.overflow-hidden {
+  overflow: hidden
 }
 
 .rounded-lg {

@@ -14,6 +14,11 @@
 			"display": "flex"
 		}
 	},
+	"hidden": {
+		"style": {
+			"display": "none"
+		}
+	},
 	"h-2": {
 		"style": {
 			"height": 8
@@ -67,6 +72,16 @@
 	"h-0.5": {
 		"style": {
 			"height": 2
+		}
+	},
+	"h-64": {
+		"style": {
+			"height": 256
+		}
+	},
+	"h-48": {
+		"style": {
+			"height": 192
 		}
 	},
 	"w-2": {
@@ -204,6 +219,11 @@
 	"justify-around": {
 		"style": {
 			"justifyContent": "space-around"
+		}
+	},
+	"overflow-hidden": {
+		"style": {
+			"overflow": "hidden"
 		}
 	},
 	"rounded-lg": {

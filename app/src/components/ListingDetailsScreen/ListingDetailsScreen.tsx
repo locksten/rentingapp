@@ -1,4 +1,5 @@
 import { AppImage } from "@components/AppImage"
+import { AppMapView } from "@components/AppMapView"
 import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
@@ -128,7 +129,15 @@ export const MainDetails: VFC<{
           <View style={tw("h-1")} />
           {!!description && <AppText style={tw("px-4")}>{description}</AppText>}
         </View>
-        <View style={tw("h-4")} />
+        {!!AppMapView && (
+          <>
+            <View style={tw("h-4")} />
+            <View style={tw("px-4 w-full h-48")}>
+              <AppMapView showsPointsOfInterest />
+            </View>
+            <View style={tw("h-4")} />
+          </>
+        )}
         <View style={tw("px-4 w-full max-w-md")}>
           {!!owner && <PersonCard person={owner} />}
         </View>
