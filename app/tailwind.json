@@ -59,6 +59,16 @@
 			"height": 40
 		}
 	},
+	"h-0": {
+		"style": {
+			"height": 0
+		}
+	},
+	"h-0.5": {
+		"style": {
+			"height": 2
+		}
+	},
 	"w-2": {
 		"style": {
 			"width": 8
@@ -124,6 +134,11 @@
 	"flex-col": {
 		"style": {
 			"flexDirection": "column"
+		}
+	},
+	"content-center": {
+		"style": {
+			"alignContent": "center"
 		}
 	},
 	"content-end": {
@@ -489,6 +504,31 @@
 	"pt-2": {
 		"style": {
 			"paddingTop": 8
+		}
+	},
+	"pl-2": {
+		"style": {
+			"paddingLeft": 8
+		}
+	},
+	"pb-0.5": {
+		"style": {
+			"paddingBottom": 2
+		}
+	},
+	"pb-0": {
+		"style": {
+			"paddingBottom": 0
+		}
+	},
+	"pt-0.5": {
+		"style": {
+			"paddingTop": 2
+		}
+	},
+	"pt-0": {
+		"style": {
+			"paddingTop": 0
 		}
 	},
 	"text-base": {

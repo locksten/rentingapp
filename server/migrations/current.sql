@@ -22,6 +22,15 @@ create table "Listing" (
 );
 
 
+drop table if exists "Feedback" cascade;
+create table "Feedback" (
+    "id" serial primary key,
+    "rating" int not null,
+    "text" text,
+    "createdAt" timestamp with time zone not null default now(),
+    "_type" text not null generated always as ('Feedback') stored
+);
+
 drop type if exists "RentingStatus" cascade;
 create type "RentingStatus" as enum ('RequestPending', 'RequestDeclined', 'PaymentPending', 'ReturnPending', 'Returned', 'Canceled');
 
@@ -31,6 +40,8 @@ create table "Renting" (
     "listingId" int references "Listing" ("id") not null,
     "ownerId" text references "User" ("id") not null,
     "renterId" text references "User" ("id") not null,
+    "ownerFeedbackId" int references "Feedback" ("id"),
+    "renterFeedbackId" int references "Feedback" ("id"),
     "scheduledStartTime" timestamp with time zone not null,
     "scheduledEndTime" timestamp with time zone not null,
     "rentingStatus" "RentingStatus" default 'RequestPending',

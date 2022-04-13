@@ -1,5 +1,6 @@
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
+import { Feedback } from "schema/feedback"
 import { Listing } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
@@ -34,6 +35,10 @@ export const Renting = schemaBuilder.loadableNode(RentingRef, {
       type: "String",
       resolve: ({ updatedAt }) => db.toDate(updatedAt).toISOString(),
     }),
+    listing: t.field({
+      type: Listing,
+      resolve: ({ listingId }) => listingId,
+    }),
     rentingStatus: t.field({
       type: RentingStatus,
       resolve: ({ rentingStatus }) => rentingStatus,
@@ -46,9 +51,13 @@ export const Renting = schemaBuilder.loadableNode(RentingRef, {
       type: User,
       resolve: ({ renterId }) => renterId,
     }),
-    listing: t.field({
-      type: Listing,
-      resolve: ({ listingId }) => listingId,
+    ownerFeedback: t.field({
+      type: Feedback,
+      resolve: ({ ownerFeedbackId }) => ownerFeedbackId,
+    }),
+    renterFeedback: t.field({
+      type: Feedback,
+      resolve: ({ renterFeedbackId }) => renterFeedbackId,
     }),
   }),
 })

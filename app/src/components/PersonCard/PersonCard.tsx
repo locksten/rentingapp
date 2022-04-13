@@ -19,6 +19,8 @@ const PersonCardFragment = gql(/* GraphQL */ `
     listingCount
     rentingOwnerCount
     rentingRenterCount
+    ratingCount
+    rating
   }
 `)
 
@@ -28,13 +30,14 @@ export const PersonCard: VFC<{
   const tw = useTailwind()
   const { navigate } = useNavigation<RootTabsNavigationProp>()
   const {
-    id,
     isMe,
     listingCount,
     name,
     imageUrl,
     rentingOwnerCount,
     rentingRenterCount,
+    ratingCount,
+    rating,
   } = person
 
   const NameAndPic = (
@@ -59,7 +62,7 @@ export const PersonCard: VFC<{
         {NameAndPic}
         <View style={tw("h-4")} />
         <View style={tw("flex-row justify-around pb-4")}>
-          <Ratings rating={0} ratingCount={0} />
+          <Ratings rating={rating} ratingCount={ratingCount} />
           <Rentings asOwner={rentingOwnerCount} asRenter={rentingRenterCount} />
           <Listings listingCount={listingCount} />
         </View>
@@ -94,7 +97,7 @@ const Fact: VFC<{
   )
 }
 
-const Ratings: VFC<{ rating: number; ratingCount: number }> = ({
+const Ratings: VFC<{ rating?: number | null; ratingCount?: number | null }> = ({
   rating,
   ratingCount,
 }) => {
@@ -102,7 +105,7 @@ const Ratings: VFC<{ rating: number; ratingCount: number }> = ({
     <Fact
       name="Ratings"
       icon={"star-outline"}
-      value={`${rating.toFixed(1)} (${ratingCount})`}
+      value={`${(rating ?? 0).toFixed(1)} (${ratingCount ?? 0})`}
     />
   )
 }

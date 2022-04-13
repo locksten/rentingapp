@@ -3,6 +3,7 @@ import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
 import { PersonCard } from "@components/PersonCard"
+import { Stars } from "@components/Stars"
 import {
   CommonStackNavigationProp,
   CommonStackParams,
@@ -15,36 +16,28 @@ import { FlatList, StyleSheet, View } from "react-native"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
-const f: FeedbackListItem = {
-  id: "",
-  content: "Feedback feedback feedback",
-  rating: 5,
-}
-
-const feedback: FeedbackListItem[] = [
-  {
-    ...f,
-    id: "1",
-    content: "Feedback feedback feedback feedback feedback feedback feedback",
-  },
-  { ...f, id: "2" },
-  { ...f, id: "3" },
-  { ...f, id: "4" },
-]
-
 export const Listing = gql(/* GraphQL */ `
   query Listing($nodeId: ID!) {
     node(id: $nodeId) {
       __typename
       id
       ... on Listing {
+        id
         title
         description
         imageUrl
         dayPriceEuroCents
+        rating
         owner {
           isMe
           ...PersonCardFragment
+        }
+        feedback {
+          edges {
+            node {
+              ...FeedbackListItemFragment
+            }
+          }
         }
       }
     }
@@ -61,14 +54,13 @@ export const ListingDetailsScreen: VFC<
   const tw = useTailwind()
   const { navigate } = useNavigation<CommonStackNavigationProp>()
 
-  const [{ data, fetching, error }] = useQuery({
+  const [{ data, error }] = useQuery({
     query: Listing,
     variables: { nodeId: id },
     requestPolicy: "cache-and-network",
   })
   const item = data?.node?.__typename === "Listing" ? data.node : undefined
 
-  if (fetching) return <AppText>Loading</AppText>
   if (error || !item?.__typename)
     return <AppText>Error {error?.message}</AppText>
 
@@ -76,8 +68,10 @@ export const ListingDetailsScreen: VFC<
     <View style={tw("flex-1")}>
       <FlatList
         ListHeaderComponent={() => <MainDetails item={item} />}
-        data={feedback}
-        renderItem={({ item }) => <FeedbackListItem item={item} />}
+        data={item.feedback?.edges?.map((e) => e?.node)}
+        renderItem={({ item }) =>
+          item ? <FeedbackListItem feedback={item} /> : null
+        }
         ItemSeparatorComponent={() => (
           <View
             style={[
@@ -107,7 +101,7 @@ export const MainDetails: VFC<{
     },
     "__typename"
   >
-}> = ({ item: { imageUrl, title, description, owner } }) => {
+}> = ({ item: { imageUrl, title, description, owner, rating, feedback } }) => {
   const tw = useTailwind()
   return (
     <View style={tw("justify-between")}>
@@ -129,6 +123,15 @@ export const MainDetails: VFC<{
       <View style={tw("h-4")} />
       <View style={tw("px-4")}>{!!owner && <PersonCard person={owner} />}</View>
       <View style={tw("h-4")} />
+      {!!feedback?.edges.length && (
+        <View style={tw("flex-row bg-white p-2 justify-center items-center")}>
+          {!!rating && (
+            <AppText style={tw("pt-0.5")}>{rating.toFixed(1)}</AppText>
+          )}
+          <View style={tw("w-2")} />
+          <Stars stars={rating} />
+        </View>
+      )}
     </View>
   )
 }

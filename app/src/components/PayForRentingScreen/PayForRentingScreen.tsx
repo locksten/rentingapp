@@ -76,7 +76,7 @@ export const PayForRentingScreen: VFC<
             })
             navigtion.goBack()
           }}
-          text={`Pay ${item?.dayPriceEuroCents ?? 0 * 100}€ for ${item?.title}`}
+          text={`Pay ${item?.dayPriceEuroCents ?? 0 / 100}€ for ${item?.title}`}
         />
       </View>
     </SafeAreaView>

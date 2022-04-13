@@ -2,6 +2,11 @@ import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { getFirebaseUserById } from "auth"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
+import {
+  feedbackAvergeRating,
+  getFeedbacksReceivedAsOwner,
+  getFeedbacksReceivedAsRenter,
+} from "schema/feedback"
 import { Listing } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User as QUser } from "zapatos/schema"
@@ -36,6 +41,18 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     rentingRenterCount: t.int({
       resolve: ({ id }, _args, { pool }) =>
         db.count("Renting", { renterId: id }).run(pool),
+    }),
+    ratingCount: t.int({
+      resolve: async ({ id }, _args, { pool }) =>
+        (await getFeedbacksReceivedAsOwner(id, pool)).length +
+        (await getFeedbacksReceivedAsRenter(id, pool)).length,
+    }),
+    rating: t.float({
+      resolve: async ({ id }, _args, { pool }) =>
+        feedbackAvergeRating([
+          ...(await getFeedbacksReceivedAsOwner(id, pool)),
+          ...(await getFeedbacksReceivedAsRenter(id, pool)),
+        ]),
     }),
   }),
 })

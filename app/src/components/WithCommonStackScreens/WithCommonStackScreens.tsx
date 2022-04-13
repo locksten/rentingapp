@@ -13,7 +13,7 @@ import React, { FC } from "react"
 export type CommonStackParams = {
   ListingDetail: { id: string }
   MakeRentingRequest: { id: string }
-  LeaveFeedback: { id: string }
+  LeaveFeedback: { rentingId: string }
   PayForRenting: { id: string }
   CreateListing: undefined
 }

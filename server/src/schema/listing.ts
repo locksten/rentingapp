@@ -2,7 +2,8 @@ import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
 import { eachDayOfInterval, formatISO } from "date-fns"
-import { Renting } from "schema/renting"
+import { Feedback, feedbackAvergeRating, QFeedback } from "schema/feedback"
+import { QRenting, Renting } from "schema/renting"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
 import { Listing as QListing } from "zapatos/schema"
@@ -63,6 +64,39 @@ schemaBuilder.objectFields(Listing, (t) => ({
     type: [Renting],
     resolve: ({ id }, _args, { pool }) =>
       db.select("Renting", { listingId: id }).run(pool),
+  }),
+}))
+
+schemaBuilder.objectFields(Listing, (t) => ({
+  rating: t.float({
+    resolve: async ({ id: listingId }, _args, { pool }) => {
+      const feedbacks = await db.sql<
+        QListing.SQL | QRenting.SQL | QFeedback.SQL,
+        Feedback[]
+      >`
+      SELECT ${"Feedback"}.*
+      FROM ${"Renting"}
+      JOIN ${"Feedback"} ON ${"Renting"}.${"renterFeedbackId"} = ${"Feedback"}.${"id"}
+      WHERE ${{ listingId }}`.run(pool)
+      return feedbackAvergeRating(feedbacks)
+    },
+  }),
+}))
+
+schemaBuilder.objectFields(Listing, (t) => ({
+  feedback: t.connection({
+    type: Feedback,
+    resolve: async ({ id: listingId }, args, { pool }) => {
+      const feedbacks = await db.sql<
+        QListing.SQL | QRenting.SQL | QFeedback.SQL,
+        Feedback[]
+      >`
+      SELECT ${"Feedback"}.*
+      FROM ${"Renting"}
+      JOIN ${"Feedback"} ON ${"Renting"}.${"renterFeedbackId"} = ${"Feedback"}.${"id"}
+      WHERE ${{ listingId }}`.run(pool)
+      return resolveArrayConnection({ args }, feedbacks)
+    },
   }),
 }))
 

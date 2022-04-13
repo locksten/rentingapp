@@ -81,7 +81,7 @@ export const emailSignUp = async (
   password: string,
   displayName: string,
 ) => {
-  await createUserWithEmailAndPassword(auth, email, password)
+  console.log("singing up", email, password, displayName)
   if (!displayName) throw new Error("Name is required")
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, {

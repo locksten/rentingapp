@@ -55,17 +55,7 @@ export const MyListings = gql(/* GraphQL */ `
             id
             ...ListingListItemFragment
             rentings {
-              __typename
-              id
-              rentingStatus
-              scheduledStartTime
-              scheduledEndTime
-              updatedAt
-              renter {
-                __typename
-                id
-                ...PersonLineFragment
-              }
+              ...OwnerRentingFragment
             }
           }
         }
@@ -136,6 +126,10 @@ const OwnerRentingFragment = gql(/* GraphQL */ `
     rentingStatus
     scheduledStartTime
     scheduledEndTime
+    ownerFeedback {
+      __typename
+      id
+    }
     updatedAt
     renter {
       __typename
@@ -181,14 +175,15 @@ export const acceptRentingReturn = gql(/* GraphQL */ `
 export const OwnerRenting: VFC<{
   renting?: DocumentType<typeof OwnerRentingFragment> | null
 }> = ({ renting }) => {
+  const tw = useTailwind()
+  const { navigate } = useNavigation<CommonStackNavigationProp>()
+
   const [_, declineRequest] = useMutation(declineRentingRequest)
   const [__, acceptRequest] = useMutation(acceptRentingRequest)
   const [___, acceptReturn] = useMutation(acceptRentingReturn)
 
-  const tw = useTailwind()
-
   if (!renting) return null
-  const { id: rentingId, renter, rentingStatus } = renting
+  const { id: rentingId, renter, rentingStatus, ownerFeedback } = renting
 
   const status = {
     RequestPending: (
@@ -216,19 +211,23 @@ export const OwnerRenting: VFC<{
         text="Accept Return"
         onPress={async () => {
           await acceptReturn({ input: { rentingId } })
-          console.log("Navigate to leave feedback")
         }}
       />
     ),
-    Returned: true ? (
-      <Pill color="green">Returned</Pill>
-    ) : (
-      <MainButton
-        text="Leave Feedback"
-        onPress={async () => {
-          console.log("Navigate to leave feedback")
-        }}
-      />
+    Returned: (
+      <View style={tw("flex-row items-center")}>
+        <Pill color="green">Returned</Pill>
+        {!ownerFeedback && (
+          <View style={tw("pl-2")}>
+            <MainButton
+              text="Leave Feedback"
+              onPress={() => {
+                navigate("LeaveFeedback", { rentingId })
+              }}
+            />
+          </View>
+        )}
+      </View>
     ),
     Canceled: <Pill color="gray">Canceled</Pill>,
   }
@@ -237,8 +236,8 @@ export const OwnerRenting: VFC<{
     <View
       style={[
         (rentingStatus === "Canceled" ||
-          rentingStatus === "Returned" ||
-          rentingStatus === "RequestDeclined") &&
+          rentingStatus === "RequestDeclined" ||
+          (rentingStatus === "Returned" && renting.ownerFeedback)) &&
           tw("opacity-50"),
       ]}
     >

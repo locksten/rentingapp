@@ -26,6 +26,167 @@ declare module 'zapatos/schema' {
   /* --- tables --- */
 
   /**
+   * **Feedback**
+   * - Table in database
+   */
+  export namespace Feedback {
+    export type Table = 'Feedback';
+    export interface Selectable {
+      /**
+      * **Feedback.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Feedback_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Feedback.rating**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      rating: number;
+      /**
+      * **Feedback.text**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      text: string | null;
+      /**
+      * **Feedback.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: Date;
+      /**
+      * **Feedback._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **Feedback.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Feedback_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Feedback.rating**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      rating: number;
+      /**
+      * **Feedback.text**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      text: string | null;
+      /**
+      * **Feedback.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: db.TimestampTzString;
+      /**
+      * **Feedback._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface Whereable {
+      /**
+      * **Feedback.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Feedback_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Feedback.rating**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      rating?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Feedback.text**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      text?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Feedback.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Feedback._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **Feedback.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Feedback_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Feedback.rating**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      rating: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **Feedback.text**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      text?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Feedback.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **Feedback.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Feedback_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Feedback.rating**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      rating?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Feedback.text**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      text?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Feedback.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+    }
+    export type UniqueIndex = 'Feedback_pkey';
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
    * **Listing**
    * - Table in database
    */
@@ -368,6 +529,18 @@ declare module 'zapatos/schema' {
       */
       renterId: string;
       /**
+      * **Renting.ownerFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      ownerFeedbackId: number | null;
+      /**
+      * **Renting.renterFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      renterFeedbackId: number | null;
+      /**
       * **Renting.scheduledStartTime**
       * - `timestamptz` in database
       * - `NOT NULL`, no default
@@ -429,6 +602,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       renterId: string;
+      /**
+      * **Renting.ownerFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      ownerFeedbackId: number | null;
+      /**
+      * **Renting.renterFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      renterFeedbackId: number | null;
       /**
       * **Renting.scheduledStartTime**
       * - `timestamptz` in database
@@ -492,6 +677,18 @@ declare module 'zapatos/schema' {
       */
       renterId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Renting.ownerFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      ownerFeedbackId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Renting.renterFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      renterFeedbackId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Renting.scheduledStartTime**
       * - `timestamptz` in database
       * - `NOT NULL`, no default
@@ -554,6 +751,18 @@ declare module 'zapatos/schema' {
       */
       renterId: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **Renting.ownerFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      ownerFeedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Renting.renterFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      renterFeedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
       * **Renting.scheduledStartTime**
       * - `timestamptz` in database
       * - `NOT NULL`, no default
@@ -609,6 +818,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       renterId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Renting.ownerFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      ownerFeedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Renting.renterFeedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      renterFeedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
       /**
       * **Renting.scheduledStartTime**
       * - `timestamptz` in database
@@ -810,64 +1031,72 @@ declare module 'zapatos/schema' {
 
   /* === cross-table types === */
 
-  export type Table = Listing.Table | Renting.Table | User.Table;
-  export type Selectable = Listing.Selectable | Renting.Selectable | User.Selectable;
-  export type JSONSelectable = Listing.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
-  export type Whereable = Listing.Whereable | Renting.Whereable | User.Whereable;
-  export type Insertable = Listing.Insertable | Renting.Insertable | User.Insertable;
-  export type Updatable = Listing.Updatable | Renting.Updatable | User.Updatable;
-  export type UniqueIndex = Listing.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
-  export type Column = Listing.Column | Renting.Column | User.Column;
-  export type AllBaseTables = [Listing.Table, Renting.Table, User.Table];
+  export type Table = Feedback.Table | Listing.Table | Renting.Table | User.Table;
+  export type Selectable = Feedback.Selectable | Listing.Selectable | Renting.Selectable | User.Selectable;
+  export type JSONSelectable = Feedback.JSONSelectable | Listing.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
+  export type Whereable = Feedback.Whereable | Listing.Whereable | Renting.Whereable | User.Whereable;
+  export type Insertable = Feedback.Insertable | Listing.Insertable | Renting.Insertable | User.Insertable;
+  export type Updatable = Feedback.Updatable | Listing.Updatable | Renting.Updatable | User.Updatable;
+  export type UniqueIndex = Feedback.UniqueIndex | Listing.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
+  export type Column = Feedback.Column | Listing.Column | Renting.Column | User.Column;
+  export type AllBaseTables = [Feedback.Table, Listing.Table, Renting.Table, User.Table];
   export type AllForeignTables = [];
   export type AllViews = [];
   export type AllMaterializedViews = [];
-  export type AllTablesAndViews = [Listing.Table, Renting.Table, User.Table];
+  export type AllTablesAndViews = [Feedback.Table, Listing.Table, Renting.Table, User.Table];
 
 
   export type SelectableForTable<T extends Table> = {
+    Feedback: Feedback.Selectable;
     Listing: Listing.Selectable;
     Renting: Renting.Selectable;
     User: User.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
+    Feedback: Feedback.JSONSelectable;
     Listing: Listing.JSONSelectable;
     Renting: Renting.JSONSelectable;
     User: User.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
+    Feedback: Feedback.Whereable;
     Listing: Listing.Whereable;
     Renting: Renting.Whereable;
     User: User.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
+    Feedback: Feedback.Insertable;
     Listing: Listing.Insertable;
     Renting: Renting.Insertable;
     User: User.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
+    Feedback: Feedback.Updatable;
     Listing: Listing.Updatable;
     Renting: Renting.Updatable;
     User: User.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
+    Feedback: Feedback.UniqueIndex;
     Listing: Listing.UniqueIndex;
     Renting: Renting.UniqueIndex;
     User: User.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
+    Feedback: Feedback.Column;
     Listing: Listing.Column;
     Renting: Renting.Column;
     User: User.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
+    Feedback: Feedback.SQL;
     Listing: Listing.SQL;
     Renting: Renting.SQL;
     User: User.SQL;
