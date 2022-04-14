@@ -36,11 +36,15 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     }),
     rentingOwnerCount: t.int({
       resolve: ({ id }, _args, { pool }) =>
-        db.count("Renting", { ownerId: id }).run(pool),
+        db
+          .count("Renting", { ownerId: id, rentingStatus: "Returned" })
+          .run(pool),
     }),
     rentingRenterCount: t.int({
       resolve: ({ id }, _args, { pool }) =>
-        db.count("Renting", { renterId: id }).run(pool),
+        db
+          .count("Renting", { renterId: id, rentingStatus: "Returned" })
+          .run(pool),
     }),
     ratingCount: t.int({
       resolve: async ({ id }, _args, { pool }) =>
