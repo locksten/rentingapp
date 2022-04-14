@@ -21,7 +21,7 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
-import { FlatList, View } from "react-native"
+import { View } from "react-native"
 import { filterNodes, sortByUpdatedAt, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
@@ -50,7 +50,7 @@ export const MyListings = gql(/* GraphQL */ `
   query MyListings {
     me {
       id
-      MyListings {
+      myListings {
         edges {
           node {
             __typename
@@ -76,7 +76,7 @@ const HomeScreen: VFC<
     requestPolicy: "cache-and-network",
   })
   useRefetchOnFocus(refetch)
-  const items = data?.me?.MyListings?.edges
+  const items = data?.me?.myListings?.edges
 
   if (error) return <AppText>Error {error.message}</AppText>
 

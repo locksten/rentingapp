@@ -1,17 +1,15 @@
+import { AppFlatList } from "@components/AppFlatList"
 import { AppImage } from "@components/AppImage"
-import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
-import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
 import { AppText } from "@components/AppText"
-import { items } from "@components/ListingListItem/ListingListItem"
-import { names } from "@components/PersonCard"
+import { ChatScreen } from "@components/ChatScreen"
+import { MediumListWidth } from "@components/MediumListWidth"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { RootTabs } from "@components/RootTabNavigator"
-import { SeparatedBy } from "@components/SeparatedBy"
 import {
   CommonStackParams,
   WithCommonStackScreens,
 } from "@components/WithCommonStackScreens"
-import Ionicons from "@expo/vector-icons/Ionicons"
+import { gql } from "@gql/gql"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { useNavigation } from "@react-navigation/native"
 import {
@@ -19,13 +17,16 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
+import { formatDistanceToNowStrict } from "date-fns"
 import React, { VFC } from "react"
-import { ScrollView, TextInput, TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
+import { isTruthy, isWeb, parseJSONDate, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
+import { useQuery } from "urql"
 
 export type MessagesScreenParams = CommonStackParams & {
   Home: undefined
-  Chat: undefined
+  Chat: { conversationId?: string; listingId?: string; recipientId?: string }
 }
 
 export type MessagesStackNavigationProp =
@@ -55,169 +56,128 @@ export const MessagesScreen: VFC<
   )
 }
 
-const chats = [
-  {
-    id: "1",
-    personId: "1",
-    itemId: "1",
-    content: "Lorem ipsum dolor sit amet",
-  },
-  {
-    id: "2",
-    personId: "2",
-    itemId: "2",
-    content: "Lorem ipsum dolor sit amet",
-  },
-]
+export const MyConversations = gql(/* GraphQL */ `
+  query MyConversations {
+    me {
+      __typename
+      id
+      conversations {
+        edges {
+          node {
+            __typename
+            id
+            createdAt
+            listing {
+              __typename
+              id
+              imageUrl
+            }
+            latestMessage {
+              __typename
+              id
+              text
+              createdAt
+              sender {
+                __typename
+                id
+                name
+                imageUrl
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`)
 
 const HomeScreen: VFC<
   NativeStackScreenProps<MessagesScreenParams, "Home">
 > = () => {
   const tw = useTailwind()
   const { navigate } = useNavigation<MessagesStackNavigationProp>()
+
+  const [{ data }, refetch] = useQuery({
+    query: MyConversations,
+    requestPolicy: "cache-and-network",
+  })
+  const items = data?.me?.conversations?.edges
+  useRefetchOnFocus(refetch)
+
   return (
-    <ScrollView
-      contentContainerStyle={tw(
-        "flex-grow justify-between flex-col justify-start",
-      )}
-    >
-      <SeparatedBy
-        separator={<View style={tw("h-4")} />}
-        start
-        end
-        style={tw("flex flex-col content-end")}
-      >
-        {[...Array(7).keys()]
-          .map((i) => `${i}`)
-          .map((id) => {
-            const { itemId, personId, content } =
-              chats[Number(id) % chats.length]
-            const readStyle =
-              Number(id) % 3 === 0
-                ? tw("text-black font-bold")
-                : tw("text-gray-600")
-            return (
-              <TouchableOpacity
-                key={id}
-                activeOpacity={0.7}
-                onPress={() => {
-                  navigate("Chat")
-                }}
-                style={tw("h-16 flex-row pr-2")}
-              >
-                <View style={tw("-ml-16 pr-8 items-end")}>
-                  <AppImage
-                    uri={items[0].imageUri}
-                    aspectRatio={16 / 9}
-                    imageStyle={tw("h-full rounded-r-none")}
-                  />
+    <MediumListWidth>
+      <AppFlatList
+        data={items?.map((i) => i?.node).filter(isTruthy)}
+        renderItem={({ item }) => {
+          const { latestMessage, listing } = item
+          const lastMessageDate = parseJSONDate(latestMessage?.createdAt)
+          const readStyle = true
+            ? tw("text-black font-bold")
+            : tw("text-gray-600")
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                navigate("Chat", { conversationId: item.id })
+              }}
+              style={tw("h-16 flex-row pr-2")}
+            >
+              {isWeb ? (
+                <ProfilePicture
+                  uri={latestMessage?.sender?.imageUrl}
+                  style={tw("h-full")}
+                />
+              ) : (
+                <View style={tw("-ml-16 pr-8 relative items-end")}>
+                  <View style={!listing?.imageUrl && tw("opacity-0")}>
+                    <AppImage
+                      uri={listing?.imageUrl}
+                      aspectRatio={16 / 9}
+                      style={tw("h-full rounded-r-none")}
+                    />
+                  </View>
                   <ProfilePicture
-                    uri={"https://www.example.com"}
-                    style={tw("absolute h-full")}
-                    imageStyle={{
-                      borderWidth: 0.5,
-                      borderColor: "#ffffffff",
-                    }}
+                    uri={latestMessage?.sender?.imageUrl}
+                    style={tw("h-full absolute border-white")}
                   />
                 </View>
-                <View style={tw("h-full flex-1 px-2 pb-2 justify-center")}>
-                  <AppText style={tw("text-lg font-semibold")}>
-                    {names[Number(personId) % names.length]}
-                  </AppText>
-                  <View style={tw("flex-row")}>
-                    <View style={tw("flex-shrink")}>
-                      <AppText numberOfLines={1} style={readStyle}>
-                        {content}
-                      </AppText>
-                    </View>
-                    <AppText style={readStyle}>{" · 2h ago"}</AppText>
+              )}
+              <View style={tw("h-full flex-1 px-4 pb-2 justify-center")}>
+                <AppText style={tw("text-lg font-semibold")}>
+                  {latestMessage?.sender?.name}
+                </AppText>
+                <View style={tw("flex-row")}>
+                  <View style={tw("flex-shrink")}>
+                    <AppText numberOfLines={1} style={readStyle}>
+                      {latestMessage?.text}
+                    </AppText>
                   </View>
-                </View>
-              </TouchableOpacity>
-            )
-          })}
-      </SeparatedBy>
-    </ScrollView>
-  )
-}
-
-const messages = [
-  {
-    id: "1",
-    content: "Lorem ipsum dolor sit amet",
-  },
-  {
-    id: "2",
-    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-  },
-  {
-    id: "3",
-    content: "Lorem ipsum dolor sit adipi scing elit consec tetur",
-  },
-]
-
-const ChatScreen: VFC<
-  NativeStackScreenProps<MessagesScreenParams, "Chat">
-> = () => {
-  const tw = useTailwind()
-  return (
-    <AppKeyboardAvoidingView>
-      <AppKeyboardAvoidingViewScrollView>
-        <SeparatedBy separator={<View style={tw("h-4")} />} start end>
-          {[...Array(15).keys()]
-            .map((i) => ({
-              id: `${i}`,
-            }))
-            .map(({ id }) => {
-              const { content } = messages[Number(id) % messages.length]
-              const mine = Number(id) % 2 === 0
-              return (
-                <View
-                  key={id}
-                  style={tw(
-                    `px-2 ${mine ? "items-end pl-8" : "items-start pr-8"}`,
+                  {lastMessageDate && (
+                    <AppText style={readStyle}>{` · ${formatDistanceToNowStrict(
+                      lastMessageDate,
+                      { addSuffix: true },
+                    )}`}</AppText>
                   )}
-                >
-                  <View
-                    style={tw(
-                      `p-4 py-3 bg-primary-600 rounded-2xl ${
-                        mine ? "rounded-br-none" : "rounded-bl-none"
-                      }`,
-                    )}
-                  >
-                    <AppText style={tw("text-primary-50")}>{content}</AppText>
-                  </View>
                 </View>
-              )
-            })}
-        </SeparatedBy>
-      </AppKeyboardAvoidingViewScrollView>
-      <View style={tw("p-2 bg-white border-t border-neutral-200")}>
-        <View
-          style={tw(
-            "h-10 w-full flex-row bg-neutral-100 rounded-full justify-end p-1 border border-neutral-200",
-          )}
-        >
-          <TextInput style={tw("flex-1 px-2 text-base")} />
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              console.log("send!")
-            }}
-            style={[
-              tw("bg-primary-600 rounded-full items-center justify-center"),
-              { aspectRatio: 1 },
-            ]}
-          >
-            <Ionicons
-              name={"send"}
-              color={"white"}
-              size={16}
-              style={tw("pl-0.5")}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </AppKeyboardAvoidingView>
+              </View>
+            </TouchableOpacity>
+          )
+        }}
+        keyExtractor={(i) => i.id}
+      />
+    </MediumListWidth>
   )
 }
+
+// <View style={tw("-ml-16 pr-8 items-end border")}>
+//   <View style={!listing?.imageUrl && tw("opacity-0")}>
+//     <AppImage
+//       uri={listing?.imageUrl}
+//       aspectRatio={16 / 9}
+//       style={tw("h-full rounded-r-none")}
+//     />
+//   </View>
+//   <ProfilePicture
+//     uri={latestMessage?.sender?.imageUrl}
+//     style={tw("absolute h-full border-white")}
+//   />
+// </View>

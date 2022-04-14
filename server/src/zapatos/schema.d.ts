@@ -26,6 +26,220 @@ declare module 'zapatos/schema' {
   /* --- tables --- */
 
   /**
+   * **Conversation**
+   * - Table in database
+   */
+  export namespace Conversation {
+    export type Table = 'Conversation';
+    export interface Selectable {
+      /**
+      * **Conversation.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Conversation_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Conversation.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId: number | null;
+      /**
+      * **Conversation.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: Date;
+      /**
+      * **Conversation._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **Conversation.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Conversation_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Conversation.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId: number | null;
+      /**
+      * **Conversation.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: db.TimestampTzString;
+      /**
+      * **Conversation._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface Whereable {
+      /**
+      * **Conversation.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Conversation_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Conversation.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Conversation.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Conversation._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **Conversation.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Conversation_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Conversation.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Conversation.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **Conversation.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Conversation_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Conversation.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Conversation.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+    }
+    export type UniqueIndex = 'Conversation_pkey';
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
+   * **ConversationUser**
+   * - Table in database
+   */
+  export namespace ConversationUser {
+    export type Table = 'ConversationUser';
+    export interface Selectable {
+      /**
+      * **ConversationUser.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number;
+      /**
+      * **ConversationUser.userId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      userId: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **ConversationUser.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number;
+      /**
+      * **ConversationUser.userId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      userId: string;
+    }
+    export interface Whereable {
+      /**
+      * **ConversationUser.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **ConversationUser.userId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      userId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **ConversationUser.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **ConversationUser.userId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      userId: string | db.Parameter<string> | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **ConversationUser.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **ConversationUser.userId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      userId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+    }
+    export type UniqueIndex = never;
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
    * **Feedback**
    * - Table in database
    */
@@ -558,6 +772,227 @@ declare module 'zapatos/schema' {
   }
 
   /**
+   * **Message**
+   * - Table in database
+   */
+  export namespace Message {
+    export type Table = 'Message';
+    export interface Selectable {
+      /**
+      * **Message.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Message_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Message.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number;
+      /**
+      * **Message.senderId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      senderId: string;
+      /**
+      * **Message.text**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      text: string;
+      /**
+      * **Message.isRead**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRead: boolean;
+      /**
+      * **Message.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: Date;
+      /**
+      * **Message._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **Message.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Message_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Message.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number;
+      /**
+      * **Message.senderId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      senderId: string;
+      /**
+      * **Message.text**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      text: string;
+      /**
+      * **Message.isRead**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRead: boolean;
+      /**
+      * **Message.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: db.TimestampTzString;
+      /**
+      * **Message._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface Whereable {
+      /**
+      * **Message.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Message_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message.senderId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      senderId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message.text**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      text?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message.isRead**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRead?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Message._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **Message.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Message_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Message.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **Message.senderId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      senderId: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **Message.text**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      text: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **Message.isRead**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRead?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Message.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **Message.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Message_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Message.conversationId**
+      * - `int4` in database
+      * - `NOT NULL`, no default
+      */
+      conversationId?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Message.senderId**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      senderId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Message.text**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      text?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Message.isRead**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRead?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Message.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+    }
+    export type UniqueIndex = 'Message_pkey';
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
    * **Renting**
    * - Table in database
    */
@@ -615,9 +1050,9 @@ declare module 'zapatos/schema' {
       /**
       * **Renting.rentingStatus**
       * - `RentingStatus` in database
-      * - Nullable, default: `'RequestPending'::"RentingStatus"`
+      * - `NOT NULL`, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingStatus: RentingStatus | null;
+      rentingStatus: RentingStatus;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
@@ -689,9 +1124,9 @@ declare module 'zapatos/schema' {
       /**
       * **Renting.rentingStatus**
       * - `RentingStatus` in database
-      * - Nullable, default: `'RequestPending'::"RentingStatus"`
+      * - `NOT NULL`, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingStatus: RentingStatus | null;
+      rentingStatus: RentingStatus;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
@@ -763,7 +1198,7 @@ declare module 'zapatos/schema' {
       /**
       * **Renting.rentingStatus**
       * - `RentingStatus` in database
-      * - Nullable, default: `'RequestPending'::"RentingStatus"`
+      * - `NOT NULL`, default: `'RequestPending'::"RentingStatus"`
       */
       rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, RentingStatus | db.Parameter<RentingStatus> | db.SQLFragment | db.ParentColumn>;
       /**
@@ -837,9 +1272,9 @@ declare module 'zapatos/schema' {
       /**
       * **Renting.rentingStatus**
       * - `RentingStatus` in database
-      * - Nullable, default: `'RequestPending'::"RentingStatus"`
+      * - `NOT NULL`, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment;
+      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | db.DefaultType | db.SQLFragment;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
@@ -905,9 +1340,9 @@ declare module 'zapatos/schema' {
       /**
       * **Renting.rentingStatus**
       * - `RentingStatus` in database
-      * - Nullable, default: `'RequestPending'::"RentingStatus"`
+      * - `NOT NULL`, default: `'RequestPending'::"RentingStatus"`
       */
-      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingStatus | db.Parameter<RentingStatus> | null | db.DefaultType | db.SQLFragment>;
+      rentingStatus?: RentingStatus | db.Parameter<RentingStatus> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, RentingStatus | db.Parameter<RentingStatus> | db.DefaultType | db.SQLFragment>;
       /**
       * **Renting.createdAt**
       * - `timestamptz` in database
@@ -950,9 +1385,9 @@ declare module 'zapatos/schema' {
       /**
       * **User.isAdmin**
       * - `bool` in database
-      * - Nullable, default: `false`
+      * - `NOT NULL`, default: `false`
       */
-      isAdmin: boolean | null;
+      isAdmin: boolean;
       /**
       * **User.createdAt**
       * - `timestamptz` in database
@@ -982,9 +1417,9 @@ declare module 'zapatos/schema' {
       /**
       * **User.isAdmin**
       * - `bool` in database
-      * - Nullable, default: `false`
+      * - `NOT NULL`, default: `false`
       */
-      isAdmin: boolean | null;
+      isAdmin: boolean;
       /**
       * **User.createdAt**
       * - `timestamptz` in database
@@ -1014,7 +1449,7 @@ declare module 'zapatos/schema' {
       /**
       * **User.isAdmin**
       * - `bool` in database
-      * - Nullable, default: `false`
+      * - `NOT NULL`, default: `false`
       */
       isAdmin?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
       /**
@@ -1046,9 +1481,9 @@ declare module 'zapatos/schema' {
       /**
       * **User.isAdmin**
       * - `bool` in database
-      * - Nullable, default: `false`
+      * - `NOT NULL`, default: `false`
       */
-      isAdmin?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment;
+      isAdmin?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
       /**
       * **User.createdAt**
       * - `timestamptz` in database
@@ -1072,9 +1507,9 @@ declare module 'zapatos/schema' {
       /**
       * **User.isAdmin**
       * - `bool` in database
-      * - Nullable, default: `false`
+      * - `NOT NULL`, default: `false`
       */
-      isAdmin?: boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | null | db.DefaultType | db.SQLFragment>;
+      isAdmin?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **User.createdAt**
       * - `timestamptz` in database
@@ -1091,73 +1526,97 @@ declare module 'zapatos/schema' {
 
   /* === cross-table types === */
 
-  export type Table = Feedback.Table | Listing.Table | Renting.Table | User.Table;
-  export type Selectable = Feedback.Selectable | Listing.Selectable | Renting.Selectable | User.Selectable;
-  export type JSONSelectable = Feedback.JSONSelectable | Listing.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
-  export type Whereable = Feedback.Whereable | Listing.Whereable | Renting.Whereable | User.Whereable;
-  export type Insertable = Feedback.Insertable | Listing.Insertable | Renting.Insertable | User.Insertable;
-  export type Updatable = Feedback.Updatable | Listing.Updatable | Renting.Updatable | User.Updatable;
-  export type UniqueIndex = Feedback.UniqueIndex | Listing.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
-  export type Column = Feedback.Column | Listing.Column | Renting.Column | User.Column;
-  export type AllBaseTables = [Feedback.Table, Listing.Table, Renting.Table, User.Table];
+  export type Table = Conversation.Table | ConversationUser.Table | Feedback.Table | Listing.Table | Message.Table | Renting.Table | User.Table;
+  export type Selectable = Conversation.Selectable | ConversationUser.Selectable | Feedback.Selectable | Listing.Selectable | Message.Selectable | Renting.Selectable | User.Selectable;
+  export type JSONSelectable = Conversation.JSONSelectable | ConversationUser.JSONSelectable | Feedback.JSONSelectable | Listing.JSONSelectable | Message.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
+  export type Whereable = Conversation.Whereable | ConversationUser.Whereable | Feedback.Whereable | Listing.Whereable | Message.Whereable | Renting.Whereable | User.Whereable;
+  export type Insertable = Conversation.Insertable | ConversationUser.Insertable | Feedback.Insertable | Listing.Insertable | Message.Insertable | Renting.Insertable | User.Insertable;
+  export type Updatable = Conversation.Updatable | ConversationUser.Updatable | Feedback.Updatable | Listing.Updatable | Message.Updatable | Renting.Updatable | User.Updatable;
+  export type UniqueIndex = Conversation.UniqueIndex | ConversationUser.UniqueIndex | Feedback.UniqueIndex | Listing.UniqueIndex | Message.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
+  export type Column = Conversation.Column | ConversationUser.Column | Feedback.Column | Listing.Column | Message.Column | Renting.Column | User.Column;
+  export type AllBaseTables = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, User.Table];
   export type AllForeignTables = [];
   export type AllViews = [];
   export type AllMaterializedViews = [];
-  export type AllTablesAndViews = [Feedback.Table, Listing.Table, Renting.Table, User.Table];
+  export type AllTablesAndViews = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, User.Table];
 
 
   export type SelectableForTable<T extends Table> = {
+    Conversation: Conversation.Selectable;
+    ConversationUser: ConversationUser.Selectable;
     Feedback: Feedback.Selectable;
     Listing: Listing.Selectable;
+    Message: Message.Selectable;
     Renting: Renting.Selectable;
     User: User.Selectable;
   }[T];
 
   export type JSONSelectableForTable<T extends Table> = {
+    Conversation: Conversation.JSONSelectable;
+    ConversationUser: ConversationUser.JSONSelectable;
     Feedback: Feedback.JSONSelectable;
     Listing: Listing.JSONSelectable;
+    Message: Message.JSONSelectable;
     Renting: Renting.JSONSelectable;
     User: User.JSONSelectable;
   }[T];
 
   export type WhereableForTable<T extends Table> = {
+    Conversation: Conversation.Whereable;
+    ConversationUser: ConversationUser.Whereable;
     Feedback: Feedback.Whereable;
     Listing: Listing.Whereable;
+    Message: Message.Whereable;
     Renting: Renting.Whereable;
     User: User.Whereable;
   }[T];
 
   export type InsertableForTable<T extends Table> = {
+    Conversation: Conversation.Insertable;
+    ConversationUser: ConversationUser.Insertable;
     Feedback: Feedback.Insertable;
     Listing: Listing.Insertable;
+    Message: Message.Insertable;
     Renting: Renting.Insertable;
     User: User.Insertable;
   }[T];
 
   export type UpdatableForTable<T extends Table> = {
+    Conversation: Conversation.Updatable;
+    ConversationUser: ConversationUser.Updatable;
     Feedback: Feedback.Updatable;
     Listing: Listing.Updatable;
+    Message: Message.Updatable;
     Renting: Renting.Updatable;
     User: User.Updatable;
   }[T];
 
   export type UniqueIndexForTable<T extends Table> = {
+    Conversation: Conversation.UniqueIndex;
+    ConversationUser: ConversationUser.UniqueIndex;
     Feedback: Feedback.UniqueIndex;
     Listing: Listing.UniqueIndex;
+    Message: Message.UniqueIndex;
     Renting: Renting.UniqueIndex;
     User: User.UniqueIndex;
   }[T];
 
   export type ColumnForTable<T extends Table> = {
+    Conversation: Conversation.Column;
+    ConversationUser: ConversationUser.Column;
     Feedback: Feedback.Column;
     Listing: Listing.Column;
+    Message: Message.Column;
     Renting: Renting.Column;
     User: User.Column;
   }[T];
 
   export type SQLForTable<T extends Table> = {
+    Conversation: Conversation.SQL;
+    ConversationUser: ConversationUser.SQL;
     Feedback: Feedback.SQL;
     Listing: Listing.SQL;
+    Message: Message.SQL;
     Renting: Renting.SQL;
     User: User.SQL;
   }[T];

@@ -19,8 +19,8 @@ export const AppImage: VFC<AppImageProps> = ({
   return (
     <TouchableOpacity
       style={[
-        { borderRadius, aspectRatio },
-        tw("border border-neutral-300 bg-neutral-200"),
+        { borderRadius, aspectRatio, borderWidth: 0.5 },
+        tw("border-neutral-300 bg-neutral-200"),
         style,
       ]}
       disabled={!props.onPress}

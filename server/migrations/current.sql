@@ -2,7 +2,7 @@ drop table if exists "User" cascade;
 create table "User" (
     "id" text primary key,
     "name" text not null,
-    "isAdmin" boolean default FALSE,
+    "isAdmin" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('User') stored
 );
@@ -46,8 +46,34 @@ create table "Renting" (
     "renterFeedbackId" int references "Feedback" ("id"),
     "scheduledStartTime" timestamp with time zone not null,
     "scheduledEndTime" timestamp with time zone not null,
-    "rentingStatus" "RentingStatus" default 'RequestPending',
+    "rentingStatus" "RentingStatus" not null default 'RequestPending',
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Renting') stored
+);
+
+
+drop table if exists "Conversation" cascade;
+create table "Conversation" (
+    "id" serial primary key,
+    "listingId" int references "Listing" ("id"),
+    "createdAt" timestamp with time zone not null default now(),
+    "_type" text not null generated always as ('Conversation') stored
+);
+
+drop table if exists "ConversationUser" cascade;
+create table "ConversationUser" (
+    "conversationId" int references "Conversation" ("id") not null,
+    "userId" text references "User" ("id") not null
+    "lastViewed" timestamp with time zone not null default now(),
+);
+
+drop table if exists "Message" cascade;
+create table "Message" (
+    "id" serial primary key,
+    "conversationId" int references "Conversation" ("id") not null,
+    "senderId" text references "User" ("id") not null,
+    "text" text not null,
+    "createdAt" timestamp with time zone not null default now(),
+    "_type" text not null generated always as ('Message') stored
 );

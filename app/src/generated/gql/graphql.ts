@@ -26,6 +26,35 @@ export type CancelRentingInput = {
   rentingId: Scalars['ID'];
 };
 
+export type Conversation = Node & {
+  __typename?: 'Conversation';
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  latestMessage?: Maybe<Message>;
+  listing?: Maybe<Listing>;
+  messages?: Maybe<ConversationMessagesConnection>;
+};
+
+
+export type ConversationMessagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type ConversationMessagesConnection = {
+  __typename?: 'ConversationMessagesConnection';
+  edges: Array<Maybe<ConversationMessagesConnectionEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type ConversationMessagesConnectionEdge = {
+  __typename?: 'ConversationMessagesConnectionEdge';
+  cursor: Scalars['String'];
+  node: Message;
+};
+
 export type DeclineRentingRequestInput = {
   rentingId: Scalars['ID'];
 };
@@ -103,10 +132,19 @@ export type MakeRentingRequestInput = {
 
 export type Me = {
   __typename?: 'Me';
-  MyListings?: Maybe<MeMyListingsConnection>;
-  MyRentals?: Maybe<MeMyRentalsConnection>;
+  conversations?: Maybe<MeConversationsConnection>;
   id?: Maybe<Scalars['String']>;
+  myListings?: Maybe<MeMyListingsConnection>;
+  myRentals?: Maybe<MeMyRentalsConnection>;
   user?: Maybe<User>;
+};
+
+
+export type MeConversationsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -123,6 +161,18 @@ export type MeMyRentalsArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type MeConversationsConnection = {
+  __typename?: 'MeConversationsConnection';
+  edges: Array<Maybe<MeConversationsConnectionEdge>>;
+  pageInfo: PageInfo;
+};
+
+export type MeConversationsConnectionEdge = {
+  __typename?: 'MeConversationsConnectionEdge';
+  cursor: Scalars['String'];
+  node: Conversation;
 };
 
 export type MeMyListingsConnection = {
@@ -149,6 +199,15 @@ export type MeMyRentalsConnectionEdge = {
   node: Renting;
 };
 
+export type Message = Node & {
+  __typename?: 'Message';
+  conversation?: Maybe<Conversation>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  sender?: Maybe<User>;
+  text?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   acceptRentingRequest?: Maybe<Renting>;
@@ -159,6 +218,7 @@ export type Mutation = {
   leaveFeedback?: Maybe<Feedback>;
   makeRentingRequest?: Maybe<Renting>;
   payForRenting?: Maybe<Renting>;
+  sendMessage?: Maybe<Message>;
 };
 
 
@@ -199,6 +259,11 @@ export type MutationMakeRentingRequestArgs = {
 
 export type MutationPayForRentingArgs = {
   input: PayForRentingInput;
+};
+
+
+export type MutationSendMessageArgs = {
+  input: SendMessageInput;
 };
 
 export type Node = {
@@ -299,6 +364,13 @@ export enum RentingStatus {
   Returned = 'Returned'
 }
 
+export type SendMessageInput = {
+  conversationId?: InputMaybe<Scalars['ID']>;
+  listingId?: InputMaybe<Scalars['ID']>;
+  recipientId?: InputMaybe<Scalars['ID']>;
+  text: Scalars['String'];
+};
+
 export type User = Node & {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -325,6 +397,20 @@ export type CancelRentingMutationVariables = Exact<{
 
 export type CancelRentingMutation = { __typename?: 'Mutation', cancelRenting?: { __typename: 'Renting', rentingStatus?: RentingStatus | null, updatedAt?: string | null, id: string } | null };
 
+export type ConverstionMessagesQueryVariables = Exact<{
+  nodeId: Scalars['ID'];
+}>;
+
+
+export type ConverstionMessagesQuery = { __typename?: 'Query', node?: { __typename?: 'Conversation', id: string, createdAt?: string | null, messages?: { __typename?: 'ConversationMessagesConnection', edges: Array<{ __typename?: 'ConversationMessagesConnectionEdge', node: { __typename?: 'Message', text?: string | null, createdAt?: string | null, id: string, sender?: { __typename?: 'User', imageUrl?: string | null, id: string, isMe?: boolean | null } | null } } | null> } | null } | { __typename?: 'Feedback' } | { __typename?: 'Listing' } | { __typename?: 'Message' } | { __typename?: 'Renting' } | { __typename?: 'User' } | null };
+
+export type SendMessageMutationVariables = Exact<{
+  input: SendMessageInput;
+}>;
+
+
+export type SendMessageMutation = { __typename?: 'Mutation', sendMessage?: { __typename: 'Message', id: string, conversation?: { __typename: 'Conversation', id: string } | null } | null };
+
 export type CreateListingMutationVariables = Exact<{
   input: ListingInput;
 }>;
@@ -346,7 +432,7 @@ export type ListingQueryVariables = Exact<{
 }>;
 
 
-export type ListingQuery = { __typename?: 'Query', node?: { __typename: 'Feedback', id: string } | { __typename: 'Listing', id: string, title?: string | null, description?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, rating?: number | null, latitude?: number | null, longitude?: number | null, owner?: { __typename: 'User', isMe?: boolean | null, id: string, name?: string | null, imageUrl?: string | null, listingCount?: number | null, rentingOwnerCount?: number | null, rentingRenterCount?: number | null, ratingCount?: number | null, rating?: number | null } | null, feedback?: { __typename?: 'ListingFeedbackConnection', edges: Array<{ __typename?: 'ListingFeedbackConnectionEdge', node: { __typename: 'Feedback', id: string, createdAt?: string | null, rating?: number | null, text?: string | null, renter?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null } | null } } | null> } | null } | { __typename: 'Renting', id: string } | { __typename: 'User', id: string } | null };
+export type ListingQuery = { __typename?: 'Query', node?: { __typename: 'Conversation', id: string } | { __typename: 'Feedback', id: string } | { __typename: 'Listing', id: string, title?: string | null, description?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, rating?: number | null, latitude?: number | null, longitude?: number | null, owner?: { __typename: 'User', isMe?: boolean | null, id: string, name?: string | null, imageUrl?: string | null, listingCount?: number | null, rentingOwnerCount?: number | null, rentingRenterCount?: number | null, ratingCount?: number | null, rating?: number | null } | null, feedback?: { __typename?: 'ListingFeedbackConnection', edges: Array<{ __typename?: 'ListingFeedbackConnectionEdge', node: { __typename: 'Feedback', id: string, createdAt?: string | null, rating?: number | null, text?: string | null, renter?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null } | null } } | null> } | null } | { __typename: 'Message', id: string } | { __typename: 'Renting', id: string } | { __typename: 'User', id: string } | null };
 
 export type ListingListItemFragmentFragment = { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null };
 
@@ -355,7 +441,7 @@ export type ListingRentalRequestQueryVariables = Exact<{
 }>;
 
 
-export type ListingRentalRequestQuery = { __typename?: 'Query', node?: { __typename: 'Feedback', id: string } | { __typename: 'Listing', dayPriceEuroCents?: number | null, unavailableDays?: Array<string> | null, id: string } | { __typename: 'Renting', id: string } | { __typename: 'User', id: string } | null };
+export type ListingRentalRequestQuery = { __typename?: 'Query', node?: { __typename: 'Conversation', id: string } | { __typename: 'Feedback', id: string } | { __typename: 'Listing', dayPriceEuroCents?: number | null, unavailableDays?: Array<string> | null, id: string } | { __typename: 'Message', id: string } | { __typename: 'Renting', id: string } | { __typename: 'User', id: string } | null };
 
 export type MakeRentingRequestMutationVariables = Exact<{
   input: MakeRentingRequestInput;
@@ -364,10 +450,15 @@ export type MakeRentingRequestMutationVariables = Exact<{
 
 export type MakeRentingRequestMutation = { __typename?: 'Mutation', makeRentingRequest?: { __typename: 'Renting', id: string, rentingStatus?: RentingStatus | null, updatedAt?: string | null } | null };
 
+export type MyConversationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyConversationsQuery = { __typename?: 'Query', me?: { __typename: 'Me', id?: string | null, conversations?: { __typename?: 'MeConversationsConnection', edges: Array<{ __typename?: 'MeConversationsConnectionEdge', node: { __typename: 'Conversation', id: string, createdAt?: string | null, listing?: { __typename: 'Listing', id: string, imageUrl?: string | null } | null, latestMessage?: { __typename: 'Message', id: string, text?: string | null, createdAt?: string | null, sender?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null } | null } | null } } | null> } | null } | null };
+
 export type MyListingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyListingsQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id?: string | null, MyListings?: { __typename?: 'MeMyListingsConnection', edges: Array<{ __typename?: 'MeMyListingsConnectionEdge', node: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, rentings?: Array<{ __typename: 'Renting', id: string, rentingStatus?: RentingStatus | null, scheduledStartTime?: string | null, scheduledEndTime?: string | null, updatedAt?: string | null, ownerFeedback?: { __typename: 'Feedback', id: string } | null, renter?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null, listingCount?: number | null } | null }> | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } } | null> } | null } | null };
+export type MyListingsQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id?: string | null, myListings?: { __typename?: 'MeMyListingsConnection', edges: Array<{ __typename?: 'MeMyListingsConnectionEdge', node: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, rentings?: Array<{ __typename: 'Renting', id: string, rentingStatus?: RentingStatus | null, scheduledStartTime?: string | null, scheduledEndTime?: string | null, updatedAt?: string | null, ownerFeedback?: { __typename: 'Feedback', id: string } | null, renter?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null, listingCount?: number | null } | null }> | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } } | null> } | null } | null };
 
 export type OwnerRentingFragmentFragment = { __typename: 'Renting', id: string, rentingStatus?: RentingStatus | null, scheduledStartTime?: string | null, scheduledEndTime?: string | null, updatedAt?: string | null, ownerFeedback?: { __typename: 'Feedback', id: string } | null, renter?: { __typename: 'User', id: string, name?: string | null, imageUrl?: string | null, listingCount?: number | null } | null };
 
@@ -395,14 +486,14 @@ export type AcceptRentingReturnMutation = { __typename?: 'Mutation', acceptRenti
 export type MyRentalsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyRentalsQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id?: string | null, MyRentals?: { __typename?: 'MeMyRentalsConnection', edges: Array<{ __typename?: 'MeMyRentalsConnectionEdge', node: { __typename: 'Renting', id: string, scheduledStartTime?: string | null, scheduledEndTime?: string | null, rentingStatus?: RentingStatus | null, updatedAt?: string | null, renterFeedback?: { __typename: 'Feedback', id: string } | null, listing?: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } | null } } | null> } | null } | null };
+export type MyRentalsQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id?: string | null, myRentals?: { __typename?: 'MeMyRentalsConnection', edges: Array<{ __typename?: 'MeMyRentalsConnectionEdge', node: { __typename: 'Renting', id: string, scheduledStartTime?: string | null, scheduledEndTime?: string | null, rentingStatus?: RentingStatus | null, updatedAt?: string | null, renterFeedback?: { __typename: 'Feedback', id: string } | null, listing?: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } | null } } | null> } | null } | null };
 
 export type RentalPaymentInfoQueryVariables = Exact<{
   nodeId: Scalars['ID'];
 }>;
 
 
-export type RentalPaymentInfoQuery = { __typename?: 'Query', node?: { __typename: 'Feedback', id: string } | { __typename: 'Listing', id: string } | { __typename: 'Renting', id: string, listing?: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } | null } | { __typename: 'User', id: string } | null };
+export type RentalPaymentInfoQuery = { __typename?: 'Query', node?: { __typename: 'Conversation', id: string } | { __typename: 'Feedback', id: string } | { __typename: 'Listing', id: string } | { __typename: 'Message', id: string } | { __typename: 'Renting', id: string, listing?: { __typename: 'Listing', id: string, title?: string | null, imageUrl?: string | null, dayPriceEuroCents?: number | null, owner?: { __typename: 'User', id: string, name?: string | null, isMe?: boolean | null, imageUrl?: string | null, listingCount?: number | null } | null } | null } | { __typename: 'User', id: string } | null };
 
 export type PayForRentingcMutationVariables = Exact<{
   input: PayForRentingInput;
@@ -422,15 +513,18 @@ export const OwnerRentingFragmentFragmentDoc = {"kind":"Document","definitions":
 export const PersonCardFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PersonCardFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isMe"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"listingCount"}},{"kind":"Field","name":{"kind":"Name","value":"rentingOwnerCount"}},{"kind":"Field","name":{"kind":"Name","value":"rentingRenterCount"}},{"kind":"Field","name":{"kind":"Name","value":"ratingCount"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}}]}}]} as unknown as DocumentNode<PersonCardFragmentFragment, unknown>;
 export const ListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Listings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ListingListItemFragment"}}]}}]}}]}}]}},...ListingListItemFragmentFragmentDoc.definitions,...PersonLineFragmentFragmentDoc.definitions]} as unknown as DocumentNode<ListingsQuery, ListingsQueryVariables>;
 export const CancelRentingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"cancelRenting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CancelRentingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cancelRenting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CancelRentingMutation, CancelRentingMutationVariables>;
+export const ConverstionMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ConverstionMessages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Conversation"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"sender"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isMe"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]}}]} as unknown as DocumentNode<ConverstionMessagesQuery, ConverstionMessagesQueryVariables>;
+export const SendMessageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"sendMessage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SendMessageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendMessage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"conversation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<SendMessageMutation, SendMessageMutationVariables>;
 export const CreateListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createListing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ListingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createListing"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"dayPriceEuroCents"}},{"kind":"Field","name":{"kind":"Name","value":"depositEuroCents"}}]}}]}}]} as unknown as DocumentNode<CreateListingMutation, CreateListingMutationVariables>;
 export const LeveFeedbackDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"leveFeedback"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LeaveFeedbackInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"leaveFeedback"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<LeveFeedbackMutation, LeveFeedbackMutationVariables>;
 export const ListingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Listing"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Listing"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"dayPriceEuroCents"}},{"kind":"Field","name":{"kind":"Name","value":"rating"}},{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}},{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isMe"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonCardFragment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"feedback"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"FeedbackListItemFragment"}}]}}]}}]}}]}}]}}]}},...PersonCardFragmentFragmentDoc.definitions,...FeedbackListItemFragmentFragmentDoc.definitions]} as unknown as DocumentNode<ListingQuery, ListingQueryVariables>;
 export const ListingRentalRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListingRentalRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Listing"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"dayPriceEuroCents"}},{"kind":"Field","name":{"kind":"Name","value":"unavailableDays"}}]}}]}}]}}]} as unknown as DocumentNode<ListingRentalRequestQuery, ListingRentalRequestQueryVariables>;
 export const MakeRentingRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"makeRentingRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MakeRentingRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"makeRentingRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<MakeRentingRequestMutation, MakeRentingRequestMutationVariables>;
-export const MyListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"MyListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ListingListItemFragment"}},{"kind":"Field","name":{"kind":"Name","value":"rentings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"OwnerRentingFragment"}}]}}]}}]}}]}}]}}]}},...ListingListItemFragmentFragmentDoc.definitions,...PersonLineFragmentFragmentDoc.definitions,...OwnerRentingFragmentFragmentDoc.definitions]} as unknown as DocumentNode<MyListingsQuery, MyListingsQueryVariables>;
+export const MyConversationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyConversations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"conversations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"listing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"latestMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"sender"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}}]}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyConversationsQuery, MyConversationsQueryVariables>;
+export const MyListingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"myListings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"ListingListItemFragment"}},{"kind":"Field","name":{"kind":"Name","value":"rentings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"OwnerRentingFragment"}}]}}]}}]}}]}}]}}]}},...ListingListItemFragmentFragmentDoc.definitions,...PersonLineFragmentFragmentDoc.definitions,...OwnerRentingFragmentFragmentDoc.definitions]} as unknown as DocumentNode<MyListingsQuery, MyListingsQueryVariables>;
 export const DeclineRentingRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"declineRentingRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeclineRentingRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"declineRentingRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeclineRentingRequestMutation, DeclineRentingRequestMutationVariables>;
 export const AcceptRentingRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acceptRentingRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AcceptRentingRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acceptRentingRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AcceptRentingRequestMutation, AcceptRentingRequestMutationVariables>;
 export const AcceptRentingReturnDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"acceptRentingReturn"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AcceptRentingReturnInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"acceptRentingReturn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AcceptRentingReturnMutation, AcceptRentingReturnMutationVariables>;
-export const MyRentalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyRentals"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"MyRentals"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledStartTime"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledEndTime"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"renterFeedback"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"listing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ListingListItemFragment"}}]}}]}}]}}]}}]}}]}},...ListingListItemFragmentFragmentDoc.definitions,...PersonLineFragmentFragmentDoc.definitions]} as unknown as DocumentNode<MyRentalsQuery, MyRentalsQueryVariables>;
+export const MyRentalsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyRentals"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"myRentals"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledStartTime"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledEndTime"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"renterFeedback"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"listing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ListingListItemFragment"}}]}}]}}]}}]}}]}}]}},...ListingListItemFragmentFragmentDoc.definitions,...PersonLineFragmentFragmentDoc.definitions]} as unknown as DocumentNode<MyRentalsQuery, MyRentalsQueryVariables>;
 export const RentalPaymentInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RentalPaymentInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"nodeId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Renting"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listing"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"dayPriceEuroCents"}},{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isMe"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"PersonLineFragment"}}]}}]}}]}}]}}]}},...PersonLineFragmentFragmentDoc.definitions]} as unknown as DocumentNode<RentalPaymentInfoQuery, RentalPaymentInfoQueryVariables>;
 export const PayForRentingcDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"payForRentingc"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PayForRentingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"payForRenting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rentingStatus"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<PayForRentingcMutation, PayForRentingcMutationVariables>;

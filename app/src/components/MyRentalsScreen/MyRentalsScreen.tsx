@@ -54,7 +54,7 @@ export const MyRentals = gql(/* GraphQL */ `
   query MyRentals {
     me {
       id
-      MyRentals {
+      myRentals {
         edges {
           node {
             __typename
@@ -87,7 +87,7 @@ const HomeScreen: VFC<
     requestPolicy: "cache-and-network",
   })
   useRefetchOnFocus(refetch)
-  const items = data?.me?.MyRentals?.edges
+  const items = data?.me?.myRentals?.edges
 
   if (error) return <AppText>Error {error.message}</AppText>
 
