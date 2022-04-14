@@ -25,6 +25,8 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
     imageUrl: t.exposeString("imageUrl"),
     dayPriceEuroCents: t.exposeInt("dayPriceEuroCents"),
     depositEuroCents: t.exposeInt("depositEuroCents"),
+    latitude: t.exposeFloat("latitude"),
+    longitude: t.exposeFloat("longitude"),
     updatedAt: t.field({
       type: "String",
       resolve: ({ updatedAt }) => db.toDate(updatedAt).toISOString(),
@@ -119,6 +121,8 @@ const ListingInput = schemaBuilder.inputType("ListingInput", {
     imageUrl: t.string({ required: true }),
     dayPriceEuroCents: t.int({ required: true }),
     depositEuroCents: t.int({ required: false }),
+    latitude: t.float({ required: true }),
+    longitude: t.float({ required: true }),
   }),
 })
 
@@ -138,6 +142,8 @@ schemaBuilder.mutationFields((t) => ({
           imageUrl,
           dayPriceEuroCents,
           depositEuroCents,
+          latitude,
+          longitude,
         },
       },
       { pool, auth },
@@ -150,6 +156,8 @@ schemaBuilder.mutationFields((t) => ({
           imageUrl,
           dayPriceEuroCents,
           depositEuroCents,
+          latitude: Number(latitude.toFixed(2)),
+          longitude: Number(longitude.toFixed(2)),
         })
         .run(pool),
   }),

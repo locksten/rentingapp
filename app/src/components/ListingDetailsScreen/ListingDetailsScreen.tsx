@@ -1,5 +1,6 @@
 import { AppImage } from "@components/AppImage"
 import { AppMapView } from "@components/AppMapView"
+import { AppMapViewMarker } from "@components/AppMapViewMarker"
 import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
@@ -30,6 +31,8 @@ export const Listing = gql(/* GraphQL */ `
         imageUrl
         dayPriceEuroCents
         rating
+        latitude
+        longitude
         owner {
           isMe
           ...PersonCardFragment
@@ -103,7 +106,18 @@ export const MainDetails: VFC<{
     },
     "__typename"
   >
-}> = ({ item: { imageUrl, title, description, owner, rating, feedback } }) => {
+}> = ({
+  item: {
+    imageUrl,
+    title,
+    description,
+    owner,
+    rating,
+    feedback,
+    latitude,
+    longitude,
+  },
+}) => {
   const tw = useTailwind()
   const device = useDeviceSize()
   return (
@@ -123,21 +137,38 @@ export const MainDetails: VFC<{
         <View style={tw("w-full")}>
           <AppText style={tw("px-4 text-xl font-medium")}>{title}</AppText>
           <View style={tw("h-1")} />
-          <View style={tw("px-4 flex-row items-center opacity-60")}>
-            {/* <AppText style={tw("font-medium")}>{"Some City, 12km away"}</AppText> */}
-          </View>
-          <View style={tw("h-1")} />
           {!!description && <AppText style={tw("px-4")}>{description}</AppText>}
         </View>
-        {!!AppMapView && (
-          <>
-            <View style={tw("h-4")} />
-            <View style={tw("px-4 w-full h-48")}>
-              <AppMapView showsPointsOfInterest />
-            </View>
-            <View style={tw("h-4")} />
-          </>
-        )}
+        {!!AppMapView &&
+          latitude !== null &&
+          latitude !== undefined &&
+          longitude !== null &&
+          longitude !== undefined && (
+            <>
+              <View style={tw("h-4")} />
+              <View style={tw("px-4 w-full h-48")}>
+                <AppMapView
+                  showsPointsOfInterest
+                  initialRegion={{
+                    latitude,
+                    longitude,
+                    latitudeDelta: 1,
+                    longitudeDelta: 1,
+                  }}
+                >
+                  {AppMapViewMarker && (
+                    <AppMapViewMarker
+                      coordinate={{
+                        latitude,
+                        longitude,
+                      }}
+                    />
+                  )}
+                </AppMapView>
+              </View>
+            </>
+          )}
+        <View style={tw("h-4")} />
         <View style={tw("px-4 w-full max-w-md")}>
           {!!owner && <PersonCard person={owner} />}
         </View>

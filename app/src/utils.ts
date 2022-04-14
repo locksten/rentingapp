@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { format, formatISO, parseJSON } from "date-fns"
-import React from "react"
-import { useReducer } from "react"
+import * as Location from "expo-location"
+import React, { useEffect, useReducer, useState } from "react"
 import { Platform } from "react-native"
 import { useMediaQuery } from "react-responsive"
 import { OperationContext } from "urql"
@@ -61,3 +61,22 @@ export const useDeviceSize = () => ({
 })
 
 export const isWeb = Platform.OS === "web"
+
+export const useLocation = () => {
+  const [location, setLocation] = useState<Location.LocationObject>()
+  const [error, setErrorMsg] = useState<string>()
+
+  useEffect(() => {
+    ;(async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied")
+        return
+      }
+      let location = await Location.getCurrentPositionAsync({})
+      setLocation(location)
+    })()
+  }, [])
+
+  return { error, location }
+}

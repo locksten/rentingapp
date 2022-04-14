@@ -236,6 +236,18 @@ declare module 'zapatos/schema' {
       */
       ownerId: string;
       /**
+      * **Listing.latitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      latitude: number;
+      /**
+      * **Listing.longitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      longitude: number;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -297,6 +309,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       ownerId: string;
+      /**
+      * **Listing.latitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      latitude: number;
+      /**
+      * **Listing.longitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      longitude: number;
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database
@@ -360,6 +384,18 @@ declare module 'zapatos/schema' {
       */
       ownerId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.latitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      latitude?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Listing.longitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      longitude?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -422,6 +458,18 @@ declare module 'zapatos/schema' {
       */
       ownerId: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **Listing.latitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      latitude: number | db.Parameter<number> | db.SQLFragment;
+      /**
+      * **Listing.longitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      longitude: number | db.Parameter<number> | db.SQLFragment;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -477,6 +525,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       ownerId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Listing.latitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      latitude?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Listing.longitude**
+      * - `float8` in database
+      * - `NOT NULL`, no default
+      */
+      longitude?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database

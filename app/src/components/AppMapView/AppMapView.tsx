@@ -3,11 +3,16 @@ import { View } from "react-native"
 import MapView, { MapViewProps } from "react-native-maps"
 import { useTailwind } from "tailwind-rn"
 
-export const AppMapView: VFC<MapViewProps> | undefined = ({ ...props }) => {
+export const AppMapView: VFC<MapViewProps> | undefined = ({
+  children,
+  ...props
+}) => {
   const tw = useTailwind()
   return (
     <View style={tw("flex-1 rounded-2xl overflow-hidden")}>
-      <MapView style={tw("flex-1")} {...props} />
+      <MapView style={tw("flex-1")} {...props} showsUserLocation>
+        {children}
+      </MapView>
     </View>
   )
 }

@@ -16,6 +16,8 @@ create table "Listing" (
     "dayPriceEuroCents" int not null,
     "depositEuroCents" int,
     "ownerId" text references "User" ("id") not null,
+    "latitude" float not null,
+    "longitude" float not null,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Listing') stored

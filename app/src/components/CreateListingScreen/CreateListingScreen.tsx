@@ -1,6 +1,8 @@
 import { AppImage } from "@components/AppImage"
 import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
 import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
+import { AppMapView } from "@components/AppMapView"
+import { AppMapViewMarker } from "@components/AppMapViewMarker"
 import { AppTextInput } from "@components/AppTextInput"
 import { MainButton } from "@components/MainButton"
 import { SeparatedBy } from "@components/SeparatedBy"
@@ -11,8 +13,9 @@ import {
 import { gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState, VFC } from "react"
+import React, { useEffect, useState, VFC } from "react"
 import { View } from "react-native"
+import { useLocation } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
 
@@ -39,6 +42,19 @@ export const CreateListingScreen: VFC<
   const [description, onChangeDescription] = useState("")
   const [price, onChangePrice] = useState("")
   const [deposit, onChangeDeposit] = useState("")
+
+  const userLocation = useLocation().location?.coords
+  const [coord, setCoord] = useState<{ latitude: number; longitude: number }>()
+
+  useEffect(() => {
+    !coord &&
+      userLocation &&
+      setCoord({
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      })
+  }, [userLocation])
+
   const imageUrl =
     "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
 
@@ -89,18 +105,51 @@ export const CreateListingScreen: VFC<
                     onChangeDeposit(`${Number.parseInt(input.slice(2)) || ""}`)
                   }
                 />
+                {!!AppMapView && (
+                  <>
+                    <View style={tw("h-4")} />
+                    <View style={tw("w-full h-48")}>
+                      <AppMapView
+                        showsUserLocation
+                        showsPointsOfInterest
+                        onRegionChangeComplete={(e) => setCoord(e)}
+                        initialRegion={
+                          userLocation && {
+                            ...userLocation,
+                            latitudeDelta: 1,
+                            longitudeDelta: 1,
+                          }
+                        }
+                      >
+                        {coord && AppMapViewMarker && (
+                          <AppMapViewMarker
+                            coordinate={{
+                              latitude: coord.latitude,
+                              longitude: coord.longitude,
+                            }}
+                            title="Selected location"
+                          />
+                        )}
+                      </AppMapView>
+                    </View>
+                    <View style={tw("h-4")} />
+                  </>
+                )}
                 <MainButton
                   text="Create"
                   onPress={async () => {
-                    await create({
-                      input: {
-                        title,
-                        imageUrl,
-                        description,
-                        dayPriceEuroCents: Number(price) * 100,
-                        depositEuroCents: Number(deposit) * 100,
-                      },
-                    })
+                    coord &&
+                      (await create({
+                        input: {
+                          title,
+                          imageUrl,
+                          description,
+                          dayPriceEuroCents: Number(price) * 100,
+                          depositEuroCents: Number(deposit) * 100,
+                          latitude: coord.latitude,
+                          longitude: coord.longitude,
+                        },
+                      }))
                     navigation.goBack()
                   }}
                 />
