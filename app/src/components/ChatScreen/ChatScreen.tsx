@@ -13,25 +13,27 @@ import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
 
 export const ConversationMessages = gql(/* GraphQL */ `
-  query ConverstionMessages($nodeId: ID!) {
+  query ConversationMessages($nodeId: ID!) {
     node(id: $nodeId) {
+      __typename
+      id
       ... on Conversation {
+        id
+        createdAt
         messages {
           edges {
             node {
+              id
               text
+              createdAt
               sender {
                 imageUrl
                 id
                 isMe
               }
-              createdAt
-              id
             }
           }
         }
-        id
-        createdAt
       }
     }
   }
