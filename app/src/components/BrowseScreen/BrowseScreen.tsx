@@ -64,12 +64,12 @@ const HomeScreen: VFC<
 
   const items = data?.listings?.edges
 
-  if (error) return <AppText>Error {error.message}</AppText>
-
   const [refreshing, setRefreshing] = React.useState(false)
   useEffect(() => {
     setRefreshing(fetching)
   }, [fetching])
+
+  if (error) return <AppText>Error {error.message}</AppText>
 
   return (
     <ScrollView

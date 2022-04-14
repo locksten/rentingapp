@@ -24,7 +24,7 @@ const FeedbackListItemFragment = gql(/* GraphQL */ `
 
 export const FeedbackListItem: VFC<{
   feedback: DocumentType<typeof FeedbackListItemFragment>
-}> = ({ feedback: { id, rating, text, renter } }) => {
+}> = ({ feedback: { rating, text, renter } }) => {
   const tw = useTailwind()
   return (
     <View style={tw("p-4 flex-row bg-white")}>

@@ -13,6 +13,7 @@ import {
 } from "firebase/auth"
 import { getReactNativePersistence } from "firebase/auth/react-native"
 import { useEffect, useReducer, useRef } from "react"
+import { isWeb } from "src/utils"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQ51basYw88ojUlEH62Qak0l-e9vOiwXE",
@@ -57,16 +58,18 @@ export const onAuthStateChange = (fn: () => Promise<void>) =>
 }
 
 export const saveEmailPassword = async (email: string, password: string) => {
+  if (isWeb) return
   await SecureStore.setItemAsync("email", email)
   await SecureStore.setItemAsync("password", password)
 }
 
 export const getEmailPassword = async () => ({
-  email: await SecureStore.getItemAsync("email"),
-  password: await SecureStore.getItemAsync("password"),
+  email: isWeb ? undefined : await SecureStore.getItemAsync("email"),
+  password: isWeb ? undefined : await SecureStore.getItemAsync("password"),
 })
 
 export const clearEmailPassword = async () => {
+  if (isWeb) return
   await SecureStore.deleteItemAsync("email")
   await SecureStore.deleteItemAsync("password")
 }
@@ -81,7 +84,6 @@ export const emailSignUp = async (
   password: string,
   displayName: string,
 ) => {
-  console.log("singing up", email, password, displayName)
   if (!displayName) throw new Error("Name is required")
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, {

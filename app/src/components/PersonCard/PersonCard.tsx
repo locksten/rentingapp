@@ -111,16 +111,18 @@ const Ratings: VFC<{ rating?: number | null; ratingCount?: number | null }> = ({
 }
 
 const Rentings: VFC<{ asOwner?: number | null; asRenter?: number | null }> = ({
-  asOwner = 0,
-  asRenter = 0,
+  asOwner,
+  asRenter,
 }) => {
   return (
-    <Fact name="Rentings" icon={"repeat"} value={`${asOwner}↑ ${asRenter}↓`} />
+    <Fact
+      name="Rentings"
+      icon={"repeat"}
+      value={`${asOwner ?? 0}↑ ${asRenter ?? 0}↓`}
+    />
   )
 }
 
-const Listings: VFC<{ listingCount?: number | null }> = ({
-  listingCount = 0,
-}) => {
-  return <Fact name="Listings" icon={"list"} value={`${listingCount}`} />
+const Listings: VFC<{ listingCount?: number | null }> = ({ listingCount }) => {
+  return <Fact name="Listings" icon={"list"} value={`${listingCount ?? 0}`} />
 }

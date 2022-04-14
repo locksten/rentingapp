@@ -13,15 +13,16 @@ export const RentingPeriod: VFC<{
   const tw = useTailwind()
   const startDate = parseJSONDate(scheduledStartTime)
   const endDate = parseJSONDate(scheduledEndTime)
+  if (!startDate || !endDate) return null
   return (
     <AppText numberOfLines={1}>
-      {`for ${
-        startDate && endDate
-          ? formatDistanceStrict(startDate, endDate, { unit: "day" })
-          : ""
-      } from ${formatMonthDayNumbers(
-        scheduledStartTime,
-      )} to ${formatMonthDayNumbers(scheduledEndTime)}`}
+      {startDate.getTime() === endDate.getTime()
+        ? `for ${formatMonthDayNumbers(endDate)}`
+        : `for ${formatDistanceStrict(startDate, endDate, {
+            unit: "day",
+          })} from ${formatMonthDayNumbers(
+            scheduledStartTime,
+          )} to ${formatMonthDayNumbers(scheduledEndTime)}`}
     </AppText>
   )
 }

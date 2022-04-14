@@ -5,6 +5,7 @@ import { AppMapView } from "@components/AppMapView"
 import { AppMapViewMarker } from "@components/AppMapViewMarker"
 import { AppTextInput } from "@components/AppTextInput"
 import { MainButton } from "@components/MainButton"
+import { MediumListWidth } from "@components/MediumListWidth"
 import { SeparatedBy } from "@components/SeparatedBy"
 import {
   CommonStackNavigationProp,
@@ -63,7 +64,7 @@ export const CreateListingScreen: VFC<
   return (
     <AppKeyboardAvoidingView>
       <AppKeyboardAvoidingViewScrollView>
-        <View style={tw("flex-1")}>
+        <MediumListWidth>
           <View style={tw("justify-between")}>
             <AppImage
               uri={imageUrl}
@@ -156,7 +157,7 @@ export const CreateListingScreen: VFC<
               </SeparatedBy>
             </View>
           </View>
-        </View>
+        </MediumListWidth>
       </AppKeyboardAvoidingViewScrollView>
     </AppKeyboardAvoidingView>
   )

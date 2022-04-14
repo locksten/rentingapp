@@ -152,8 +152,8 @@ export const MainDetails: VFC<{
                   initialRegion={{
                     latitude,
                     longitude,
-                    latitudeDelta: 1,
-                    longitudeDelta: 1,
+                    latitudeDelta: 0.1,
+                    longitudeDelta: 0.1,
                   }}
                 >
                   {AppMapViewMarker && (

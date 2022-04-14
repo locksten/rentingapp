@@ -29,17 +29,22 @@ export const Feedback = schemaBuilder.loadableNode(FeedbackRef, {
     listing: t.field({
       type: Listing,
       resolve: async ({ id }, _args, { pool }) =>
-        (await db.selectOne("Renting", { id }).run(pool))?.listingId,
+        (await db.selectOne("Renting", { ownerFeedbackId: id }).run(pool))
+          ?.listingId ??
+        (await db.selectOne("Renting", { renterFeedbackId: id }).run(pool))
+          ?.listingId,
     }),
     owner: t.field({
       type: User,
       resolve: async ({ id }, _args, { pool }) =>
-        (await db.selectOne("Renting", { id }).run(pool))?.ownerId,
+        (await db.selectOne("Renting", { ownerFeedbackId: id }).run(pool))
+          ?.ownerId,
     }),
     renter: t.field({
       type: User,
       resolve: async ({ id }, _args, { pool }) =>
-        (await db.selectOne("Renting", { id }).run(pool))?.renterId,
+        (await db.selectOne("Renting", { renterFeedbackId: id }).run(pool))
+          ?.renterId,
     }),
   }),
 })
