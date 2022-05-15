@@ -111,8 +111,9 @@ const HomeScreen: VFC<
                       <View style={tw("w-1")} />
                       <MainButton
                         text="Pay"
-                        onPress={() => {
-                          navigate("PayForRenting", { id: item.id })
+                        toCommon={{
+                          screen: "PayForRenting",
+                          params: { id: item.id },
                         }}
                       />
                     </View>

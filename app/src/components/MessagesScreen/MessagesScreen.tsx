@@ -1,6 +1,7 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppImage } from "@components/AppImage"
 import { AppText } from "@components/AppText"
+import { AppTouchable } from "@components/AppTouchable"
 import { ChatScreen } from "@components/ChatScreen"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { ProfilePicture } from "@components/ProfilePicture"
@@ -19,7 +20,7 @@ import {
 } from "@react-navigation/native-stack"
 import { formatDistanceToNowStrict } from "date-fns"
 import React, { VFC } from "react"
-import { TouchableOpacity, View } from "react-native"
+import { View } from "react-native"
 import { isTruthy, isWeb, parseJSONDate, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
@@ -115,9 +116,11 @@ const HomeScreen: VFC<
             ? tw("text-black font-bold")
             : tw("text-gray-600")
           return (
-            <TouchableOpacity
-              onPress={() => {
-                navigate("Chat", { conversationId: item.id })
+            <AppTouchable
+              // onPress={() => { navigate("Chat", { conversationId: item.id }) }}
+              to={{
+                screen: "Messages",
+                params: { screen: "Chat", params: { conversationId: item.id } },
               }}
               style={tw("h-16 flex-row pr-2")}
             >
@@ -159,7 +162,7 @@ const HomeScreen: VFC<
                   )}
                 </View>
               </View>
-            </TouchableOpacity>
+            </AppTouchable>
           )
         }}
         keyExtractor={(i) => i.id}
@@ -167,17 +170,3 @@ const HomeScreen: VFC<
     </MediumListWidth>
   )
 }
-
-// <View style={tw("-ml-16 pr-8 items-end border")}>
-//   <View style={!listing?.imageUrl && tw("opacity-0")}>
-//     <AppImage
-//       uri={listing?.imageUrl}
-//       aspectRatio={16 / 9}
-//       style={tw("h-full rounded-r-none")}
-//     />
-//   </View>
-//   <ProfilePicture
-//     uri={latestMessage?.sender?.imageUrl}
-//     style={tw("absolute h-full border-white")}
-//   />
-// </View>

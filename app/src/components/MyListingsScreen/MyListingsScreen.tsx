@@ -225,9 +225,7 @@ export const OwnerRenting: VFC<{
           <View style={tw("pl-2")}>
             <MainButton
               text="Leave Feedback"
-              onPress={() => {
-                navigate("LeaveFeedback", { rentingId })
-              }}
+              toCommon={{ screen: "LeaveFeedback", params: { rentingId } }}
             />
           </View>
         )}

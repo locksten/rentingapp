@@ -1,3 +1,4 @@
+import { devtoolsExchange } from "@urql/devtools"
 import { authExchange } from "@urql/exchange-auth"
 import { cacheExchange } from "@urql/exchange-graphcache"
 import type { IntrospectionData } from "@urql/exchange-graphcache/dist/types/ast"
@@ -24,6 +25,7 @@ const client = createClient({
     Platform.OS === "android" ? "10.0.2.2" : "localhost"
   }:4000/graphql`,
   exchanges: [
+    devtoolsExchange,
     dedupExchange,
     authExchange({
       getAuth: async () => {

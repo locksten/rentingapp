@@ -70,12 +70,13 @@ export const PersonCard: VFC<{
           <MainButton
             secondary
             text={"Message"}
-            onPress={() => {
-              navigate("Messages", {
+            to={{
+              screen: "Messages",
+              params: {
                 screen: "Chat",
                 params: { recipientId: person.id },
                 initial: false,
-              })
+              },
             }}
           />
         )}

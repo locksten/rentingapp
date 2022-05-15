@@ -39,7 +39,7 @@ if (!getApps().length) {
 
 export const getAuthState = () => auth
 
-export const onAuthStateChange = (fn: () => Promise<void>) =>
+export const onAuthStateChange = (fn: () => Promise<void> | void) =>
   onAuthStateChanged(auth, async () => {
     await fn()
   })

@@ -6,12 +6,8 @@ import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
 import { PersonCard } from "@components/PersonCard"
 import { Stars } from "@components/Stars"
-import {
-  CommonStackNavigationProp,
-  CommonStackParams,
-} from "@components/WithCommonStackScreens"
+import { CommonStackParams } from "@components/WithCommonStackScreens"
 import { DocumentType, gql } from "@gql/gql"
-import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
@@ -57,7 +53,6 @@ export const ListingDetailsScreen: VFC<
   },
 }) => {
   const tw = useTailwind()
-  const { navigate } = useNavigation<CommonStackNavigationProp>()
 
   const [{ data, error }] = useQuery({
     query: Listing,
@@ -91,7 +86,7 @@ export const ListingDetailsScreen: VFC<
         <View style={tw("p-2 bg-white")}>
           <MainButton
             text={`Rent for ${item.dayPriceEuroCents / 100}€ per day`}
-            onPress={() => navigate("MakeRentingRequest", { id: item.id })}
+            toCommon={{ screen: "MakeRentingRequest", params: { id: item.id } }}
           />
         </View>
       )}
