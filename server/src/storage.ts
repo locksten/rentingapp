@@ -58,15 +58,20 @@ export const fileUploadHandler =
       res
         .status(400)
         .json({ error: `File should be smaller than ${sizeLimitMegabytes}MB` })
+      return
     }
 
     const filetype = await fileTypeFromBuffer(file.data)
     if (!filetype || !["image/jpeg", "image/png"].includes(filetype.mime)) {
       res.status(400).json({ error: "Invalid file type" })
+      return
     }
 
     const url = await uploadImage(bucketName, file.data)
-    if (!url) res.status(500).json({ error: "Failed to upload" })
+    if (!url) {
+      res.status(500).json({ error: "Failed to upload" })
+      return
+    }
 
     res.status(200).json({ url })
   }
