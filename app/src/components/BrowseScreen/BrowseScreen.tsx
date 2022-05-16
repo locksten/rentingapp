@@ -1,7 +1,9 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
 import { ListingListItem } from "@components/ListingListItem"
+import { MainButton } from "@components/MainButton"
 import { RootTabs } from "@components/RootTabNavigator"
+import { SearchScreen } from "@components/SearchScreen"
 import { SeparatedBy } from "@components/SeparatedBy"
 import {
   CommonStackParams,
@@ -13,7 +15,7 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
-import React, { useEffect, VFC } from "react"
+import React, { useEffect, useState, VFC } from "react"
 import { RefreshControl, ScrollView, View } from "react-native"
 import { filterNodes, sortedByUpdatedAt } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
@@ -21,6 +23,7 @@ import { useQuery } from "urql"
 
 export type BrowseScreenParams = CommonStackParams & {
   Home: undefined
+  Search: undefined
 }
 
 export const BrowseScreen: VFC<
@@ -34,6 +37,7 @@ export const BrowseScreen: VFC<
         name="Home"
         component={HomeScreen}
       />
+      <Stack.Screen name="Search" component={SearchScreen} />
     </WithCommonStackScreens>
   )
 }
@@ -65,7 +69,7 @@ const HomeScreen: VFC<
 
   const items = data?.listings?.edges
 
-  const [refreshing, setRefreshing] = React.useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   useEffect(() => {
     setRefreshing(fetching)
   }, [fetching])
@@ -84,8 +88,22 @@ const HomeScreen: VFC<
         />
       }
     >
-      <SeparatedBy separator={<View style={tw("h-8")} />} start end>
-        <View style={tw("px-4")}></View>
+      <SeparatedBy separator={<View style={tw("h-4")} />} start end>
+        <View style={tw("px-4")}>
+          <MainButton
+            text="Search"
+            to={{ screen: "Browse", params: { screen: "Search" } }}
+          />
+        </View>
+        <AppFlatList
+          horizontal
+          title="Listings"
+          data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
+          renderItem={({ item }) => (
+            <ListingListItem.ListItemHorizontal item={item} />
+          )}
+          keyExtractor={(i) => i.id}
+        />
         <AppFlatList
           horizontal
           title="Listings"

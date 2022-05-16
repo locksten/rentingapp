@@ -25,6 +25,7 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
     imageUrl: t.exposeString("imageUrl"),
     dayPriceEuroCents: t.exposeInt("dayPriceEuroCents"),
     depositEuroCents: t.exposeInt("depositEuroCents"),
+    category: t.exposeString("category"),
     latitude: t.exposeFloat("latitude"),
     longitude: t.exposeFloat("longitude"),
     updatedAt: t.field({
@@ -105,10 +106,37 @@ schemaBuilder.objectFields(Listing, (t) => ({
 schemaBuilder.queryFields((t) => ({
   listings: t.connection({
     type: Listing,
+    args: {
+      ...t.arg.connectionArgs(),
+      fromPriceEuroCents: t.arg({ type: "Int" }),
+      toPriceEuroCents: t.arg({ type: "Int" }),
+      searchTerm: t.arg({ type: "String" }),
+      category: t.arg({ type: "String" }),
+      // distance: Number(distance),
+    },
     resolve: async (_parent, args, { pool }) => {
       return resolveArrayConnection(
         { args },
-        await db.select("Listing", db.all).run(pool),
+        await db
+          .select(
+            "Listing",
+            {
+              dayPriceEuroCents: dc.and(
+                dc.gte(args.fromPriceEuroCents ?? 0),
+                dc.lte(args.toPriceEuroCents ?? 999999),
+              ),
+              ...(args.searchTerm
+                ? { fullText: dc.ilike(`%${args.searchTerm}%`) }
+                : undefined),
+              ...(args.category && args.category !== "All Categories"
+                ? { category: dc.eq(`${args.category}`) }
+                : undefined),
+            },
+            {
+              order: { by: "updatedAt", direction: "DESC" },
+            },
+          )
+          .run(pool),
       )
     },
   }),
@@ -118,6 +146,7 @@ const ListingInput = schemaBuilder.inputType("ListingInput", {
   fields: (t) => ({
     title: t.string({ required: true }),
     description: t.string({ required: true }),
+    category: t.string({ required: true }),
     imageUrl: t.string({ required: true }),
     dayPriceEuroCents: t.int({ required: true }),
     depositEuroCents: t.int({ required: false }),
@@ -139,6 +168,7 @@ schemaBuilder.mutationFields((t) => ({
         input: {
           title,
           description,
+          category,
           imageUrl,
           dayPriceEuroCents,
           depositEuroCents,
@@ -152,10 +182,12 @@ schemaBuilder.mutationFields((t) => ({
         .insert("Listing", {
           title,
           description,
+          category,
           ownerId: auth.id,
           imageUrl,
           dayPriceEuroCents,
           depositEuroCents,
+          fullText: `${title} ${description}`,
           latitude: Number(latitude.toFixed(2)),
           longitude: Number(longitude.toFixed(2)),
         })

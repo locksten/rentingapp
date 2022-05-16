@@ -12,6 +12,8 @@ create table "Listing" (
     "id" serial primary key,
     "title" text not null,
     "description" text not null,
+    "fullText" text not null,
+    "category" text not null,
     "imageUrl" text not null,
     "dayPriceEuroCents" int not null,
     "depositEuroCents" int,
@@ -64,8 +66,8 @@ create table "Conversation" (
 drop table if exists "ConversationUser" cascade;
 create table "ConversationUser" (
     "conversationId" int references "Conversation" ("id") not null,
-    "userId" text references "User" ("id") not null
-    "lastViewed" timestamp with time zone not null default now(),
+    "userId" text references "User" ("id") not null,
+    "lastViewed" timestamp with time zone not null default now()
 );
 
 drop table if exists "Message" cascade;

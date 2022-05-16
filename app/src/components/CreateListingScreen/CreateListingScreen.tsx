@@ -4,6 +4,8 @@ import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidi
 import { AppMapView } from "@components/AppMapView"
 import { AppMapViewMarker } from "@components/AppMapViewMarker"
 import { AppTextInput } from "@components/AppTextInput"
+import { CategoryPicker } from "@components/CategoryPicker"
+import { CurrencyInput } from "@components/CurrencyInput"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { SeparatedBy } from "@components/SeparatedBy"
@@ -44,6 +46,8 @@ export const CreateListingScreen: VFC<
   const [description, onChangeDescription] = useState("")
   const [price, onChangePrice] = useState("")
   const [deposit, onChangeDeposit] = useState("")
+
+  const [category, setCategory] = useState("Other")
 
   const userLocation = useLocation().location?.coords
   const [coord, setCoord] = useState<{ latitude: number; longitude: number }>()
@@ -100,24 +104,18 @@ export const CreateListingScreen: VFC<
                   multiline
                   onChangeText={onChangeDescription}
                 />
-                <AppTextInput
+                <CurrencyInput
                   label="Price per day"
-                  keyboardType="decimal-pad"
-                  value={`€ ${price}`}
-                  returnKeyType="next"
-                  onChangeText={(input) =>
-                    onChangePrice(`${Number.parseInt(input.slice(2)) || ""}`)
-                  }
+                  value={price}
+                  onChange={onChangePrice}
                 />
-                <AppTextInput
+                <CurrencyInput
                   label="Deposit"
-                  keyboardType="decimal-pad"
-                  value={`€ ${deposit}`}
+                  value={deposit}
+                  onChange={onChangeDeposit}
                   returnKeyType="done"
-                  onChangeText={(input) =>
-                    onChangeDeposit(`${Number.parseInt(input.slice(2)) || ""}`)
-                  }
                 />
+                <CategoryPicker category={category} onSelected={setCategory} />
                 {!!AppMapView && (
                   <>
                     <View style={tw("h-4")} />
@@ -158,6 +156,7 @@ export const CreateListingScreen: VFC<
                           title,
                           imageUrl: imageUpload.uri,
                           description,
+                          category,
                           dayPriceEuroCents: Number(price) * 100,
                           depositEuroCents: Number(deposit) * 100,
                           latitude: coord.latitude,

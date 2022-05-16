@@ -64,6 +64,7 @@ const Navigation: VFC = () => {
               path: "",
               screens: {
                 Home: "",
+                Search: "search",
                 ...commonRoutes(""),
               },
             },

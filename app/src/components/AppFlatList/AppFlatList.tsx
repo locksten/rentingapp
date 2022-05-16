@@ -16,8 +16,8 @@ export const AppFlatList: <T>(
       <FlatList
         showsHorizontalScrollIndicator={false}
         ItemSeparatorComponent={() => separator}
-        ListHeaderComponent={() => separator}
-        ListFooterComponent={() => separator}
+        ListHeaderComponent={separator}
+        ListFooterComponent={separator}
         {...props}
       />
     </View>

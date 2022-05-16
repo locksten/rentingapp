@@ -84,3 +84,9 @@ export const useLocation = () => {
 }
 
 export const serverUrl = `http://${isAndroid ? "10.0.2.2" : "localhost"}:4000`
+
+export const numberOrUndefined = (n?: string) => {
+  if (!n) return undefined
+  const number = Number(n)
+  return number === NaN ? undefined : number
+}

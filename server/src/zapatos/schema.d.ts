@@ -175,6 +175,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       userId: string;
+      /**
+      * **ConversationUser.lastViewed**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      lastViewed: Date;
     }
     export interface JSONSelectable {
       /**
@@ -189,6 +195,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       userId: string;
+      /**
+      * **ConversationUser.lastViewed**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      lastViewed: db.TimestampTzString;
     }
     export interface Whereable {
       /**
@@ -203,6 +215,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       userId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **ConversationUser.lastViewed**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      lastViewed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
     }
     export interface Insertable {
       /**
@@ -217,6 +235,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       userId: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **ConversationUser.lastViewed**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      lastViewed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -231,6 +255,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       userId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **ConversationUser.lastViewed**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      lastViewed?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = never;
     export type Column = keyof Selectable;
@@ -426,6 +456,18 @@ declare module 'zapatos/schema' {
       */
       description: string;
       /**
+      * **Listing.fullText**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      fullText: string;
+      /**
+      * **Listing.category**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      category: string;
+      /**
       * **Listing.imageUrl**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -499,6 +541,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       description: string;
+      /**
+      * **Listing.fullText**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      fullText: string;
+      /**
+      * **Listing.category**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      category: string;
       /**
       * **Listing.imageUrl**
       * - `text` in database
@@ -574,6 +628,18 @@ declare module 'zapatos/schema' {
       */
       description?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.fullText**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      fullText?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Listing.category**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      category?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing.imageUrl**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -648,6 +714,18 @@ declare module 'zapatos/schema' {
       */
       description: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **Listing.fullText**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      fullText: string | db.Parameter<string> | db.SQLFragment;
+      /**
+      * **Listing.category**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      category: string | db.Parameter<string> | db.SQLFragment;
+      /**
       * **Listing.imageUrl**
       * - `text` in database
       * - `NOT NULL`, no default
@@ -715,6 +793,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       description?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Listing.fullText**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      fullText?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Listing.category**
+      * - `text` in database
+      * - `NOT NULL`, no default
+      */
+      category?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
       /**
       * **Listing.imageUrl**
       * - `text` in database
@@ -803,12 +893,6 @@ declare module 'zapatos/schema' {
       */
       text: string;
       /**
-      * **Message.isRead**
-      * - `bool` in database
-      * - `NOT NULL`, default: `false`
-      */
-      isRead: boolean;
-      /**
       * **Message.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -846,12 +930,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       text: string;
-      /**
-      * **Message.isRead**
-      * - `bool` in database
-      * - `NOT NULL`, default: `false`
-      */
-      isRead: boolean;
       /**
       * **Message.createdAt**
       * - `timestamptz` in database
@@ -891,12 +969,6 @@ declare module 'zapatos/schema' {
       */
       text?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **Message.isRead**
-      * - `bool` in database
-      * - `NOT NULL`, default: `false`
-      */
-      isRead?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
-      /**
       * **Message.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -935,12 +1007,6 @@ declare module 'zapatos/schema' {
       */
       text: string | db.Parameter<string> | db.SQLFragment;
       /**
-      * **Message.isRead**
-      * - `bool` in database
-      * - `NOT NULL`, default: `false`
-      */
-      isRead?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
-      /**
       * **Message.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -972,12 +1038,6 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       text?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
-      /**
-      * **Message.isRead**
-      * - `bool` in database
-      * - `NOT NULL`, default: `false`
-      */
-      isRead?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **Message.createdAt**
       * - `timestamptz` in database
