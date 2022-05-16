@@ -15,6 +15,11 @@ import { getReactNativePersistence } from "firebase/auth/react-native"
 import { useEffect, useReducer, useRef } from "react"
 import { isWeb } from "src/utils"
 
+export const registrationDetails = {
+  email: "",
+  password: "",
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyBQ51basYw88ojUlEH62Qak0l-e9vOiwXE",
   authDomain: "rentingapp-57f77.firebaseapp.com",
@@ -39,10 +44,15 @@ if (!getApps().length) {
 
 export const getAuthState = () => auth
 
-export const onAuthStateChange = (fn: () => Promise<void> | void) =>
-  onAuthStateChanged(auth, async () => {
+let triggerAuthStateChanged: (() => Promise<void> | void) | undefined =
+  undefined
+
+export const onAuthStateChange = (fn: () => Promise<void> | void) => {
+  triggerAuthStateChanged = fn
+  return onAuthStateChanged(auth, async () => {
     await fn()
   })
+}
 
 {
   const unsubscribe = onAuthStateChange(async () => {
@@ -83,15 +93,16 @@ export const emailSignUp = async (
   email: string,
   password: string,
   displayName: string,
+  photoURL: string,
 ) => {
   if (!displayName) throw new Error("Name is required")
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, {
     displayName,
-    photoURL:
-      "https://images.unsplash.com/photo-1621983266286-09645be8fd01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=64&q=80",
+    photoURL,
   })
   await saveEmailPassword(email, password)
+  await triggerAuthStateChanged?.()
 }
 
 export const signOut = async () => {

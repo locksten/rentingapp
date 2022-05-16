@@ -1,7 +1,8 @@
-import { SignIn } from "@components/AccountScreen/SignInScreen"
 import { AppText } from "@components/AppText"
 import { MainButton } from "@components/MainButton"
 import { RootTabs } from "@components/RootTabNavigator"
+import { SignIn } from "@components/SignInScreen"
+import { SignUp } from "@components/SignUpScreen"
 import {
   CommonStackParams,
   WithCommonStackScreens,
@@ -19,6 +20,7 @@ import { useTailwind } from "tailwind-rn/dist"
 export type AccountScreenParams = CommonStackParams & {
   Home: undefined
   SignIn: undefined
+  SignUp: undefined
 }
 
 export const AccountScreen: VFC<
@@ -35,11 +37,18 @@ export const AccountScreen: VFC<
           component={HomeScreen}
         />
       ) : (
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="SignIn"
-          component={SignIn}
-        />
+        <Stack.Group>
+          <Stack.Screen
+            options={{ title: "Sign In" }}
+            name="SignIn"
+            component={SignIn}
+          />
+          <Stack.Screen
+            options={{ title: "Sign Up" }}
+            name="SignUp"
+            component={SignUp}
+          />
+        </Stack.Group>
       )}
     </WithCommonStackScreens>
   )

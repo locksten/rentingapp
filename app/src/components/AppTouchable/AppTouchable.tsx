@@ -29,7 +29,7 @@ export const AppTouchable: FC<AppTouchableProps> = ({
   const tabState = useNavigation<CommonStackNavigationProp>()
     .getParent()
     ?.getState()
-  const currentTabName = tabState?.routeNames.at(tabState?.index)
+  const currentTabName = tabState?.routeNames[tabState?.index]
   if (typeof toCommon === "object")
     toCommon = {
       // @ts-ignore

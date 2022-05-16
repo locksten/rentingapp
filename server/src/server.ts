@@ -11,7 +11,7 @@ import { fromBuffer as fileTypeFromBuffer } from "file-type"
 import * as fs from "fs"
 import { getIntrospectionQuery } from "graphql"
 import { schema } from "schema/schema"
-import { uploadListingImage } from "storage"
+import { fileUploadHandler, uploadImage } from "storage"
 
 const server = new ApolloServer({
   schema,
@@ -33,23 +33,21 @@ const listen = (app: Express) => {
     }),
   )
 
-  app.post("/listing/image", async function (req, res) {
-    const file = req.files?.file
-    if (!file || (file && "length" in file)) {
-      res.status(400).send("Number of should be 1")
-      return
-    }
+  app.post(
+    "/listing/image",
+    fileUploadHandler({
+      bucketName: "rentingapp.listing-images",
+      sizeLimitMegabytes: 5,
+    }),
+  )
 
-    const filetype = await fileTypeFromBuffer(file.data)
-    if (!filetype || !["image/jpeg", "image/png"].includes(filetype.mime)) {
-      res.status(400).send("Invalid file type")
-    }
-
-    const url = await uploadListingImage(file.data)
-    if (!url) res.status(400).send("Failed to upload")
-
-    res.status(200).json({ url }).send()
-  })
+  app.post(
+    "/user/image",
+    fileUploadHandler({
+      bucketName: "rentingapp.user-profile-photos",
+      sizeLimitMegabytes: 0.5,
+    }),
+  )
 
   app.listen({ port: 4000 }, () => {
     fetch("http://localhost:4000/graphql", {

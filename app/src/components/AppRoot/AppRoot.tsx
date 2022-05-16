@@ -89,6 +89,8 @@ const Navigation: VFC = () => {
             Account: {
               screens: {
                 Home: "account",
+                SignIn: "sign-in",
+                SignUp: "sign-up",
                 ...commonRoutes("account"),
               },
             },

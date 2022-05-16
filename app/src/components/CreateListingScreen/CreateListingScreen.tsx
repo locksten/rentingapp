@@ -3,10 +3,7 @@ import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
 import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
 import { AppMapView } from "@components/AppMapView"
 import { AppMapViewMarker } from "@components/AppMapViewMarker"
-import { AppText } from "@components/AppText"
 import { AppTextInput } from "@components/AppTextInput"
-import { AppTouchable } from "@components/AppTouchable"
-import { useUploadImage } from "@components/ImageUpload"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { SeparatedBy } from "@components/SeparatedBy"
@@ -19,6 +16,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useState, VFC } from "react"
 import { View } from "react-native"
+import { imageUploadStateMessage, useUploadImage } from "src/imageUpload"
 import { isWeb, useLocation } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
@@ -38,7 +36,7 @@ export const createListing = gql(/* GraphQL */ `
 
 export const CreateListingScreen: VFC<
   NativeStackScreenProps<CommonStackParams, "CreateListing">
-> = ({}) => {
+> = () => {
   const tw = useTailwind()
   const navigation = useNavigation<CommonStackNavigationProp>()
 
@@ -59,8 +57,7 @@ export const CreateListingScreen: VFC<
       })
   }, [userLocation])
 
-  const { isImageSelected, uploadedImageUri, pickImage } = useUploadImage()
-  const isUploading = isImageSelected && !uploadedImageUri
+  const { imageUpload, pickImage } = useUploadImage("listing")
 
   const [_, create] = useMutation(createListing)
 
@@ -69,32 +66,24 @@ export const CreateListingScreen: VFC<
       <AppKeyboardAvoidingViewScrollView>
         <MediumListWidth>
           <View style={tw("justify-between")}>
-            <AppTouchable onPress={pickImage} style={isWeb && tw("p-4")}>
+            <View style={isWeb && tw("p-4")}>
               <AppImage
-                uri={uploadedImageUri}
+                uri={
+                  imageUpload.status === "uploaded"
+                    ? imageUpload.uri
+                    : undefined
+                }
+                onPress={pickImage}
                 aspectRatio={16 / 9}
-                borderRadius={0}
-                style={tw("border-x-0 border-t-0")}
+                borderRadius={isWeb ? 8 : 0}
+                text={
+                  imageUpload.status === "uploaded"
+                    ? undefined
+                    : imageUploadStateMessage[imageUpload.status]
+                }
+                style={[tw("border-x-0 border-t-0"), isWeb && tw("border-b-0")]}
               />
-              {!!isUploading && (
-                <View style={tw("absolute h-full w-full justify-center")}>
-                  <AppText
-                    style={tw("text-center font-bold text-xl text-gray-500")}
-                  >
-                    {"Uploading..."}
-                  </AppText>
-                </View>
-              )}
-              {!isImageSelected && (
-                <View style={tw("absolute h-full w-full justify-center")}>
-                  <AppText
-                    style={tw("text-center font-bold text-xl text-gray-500")}
-                  >
-                    {"Select Image"}
-                  </AppText>
-                </View>
-              )}
-            </AppTouchable>
+            </View>
             <View style={tw("p-4")}>
               <SeparatedBy separator={<View style={tw("h-2")} />}>
                 <AppTextInput
@@ -163,11 +152,11 @@ export const CreateListingScreen: VFC<
                   text="Create"
                   onPress={async () => {
                     coord &&
-                      uploadedImageUri &&
+                      imageUpload.status === "uploaded" &&
                       (await create({
                         input: {
                           title,
-                          imageUrl: uploadedImageUri,
+                          imageUrl: imageUpload.uri,
                           description,
                           dayPriceEuroCents: Number(price) * 100,
                           depositEuroCents: Number(deposit) * 100,

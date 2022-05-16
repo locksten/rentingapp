@@ -4,30 +4,50 @@ import { useState } from "react"
 import { Platform } from "react-native"
 import { isWeb, serverUrl } from "src/utils"
 
-export const useUploadNative = () => {
-  const [uploadedImageUri, setUploadedImageUri] = useState<string>()
-  const [isImageSelected, setIsImageSelected] = useState(false)
+export const imageUploadStateMessage: {
+  [key in ImageUploadState["status"]]: string
+} = {
+  error: "Something went wrong",
+  uploaded: "Uploaded",
+  uploading: "Uploading",
+  waiting: "Select Image",
+}
+
+type ImageUploadState =
+  | { status: "waiting" }
+  | { status: "error" }
+  | { status: "uploading" }
+  | {
+      status: "uploaded"
+      uri: string
+    }
+
+type ImageUploadType = "listing" | "user"
+
+export const useUploadImage = (type: ImageUploadType) => {
+  const [imageUpload, setImageUploadState] = useState<ImageUploadState>({
+    status: "waiting",
+  })
 
   return {
-    isImageSelected,
-    uploadedImageUri,
-    pickImage: () =>
-      uploadNative(() => setIsImageSelected(true), setUploadedImageUri),
+    imageUpload,
+    pickImage: () => uploadNative(type, setImageUploadState),
   }
 }
 
 const uploadNative = async (
-  onSelect?: () => void,
-  onUpload?: (uri: string) => void,
+  type: ImageUploadType,
+  setState: (state: ImageUploadState) => void,
 ) => {
-  console.log("uploadNative")
   const selected = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
   })
-  if (selected.cancelled) return
-  onSelect?.()
+  if (selected.cancelled) {
+    setState({ status: "waiting" })
+    return
+  }
 
-  if (!selected || selected.cancelled) return
+  setState({ status: "uploading" })
   const image =
     selected.width > 1920 || selected.height > 1080
       ? await manipulateAsync(
@@ -35,8 +55,7 @@ const uploadNative = async (
           [
             {
               resize: {
-                width: 1920,
-                height: selected.height / (selected.width / 1920),
+                width: type === "listing" ? 1920 : 256,
               },
             },
           ],
@@ -59,16 +78,19 @@ const uploadNative = async (
     })
   }
 
-  const endpoint = `${serverUrl}/graphql/listing/image`
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: isWeb
-      ? undefined
-      : {
-          "content-type": "multipart/form-data",
-        },
-    body: formData,
-  })
-  const uri = (await response.json()).url
-  onUpload?.(uri)
+  const endpoint = `${serverUrl}/${type}/image`
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: isWeb
+        ? undefined
+        : {
+            "content-type": "multipart/form-data",
+          },
+      body: formData,
+    })
+    setState({ status: "uploaded", uri: (await response.json()).url })
+  } catch (e) {
+    setState({ status: "error" })
+  }
 }

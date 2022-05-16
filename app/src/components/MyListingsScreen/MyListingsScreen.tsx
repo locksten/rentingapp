@@ -96,9 +96,7 @@ const HomeScreen: VFC<
       <AppFlatList
         ListHeaderComponent={items?.length ? createListing : undefined}
         contentContainerStyle={tw("flex-grow")}
-        ListEmptyComponent={
-          <View style={tw("flex-1 justify-center")}>{createListing}</View>
-        }
+        ListEmptyComponent={<View style={tw("flex-1")}>{createListing}</View>}
         data={filterNodes(items)?.map((i) => i.node)}
         renderItem={({ item }) => (
           <ListingListItem.ListItemVertical
@@ -180,7 +178,6 @@ export const OwnerRenting: VFC<{
   renting?: DocumentType<typeof OwnerRentingFragment> | null
 }> = ({ renting }) => {
   const tw = useTailwind()
-  const { navigate } = useNavigation<CommonStackNavigationProp>()
 
   const [_, declineRequest] = useMutation(declineRentingRequest)
   const [__, acceptRequest] = useMutation(acceptRentingRequest)

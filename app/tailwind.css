@@ -97,6 +97,18 @@
   width: 16rem
 }
 
+.w-32 {
+  width: 8rem
+}
+
+.w-16 {
+  width: 4rem
+}
+
+.w-24 {
+  width: 6rem
+}
+
 .max-w-xl {
   max-width: 36rem
 }
@@ -107,6 +119,10 @@
 
 .max-w-lg {
   max-width: 32rem
+}
+
+.max-w-2xl {
+  max-width: 42rem
 }
 
 .flex-1 {
@@ -198,6 +214,10 @@
   border-width: 4px
 }
 
+.border-2 {
+  border-width: 2px
+}
+
 .border-x-0 {
   border-left-width: 0px;
   border-right-width: 0px
@@ -209,6 +229,10 @@
 
 .border-t-0 {
   border-top-width: 0px
+}
+
+.border-b-0 {
+  border-bottom-width: 0px
 }
 
 .border-neutral-300 {
@@ -229,6 +253,11 @@
 .border-purple-800 {
   --tw-border-opacity: 1;
   border-color: rgb(107 33 168 / var(--tw-border-opacity))
+}
+
+.border-red-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(252 165 165 / var(--tw-border-opacity))
 }
 
 .bg-neutral-200 {
@@ -424,6 +453,11 @@
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem
 }
 
 .font-semibold {

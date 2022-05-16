@@ -1,12 +1,14 @@
 import React, { FC } from "react"
-import { View } from "react-native"
+import { View, ViewProps } from "react-native"
 import { useTailwind } from "tailwind-rn"
 
-export const MediumListWidth: FC = ({ children }) => {
+export const MediumListWidth: FC<ViewProps> = ({ children, ...props }) => {
   const tw = useTailwind()
   return (
     <View style={tw("flex-1 items-center")}>
-      <View style={tw("flex-1 w-full max-w-lg")}>{children}</View>
+      <View {...props} style={[tw("flex-1 w-full max-w-lg"), props.style]}>
+        {children}
+      </View>
     </View>
   )
 }
