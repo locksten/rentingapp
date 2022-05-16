@@ -3,13 +3,15 @@ import {
   minifyIntrospectionQuery,
 } from "@urql/introspection"
 import { ApolloServer } from "apollo-server-express/dist/ApolloServer"
+import { newAppContext } from "context"
+import fetch from "cross-fetch"
 import express, { Express } from "express"
+import fileUpload from "express-fileupload"
+import { fromBuffer as fileTypeFromBuffer } from "file-type"
 import * as fs from "fs"
 import { getIntrospectionQuery } from "graphql"
-import fetch from "cross-fetch"
 import { schema } from "schema/schema"
-import { newAppContext } from "context"
-import { getFirebaseUserById } from "auth"
+import { uploadListingImage } from "storage"
 
 const server = new ApolloServer({
   schema,
@@ -23,6 +25,32 @@ server.start().then(() => {
 })
 
 const listen = (app: Express) => {
+  app.use(
+    fileUpload({
+      limits: { fileSize: 5 * 1024 * 1024 },
+      abortOnLimit: true,
+      debug: true,
+    }),
+  )
+
+  app.post("/listing/image", async function (req, res) {
+    const file = req.files?.file
+    if (!file || (file && "length" in file)) {
+      res.status(400).send("Number of should be 1")
+      return
+    }
+
+    const filetype = await fileTypeFromBuffer(file.data)
+    if (!filetype || !["image/jpeg", "image/png"].includes(filetype.mime)) {
+      res.status(400).send("Invalid file type")
+    }
+
+    const url = await uploadListingImage(file.data)
+    if (!url) res.status(400).send("Failed to upload")
+
+    res.status(200).json({ url }).send()
+  })
+
   app.listen({ port: 4000 }, () => {
     fetch("http://localhost:4000/graphql", {
       method: "POST",

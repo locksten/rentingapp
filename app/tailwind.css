@@ -6,6 +6,25 @@
   position: relative
 }
 
+.inset-0 {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px
+}
+
+.top-1\/2 {
+  top: 50%
+}
+
+.left-1\/2 {
+  left: 50%
+}
+
+.m-auto {
+  margin: auto
+}
+
 .-ml-16 {
   margin-left: -4rem
 }
@@ -74,6 +93,10 @@
   width: 0.25rem
 }
 
+.w-64 {
+  width: 16rem
+}
+
 .max-w-xl {
   max-width: 36rem
 }
@@ -104,6 +127,10 @@
 
 .flex-row-reverse {
   flex-direction: row-reverse
+}
+
+.content-center {
+  align-content: center
 }
 
 .items-start {
@@ -376,6 +403,10 @@
   padding-bottom: 0.25rem
 }
 
+.text-center {
+  text-align: center
+}
+
 .text-base {
   font-size: 16px
 }
@@ -455,6 +486,16 @@
 .text-red-600 {
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity))
+}
+
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity))
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
 }
 
 .opacity-0 {

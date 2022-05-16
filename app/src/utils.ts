@@ -61,6 +61,8 @@ export const useDeviceSize = () => ({
 })
 
 export const isWeb = Platform.OS === "web"
+export const isIOS = Platform.OS === "ios"
+export const isAndroid = Platform.OS === "android"
 
 export const useLocation = () => {
   const [location, setLocation] = useState<Location.LocationObject>()
@@ -80,3 +82,5 @@ export const useLocation = () => {
 
   return { error, location }
 }
+
+export const serverUrl = `http://${isAndroid ? "10.0.2.2" : "localhost"}:4000`

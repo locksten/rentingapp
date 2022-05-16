@@ -3,7 +3,10 @@ import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
 import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
 import { AppMapView } from "@components/AppMapView"
 import { AppMapViewMarker } from "@components/AppMapViewMarker"
+import { AppText } from "@components/AppText"
 import { AppTextInput } from "@components/AppTextInput"
+import { AppTouchable } from "@components/AppTouchable"
+import { useUploadImage } from "@components/ImageUpload"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { SeparatedBy } from "@components/SeparatedBy"
@@ -16,7 +19,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useState, VFC } from "react"
 import { View } from "react-native"
-import { useLocation } from "src/utils"
+import { isWeb, useLocation } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
 
@@ -56,8 +59,8 @@ export const CreateListingScreen: VFC<
       })
   }, [userLocation])
 
-  const imageUrl =
-    "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
+  const { isImageSelected, uploadedImageUri, pickImage } = useUploadImage()
+  const isUploading = isImageSelected && !uploadedImageUri
 
   const [_, create] = useMutation(createListing)
 
@@ -66,12 +69,32 @@ export const CreateListingScreen: VFC<
       <AppKeyboardAvoidingViewScrollView>
         <MediumListWidth>
           <View style={tw("justify-between")}>
-            <AppImage
-              uri={imageUrl}
-              aspectRatio={16 / 9}
-              borderRadius={0}
-              style={tw("border-x-0 border-t-0")}
-            />
+            <AppTouchable onPress={pickImage} style={isWeb && tw("p-4")}>
+              <AppImage
+                uri={uploadedImageUri}
+                aspectRatio={16 / 9}
+                borderRadius={0}
+                style={tw("border-x-0 border-t-0")}
+              />
+              {!!isUploading && (
+                <View style={tw("absolute h-full w-full justify-center")}>
+                  <AppText
+                    style={tw("text-center font-bold text-xl text-gray-500")}
+                  >
+                    {"Uploading..."}
+                  </AppText>
+                </View>
+              )}
+              {!isImageSelected && (
+                <View style={tw("absolute h-full w-full justify-center")}>
+                  <AppText
+                    style={tw("text-center font-bold text-xl text-gray-500")}
+                  >
+                    {"Select Image"}
+                  </AppText>
+                </View>
+              )}
+            </AppTouchable>
             <View style={tw("p-4")}>
               <SeparatedBy separator={<View style={tw("h-2")} />}>
                 <AppTextInput
@@ -140,10 +163,11 @@ export const CreateListingScreen: VFC<
                   text="Create"
                   onPress={async () => {
                     coord &&
+                      uploadedImageUri &&
                       (await create({
                         input: {
                           title,
-                          imageUrl,
+                          imageUrl: uploadedImageUri,
                           description,
                           dayPriceEuroCents: Number(price) * 100,
                           depositEuroCents: Number(deposit) * 100,

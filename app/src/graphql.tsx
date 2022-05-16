@@ -3,8 +3,8 @@ import { authExchange } from "@urql/exchange-auth"
 import { cacheExchange } from "@urql/exchange-graphcache"
 import type { IntrospectionData } from "@urql/exchange-graphcache/dist/types/ast"
 import React, { FC } from "react"
-import { Platform } from "react-native"
 import { getAuthState } from "src/auth"
+import { serverUrl } from "src/utils"
 import {
   createClient,
   dedupExchange,
@@ -21,9 +21,7 @@ const nodeTypes = (
 ).possibleTypes.map(({ name }: any) => name)
 
 const client = createClient({
-  url: `http://${
-    Platform.OS === "android" ? "10.0.2.2" : "localhost"
-  }:4000/graphql`,
+  url: `${serverUrl}/graphql`,
   exchanges: [
     devtoolsExchange,
     dedupExchange,
