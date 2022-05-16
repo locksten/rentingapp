@@ -25,7 +25,7 @@ import { View } from "react-native"
 import {
   filterNodes,
   parseJSONDate,
-  sortByUpdatedAt,
+  sortedByUpdatedAt,
   useRefetchOnFocus,
 } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
@@ -94,7 +94,7 @@ const HomeScreen: VFC<
   return (
     <MediumListWidth>
       <AppFlatList
-        data={sortByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
+        data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
         renderItem={({ item }) => {
           const endDate = parseJSONDate(item.scheduledEndTime)
           return (

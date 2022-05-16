@@ -15,7 +15,7 @@ import {
 } from "@react-navigation/native-stack"
 import React, { useEffect, VFC } from "react"
 import { RefreshControl, ScrollView, View } from "react-native"
-import { filterNodes } from "src/utils"
+import { filterNodes, sortedByUpdatedAt } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -45,6 +45,7 @@ export const Listings = gql(/* GraphQL */ `
         node {
           __typename
           id
+          updatedAt
           ...ListingListItemFragment
         }
       }
@@ -88,7 +89,7 @@ const HomeScreen: VFC<
         <AppFlatList
           horizontal
           title="Listings"
-          data={filterNodes(items)?.map((i) => i.node)}
+          data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
           renderItem={({ item }) => (
             <ListingListItem.ListItemHorizontal item={item} />
           )}

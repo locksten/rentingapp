@@ -41,7 +41,7 @@ export const formatISODate = (date?: Date | number | null | string) =>
 export const formatMonthDayNumbers = (date?: Date | number | null | string) =>
   date ? format(parseJSON(date), "MM-dd") : undefined
 
-export const sortByUpdatedAt = <T extends { updatedAt?: string | null }>(
+export const sortedByUpdatedAt = <T extends { updatedAt?: string | null }>(
   items?: T[] | null,
 ) =>
   items

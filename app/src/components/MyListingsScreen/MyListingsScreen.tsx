@@ -22,7 +22,7 @@ import {
 } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { View } from "react-native"
-import { filterNodes, sortByUpdatedAt, useRefetchOnFocus } from "src/utils"
+import { filterNodes, sortedByUpdatedAt, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
 
@@ -55,8 +55,12 @@ export const MyListings = gql(/* GraphQL */ `
           node {
             __typename
             id
+            updatedAt
             ...ListingListItemFragment
             rentings {
+              __typename
+              id
+              updatedAt
               ...OwnerRentingFragment
             }
           }
@@ -97,7 +101,7 @@ const HomeScreen: VFC<
         ListHeaderComponent={items?.length ? createListing : undefined}
         contentContainerStyle={tw("flex-grow")}
         ListEmptyComponent={<View style={tw("flex-1")}>{createListing}</View>}
-        data={filterNodes(items)?.map((i) => i.node)}
+        data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
         renderItem={({ item }) => (
           <ListingListItem.ListItemVertical
             item={item}
@@ -106,7 +110,7 @@ const HomeScreen: VFC<
               return (
                 <View>
                   <SeparatedBy separator={<View style={tw("h-2")} />} start>
-                    {sortByUpdatedAt(item.rentings)?.map((renting) => (
+                    {sortedByUpdatedAt(item.rentings)?.map((renting) => (
                       <OwnerRenting key={renting.id} renting={renting} />
                     ))}
                   </SeparatedBy>
