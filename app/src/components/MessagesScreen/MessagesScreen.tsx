@@ -12,7 +12,6 @@ import {
 } from "@components/WithCommonStackScreens"
 import { gql } from "@gql/gql"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
-import { useNavigation } from "@react-navigation/native"
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -68,6 +67,13 @@ export const MyConversations = gql(/* GraphQL */ `
             __typename
             id
             createdAt
+            participants {
+              __typename
+              id
+              isMe
+              imageUrl
+              name
+            }
             listing {
               __typename
               id
@@ -96,7 +102,6 @@ const HomeScreen: VFC<
   NativeStackScreenProps<MessagesScreenParams, "Home">
 > = () => {
   const tw = useTailwind()
-  const { navigate } = useNavigation<MessagesStackNavigationProp>()
 
   const [{ data }, refetch] = useQuery({
     query: MyConversations,
@@ -111,13 +116,13 @@ const HomeScreen: VFC<
         data={items?.map((i) => i?.node).filter(isTruthy)}
         renderItem={({ item }) => {
           const { latestMessage, listing } = item
+          const otherParticipant = item.participants?.filter((p) => !p.isMe)[0]
           const lastMessageDate = parseJSONDate(latestMessage?.createdAt)
           const readStyle = true
-            ? tw("text-black font-bold")
-            : tw("text-gray-600")
+            ? tw("text-gray-600")
+            : tw("text-black font-bold")
           return (
             <AppTouchable
-              // onPress={() => { navigate("Chat", { conversationId: item.id }) }}
               to={{
                 screen: "Messages",
                 params: { screen: "Chat", params: { conversationId: item.id } },
@@ -126,7 +131,7 @@ const HomeScreen: VFC<
             >
               {isWeb ? (
                 <ProfilePicture
-                  uri={latestMessage?.sender?.imageUrl}
+                  uri={otherParticipant?.imageUrl}
                   style={tw("h-full")}
                 />
               ) : (
@@ -139,14 +144,14 @@ const HomeScreen: VFC<
                     />
                   </View>
                   <ProfilePicture
-                    uri={latestMessage?.sender?.imageUrl}
+                    uri={otherParticipant?.imageUrl}
                     style={tw("h-full absolute border-white")}
                   />
                 </View>
               )}
               <View style={tw("h-full flex-1 px-4 pb-2 justify-center")}>
                 <AppText style={tw("text-lg font-semibold")}>
-                  {latestMessage?.sender?.name}
+                  {otherParticipant?.name}
                 </AppText>
                 <View style={tw("flex-row")}>
                   <View style={tw("flex-shrink")}>

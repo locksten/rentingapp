@@ -4,6 +4,7 @@ import { db, dc } from "database"
 import { Listing } from "schema/listing"
 import { Message, MessageRef } from "schema/message"
 import { schemaBuilder } from "schema/schemaBuilder"
+import { User } from "schema/user"
 import { Conversation as QConversation } from "zapatos/schema"
 
 export { Conversation as QConversation } from "zapatos/schema"
@@ -48,6 +49,16 @@ export const Conversation = schemaBuilder.loadableNode(ConversationRef, {
             { order: { by: "createdAt", direction: "DESC" } },
           )
           .run(pool)
+      },
+    }),
+    participants: t.field({
+      type: [User],
+      resolve: async ({ id: conversationId }, _args, { pool }) => {
+        const conversationUser = await db
+          .select("ConversationUser", { conversationId })
+          .run(pool)
+        const userIds = conversationUser.map((cu) => cu.userId)
+        return await db.select("User", { id: dc.isIn(userIds) }).run(pool)
       },
     }),
     listing: t.field({
