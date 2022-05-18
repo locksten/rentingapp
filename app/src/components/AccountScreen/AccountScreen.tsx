@@ -15,6 +15,7 @@ import {
 import React, { VFC } from "react"
 import { View } from "react-native"
 import { signOut, useCurrentUser } from "src/auth"
+import { useGQLClient } from "src/graphql"
 import { useTailwind } from "tailwind-rn/dist"
 
 export type AccountScreenParams = CommonStackParams & {
@@ -59,10 +60,17 @@ const HomeScreen: VFC<
 > = () => {
   const tw = useTailwind()
   const user = useCurrentUser()
+  const gqlClient = useGQLClient()
   if (!user) <AppText>Something went wrong</AppText>
   return (
     <View style={tw("flex-1 px-4")}>
-      <MainButton text="Sign out" onPress={signOut} />
+      <MainButton
+        text="Sign out"
+        onPress={() => {
+          signOut()
+          gqlClient.resetClient()
+        }}
+      />
       <AppText>{user?.displayName}</AppText>
     </View>
   )
