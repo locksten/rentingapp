@@ -28,7 +28,6 @@ export const PersonCard: VFC<{
   person: DocumentType<typeof PersonCardFragment>
 }> = ({ person }) => {
   const tw = useTailwind()
-  const { navigate } = useNavigation<RootTabsNavigationProp>()
   const {
     isMe,
     listingCount,
@@ -41,11 +40,11 @@ export const PersonCard: VFC<{
   } = person
 
   const NameAndPic = (
-    <View style={tw(" items-center justify-center")}>
+    <View style={tw("items-center justify-center")}>
       <ProfilePicture uri={imageUrl} style={tw("h-16")} />
       <AppText
         numberOfLines={2}
-        style={tw("pt-1 text-2xl font-semibold flex-1")}
+        style={tw("pt-1 text-center text-2xl font-semibold")}
       >
         {name}
       </AppText>
