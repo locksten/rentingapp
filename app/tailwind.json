@@ -456,6 +456,12 @@
 			"paddingBottom": 16
 		}
 	},
+	"py-8": {
+		"style": {
+			"paddingTop": 32,
+			"paddingBottom": 32
+		}
+	},
 	"pl-8": {
 		"style": {
 			"paddingLeft": 32
@@ -529,6 +535,11 @@
 	"pb-1": {
 		"style": {
 			"paddingBottom": 4
+		}
+	},
+	"pb-8": {
+		"style": {
+			"paddingBottom": 32
 		}
 	},
 	"text-center": {

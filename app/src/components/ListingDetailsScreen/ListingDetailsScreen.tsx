@@ -133,7 +133,7 @@ export const MainDetails: VFC<{
             <AppText style={tw("text-xl font-medium")}>{title}</AppText>
             {!!category && (
               <AppText style={tw("text-xl font-medium text-gray-500")}>
-                {`#${category}`}
+                {`   #${category}`}
               </AppText>
             )}
           </AppText>

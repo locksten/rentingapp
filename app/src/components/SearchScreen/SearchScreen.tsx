@@ -118,7 +118,7 @@ export const SearchScreen: VFC<
         }
         contentContainerStyle={tw("flex-grow")}
         ListEmptyComponent={
-          <View style={tw("flex-1 justify-center")}>
+          <View style={tw("flex-1 justify-center pt-4 pb-8")}>
             <AppText style={tw("text-center text-xl font-bold text-gray-400")}>
               No Results
             </AppText>
