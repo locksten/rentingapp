@@ -68,6 +68,7 @@ export const AppTouchable: FC<AppTouchableProps> = ({
 
   return (
     <TouchableOpacity
+      disabled={to ? !onLinkPress : !onPress}
       onPress={to ? onLinkPress : onPress}
       {...(to ? linkProps : undefined)}
       {...props}

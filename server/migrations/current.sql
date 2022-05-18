@@ -3,7 +3,9 @@ create table "User" (
     "id" text primary key,
     "name" text not null,
     "isAdmin" boolean not null default FALSE,
+    "isBanned" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('User') stored
 );
 
@@ -32,7 +34,20 @@ create table "Feedback" (
     "rating" int not null,
     "text" text,
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Feedback') stored
+);
+
+drop table if exists "Report" cascade;
+create table "Report" (
+    "id" serial primary key,
+    "listingId" int references "Listing" ("id"),
+    "feedbackId" int references "Feedback" ("id"),
+    "reason" text,
+    "isProcessed" boolean not null default FALSE,
+    "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
+    "_type" text not null generated always as ('Report') stored
 );
 
 drop type if exists "RentingStatus" cascade;
@@ -60,6 +75,7 @@ create table "Conversation" (
     "id" serial primary key,
     "listingId" int references "Listing" ("id"),
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Conversation') stored
 );
 
@@ -77,5 +93,6 @@ create table "Message" (
     "senderId" text references "User" ("id") not null,
     "text" text not null,
     "createdAt" timestamp with time zone not null default now(),
+    "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Message') stored
 );

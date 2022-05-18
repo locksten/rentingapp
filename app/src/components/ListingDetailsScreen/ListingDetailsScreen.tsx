@@ -114,6 +114,7 @@ export const MainDetails: VFC<{
     latitude,
     longitude,
     category,
+    id,
   },
 }) => {
   const tw = useTailwind()
@@ -173,6 +174,13 @@ export const MainDetails: VFC<{
         <View style={tw("px-4 w-full max-w-md")}>
           {!!owner && <PersonCard person={owner} />}
         </View>
+        <View style={tw("h-4")} />
+        <MainButton
+          style={tw("px-4")}
+          secondary
+          text="Report Listing"
+          toCommon={{ screen: "MakeReport", params: { listingId: id } }}
+        />
         <View style={tw("h-4")} />
       </View>
       {!!feedback?.edges.length && (

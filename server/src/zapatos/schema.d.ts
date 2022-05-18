@@ -51,6 +51,12 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
+      * **Conversation.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
+      /**
       * **Conversation._type**
       * - `text` in database
       * - Generated column
@@ -76,6 +82,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **Conversation.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **Conversation._type**
       * - `text` in database
@@ -103,6 +115,12 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Conversation.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Conversation._type**
       * - `text` in database
       * - Generated column
@@ -128,6 +146,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Conversation.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -148,6 +172,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Conversation.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'Conversation_pkey';
     export type Column = keyof Selectable;
@@ -301,6 +331,12 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
+      * **Feedback.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
+      /**
       * **Feedback._type**
       * - `text` in database
       * - Generated column
@@ -332,6 +368,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **Feedback.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **Feedback._type**
       * - `text` in database
@@ -365,6 +407,12 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Feedback.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Feedback._type**
       * - `text` in database
       * - Generated column
@@ -396,6 +444,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Feedback.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -422,6 +476,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Feedback.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'Feedback_pkey';
     export type Column = keyof Selectable;
@@ -899,6 +959,12 @@ declare module 'zapatos/schema' {
       */
       createdAt: Date;
       /**
+      * **Message.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
+      /**
       * **Message._type**
       * - `text` in database
       * - Generated column
@@ -936,6 +1002,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **Message.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **Message._type**
       * - `text` in database
@@ -975,6 +1047,12 @@ declare module 'zapatos/schema' {
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Message.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Message._type**
       * - `text` in database
       * - Generated column
@@ -1012,6 +1090,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Message.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -1044,6 +1128,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Message.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'Message_pkey';
     export type Column = keyof Selectable;
@@ -1424,6 +1514,257 @@ declare module 'zapatos/schema' {
   }
 
   /**
+   * **Report**
+   * - Table in database
+   */
+  export namespace Report {
+    export type Table = 'Report';
+    export interface Selectable {
+      /**
+      * **Report.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Report_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Report.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId: number | null;
+      /**
+      * **Report.feedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      feedbackId: number | null;
+      /**
+      * **Report.reason**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      reason: string | null;
+      /**
+      * **Report.isProcessed**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isProcessed: boolean;
+      /**
+      * **Report.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: Date;
+      /**
+      * **Report.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
+      /**
+      * **Report._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface JSONSelectable {
+      /**
+      * **Report.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Report_id_seq"'::regclass)`
+      */
+      id: number;
+      /**
+      * **Report.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId: number | null;
+      /**
+      * **Report.feedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      feedbackId: number | null;
+      /**
+      * **Report.reason**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      reason: string | null;
+      /**
+      * **Report.isProcessed**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isProcessed: boolean;
+      /**
+      * **Report.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt: db.TimestampTzString;
+      /**
+      * **Report.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
+      /**
+      * **Report._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type: string;
+    }
+    export interface Whereable {
+      /**
+      * **Report.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Report_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.feedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      feedbackId?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.reason**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      reason?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.isProcessed**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isProcessed?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **Report._type**
+      * - `text` in database
+      * - Generated column
+      */
+      _type?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+    }
+    export interface Insertable {
+      /**
+      * **Report.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Report_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.feedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      feedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.reason**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      reason?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.isProcessed**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isProcessed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **Report.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+    }
+    export interface Updatable {
+      /**
+      * **Report.id**
+      * - `int4` in database
+      * - `NOT NULL`, default: `nextval('"Report_id_seq"'::regclass)`
+      */
+      id?: number | db.Parameter<number> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.listingId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      listingId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.feedbackId**
+      * - `int4` in database
+      * - Nullable, no default
+      */
+      feedbackId?: number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.reason**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      reason?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.isProcessed**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isProcessed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.createdAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Report.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+    }
+    export type UniqueIndex = 'Report_pkey';
+    export type Column = keyof Selectable;
+    export type OnlyCols<T extends readonly Column[]> = Pick<Selectable, T[number]>;
+    export type SQLExpression = db.GenericSQLExpression | db.ColumnNames<Updatable | (keyof Updatable)[]> | db.ColumnValues<Updatable> | Table | Whereable | Column;
+    export type SQL = SQLExpression | SQLExpression[];
+  }
+
+  /**
    * **User**
    * - Table in database
    */
@@ -1449,11 +1790,23 @@ declare module 'zapatos/schema' {
       */
       isAdmin: boolean;
       /**
+      * **User.isBanned**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isBanned: boolean;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt: Date;
+      /**
+      * **User.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: Date;
       /**
       * **User._type**
       * - `text` in database
@@ -1481,11 +1834,23 @@ declare module 'zapatos/schema' {
       */
       isAdmin: boolean;
       /**
+      * **User.isBanned**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isBanned: boolean;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt: db.TimestampTzString;
+      /**
+      * **User.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt: db.TimestampTzString;
       /**
       * **User._type**
       * - `text` in database
@@ -1513,11 +1878,23 @@ declare module 'zapatos/schema' {
       */
       isAdmin?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **User.isBanned**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isBanned?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **User.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.SQLFragment | db.ParentColumn>;
       /**
       * **User._type**
       * - `text` in database
@@ -1545,11 +1922,23 @@ declare module 'zapatos/schema' {
       */
       isAdmin?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
       /**
+      * **User.isBanned**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isBanned?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
+      /**
+      * **User.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment;
     }
     export interface Updatable {
       /**
@@ -1571,11 +1960,23 @@ declare module 'zapatos/schema' {
       */
       isAdmin?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
+      * **User.isBanned**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isBanned?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
       * **User.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
       */
       createdAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **User.updatedAt**
+      * - `timestamptz` in database
+      * - `NOT NULL`, default: `now()`
+      */
+      updatedAt?: (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date) | db.Parameter<(db.TimestampTzString | Date)> | db.DefaultType | db.SQLFragment>;
     }
     export type UniqueIndex = 'User_pkey';
     export type Column = keyof Selectable;
@@ -1586,19 +1987,19 @@ declare module 'zapatos/schema' {
 
   /* === cross-table types === */
 
-  export type Table = Conversation.Table | ConversationUser.Table | Feedback.Table | Listing.Table | Message.Table | Renting.Table | User.Table;
-  export type Selectable = Conversation.Selectable | ConversationUser.Selectable | Feedback.Selectable | Listing.Selectable | Message.Selectable | Renting.Selectable | User.Selectable;
-  export type JSONSelectable = Conversation.JSONSelectable | ConversationUser.JSONSelectable | Feedback.JSONSelectable | Listing.JSONSelectable | Message.JSONSelectable | Renting.JSONSelectable | User.JSONSelectable;
-  export type Whereable = Conversation.Whereable | ConversationUser.Whereable | Feedback.Whereable | Listing.Whereable | Message.Whereable | Renting.Whereable | User.Whereable;
-  export type Insertable = Conversation.Insertable | ConversationUser.Insertable | Feedback.Insertable | Listing.Insertable | Message.Insertable | Renting.Insertable | User.Insertable;
-  export type Updatable = Conversation.Updatable | ConversationUser.Updatable | Feedback.Updatable | Listing.Updatable | Message.Updatable | Renting.Updatable | User.Updatable;
-  export type UniqueIndex = Conversation.UniqueIndex | ConversationUser.UniqueIndex | Feedback.UniqueIndex | Listing.UniqueIndex | Message.UniqueIndex | Renting.UniqueIndex | User.UniqueIndex;
-  export type Column = Conversation.Column | ConversationUser.Column | Feedback.Column | Listing.Column | Message.Column | Renting.Column | User.Column;
-  export type AllBaseTables = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, User.Table];
+  export type Table = Conversation.Table | ConversationUser.Table | Feedback.Table | Listing.Table | Message.Table | Renting.Table | Report.Table | User.Table;
+  export type Selectable = Conversation.Selectable | ConversationUser.Selectable | Feedback.Selectable | Listing.Selectable | Message.Selectable | Renting.Selectable | Report.Selectable | User.Selectable;
+  export type JSONSelectable = Conversation.JSONSelectable | ConversationUser.JSONSelectable | Feedback.JSONSelectable | Listing.JSONSelectable | Message.JSONSelectable | Renting.JSONSelectable | Report.JSONSelectable | User.JSONSelectable;
+  export type Whereable = Conversation.Whereable | ConversationUser.Whereable | Feedback.Whereable | Listing.Whereable | Message.Whereable | Renting.Whereable | Report.Whereable | User.Whereable;
+  export type Insertable = Conversation.Insertable | ConversationUser.Insertable | Feedback.Insertable | Listing.Insertable | Message.Insertable | Renting.Insertable | Report.Insertable | User.Insertable;
+  export type Updatable = Conversation.Updatable | ConversationUser.Updatable | Feedback.Updatable | Listing.Updatable | Message.Updatable | Renting.Updatable | Report.Updatable | User.Updatable;
+  export type UniqueIndex = Conversation.UniqueIndex | ConversationUser.UniqueIndex | Feedback.UniqueIndex | Listing.UniqueIndex | Message.UniqueIndex | Renting.UniqueIndex | Report.UniqueIndex | User.UniqueIndex;
+  export type Column = Conversation.Column | ConversationUser.Column | Feedback.Column | Listing.Column | Message.Column | Renting.Column | Report.Column | User.Column;
+  export type AllBaseTables = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, Report.Table, User.Table];
   export type AllForeignTables = [];
   export type AllViews = [];
   export type AllMaterializedViews = [];
-  export type AllTablesAndViews = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, User.Table];
+  export type AllTablesAndViews = [Conversation.Table, ConversationUser.Table, Feedback.Table, Listing.Table, Message.Table, Renting.Table, Report.Table, User.Table];
 
 
   export type SelectableForTable<T extends Table> = {
@@ -1608,6 +2009,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.Selectable;
     Message: Message.Selectable;
     Renting: Renting.Selectable;
+    Report: Report.Selectable;
     User: User.Selectable;
   }[T];
 
@@ -1618,6 +2020,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.JSONSelectable;
     Message: Message.JSONSelectable;
     Renting: Renting.JSONSelectable;
+    Report: Report.JSONSelectable;
     User: User.JSONSelectable;
   }[T];
 
@@ -1628,6 +2031,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.Whereable;
     Message: Message.Whereable;
     Renting: Renting.Whereable;
+    Report: Report.Whereable;
     User: User.Whereable;
   }[T];
 
@@ -1638,6 +2042,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.Insertable;
     Message: Message.Insertable;
     Renting: Renting.Insertable;
+    Report: Report.Insertable;
     User: User.Insertable;
   }[T];
 
@@ -1648,6 +2053,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.Updatable;
     Message: Message.Updatable;
     Renting: Renting.Updatable;
+    Report: Report.Updatable;
     User: User.Updatable;
   }[T];
 
@@ -1658,6 +2064,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.UniqueIndex;
     Message: Message.UniqueIndex;
     Renting: Renting.UniqueIndex;
+    Report: Report.UniqueIndex;
     User: User.UniqueIndex;
   }[T];
 
@@ -1668,6 +2075,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.Column;
     Message: Message.Column;
     Renting: Renting.Column;
+    Report: Report.Column;
     User: User.Column;
   }[T];
 
@@ -1678,6 +2086,7 @@ declare module 'zapatos/schema' {
     Listing: Listing.SQL;
     Message: Message.SQL;
     Renting: Renting.SQL;
+    Report: Report.SQL;
     User: User.SQL;
   }[T];
 

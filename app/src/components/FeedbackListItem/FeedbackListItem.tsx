@@ -1,4 +1,5 @@
 import { AppText } from "@components/AppText"
+import { AppTouchable } from "@components/AppTouchable"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { Stars } from "@components/Stars"
 import { DocumentType, gql } from "@gql/gql"
@@ -24,10 +25,19 @@ const FeedbackListItemFragment = gql(/* GraphQL */ `
 
 export const FeedbackListItem: VFC<{
   feedback: DocumentType<typeof FeedbackListItemFragment>
-}> = ({ feedback: { rating, text, renter } }) => {
+  disableTouchable?: boolean
+}> = ({ feedback: { rating, text, renter, id }, disableTouchable }) => {
   const tw = useTailwind()
+
   return (
-    <View style={tw("p-4 flex-row bg-white")}>
+    <AppTouchable
+      style={tw("p-4 flex-row bg-white")}
+      toCommon={
+        disableTouchable
+          ? undefined
+          : { screen: "Feedback", params: { feedbackId: id } }
+      }
+    >
       <ProfilePicture uri={renter?.imageUrl} style={tw("h-14")} />
       <View style={tw("flex-1 pl-4")}>
         <AppText style={tw("text-lg font-semibold")}>{renter?.name}</AppText>
@@ -35,6 +45,6 @@ export const FeedbackListItem: VFC<{
         <View style={tw("h-1")} />
         <AppText>{text}</AppText>
       </View>
-    </View>
+    </AppTouchable>
   )
 }

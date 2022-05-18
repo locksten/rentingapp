@@ -462,6 +462,18 @@
 			"paddingBottom": 32
 		}
 	},
+	"px-6": {
+		"style": {
+			"paddingLeft": 24,
+			"paddingRight": 24
+		}
+	},
+	"py-0": {
+		"style": {
+			"paddingTop": 0,
+			"paddingBottom": 0
+		}
+	},
 	"pl-8": {
 		"style": {
 			"paddingLeft": 32

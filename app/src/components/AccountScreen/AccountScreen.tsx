@@ -102,7 +102,7 @@ const HomeScreen: VFC<
         <View style={tw("h-4")} />
         <View style={tw("w-full")}>
           <MainButton
-            style={tw("flex-1")}
+            style={tw("w-full")}
             text="Sign out"
             onPress={() => {
               signOut()
