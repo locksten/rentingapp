@@ -70,3 +70,35 @@ export const Conversation = schemaBuilder.loadableNode(ConversationRef, {
     }),
   }),
 })
+
+schemaBuilder.mutationFields((t) => ({
+  createSupportConversation: t.authField({
+    authScopes: { user: true },
+    type: Conversation,
+    resolve: async (_root, _args, { pool, auth }) => {
+      const admins = await db
+        .select("User", { isAdmin: true, isBanned: false })
+        .run(pool)
+      if (admins.length === 0) return undefined
+      const randomAdmin = admins[Math.floor(Math.random() * admins.length)]
+
+      const conversation = await db
+        .insert("Conversation", { listingId: undefined })
+        .run(pool)
+      await db
+        .insert("ConversationUser", {
+          conversationId: conversation.id,
+          userId: auth.id,
+        })
+        .run(pool),
+        await db
+          .insert("ConversationUser", {
+            conversationId: conversation.id,
+            userId: randomAdmin.id,
+          })
+          .run(pool)
+
+      return conversation
+    },
+  }),
+}))

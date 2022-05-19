@@ -13,6 +13,7 @@ export const NumberInput: VFC<NumberInputProps> = ({
   return (
     <AppTextInput
       value={`${value === "" ? "" : value}`}
+      keyboardType="decimal-pad"
       onChangeText={(input) =>
         onChange(`${Number.parseInt(input.slice(2)) || ""}`)
       }

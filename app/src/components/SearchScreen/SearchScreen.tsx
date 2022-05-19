@@ -52,13 +52,13 @@ export const SearchScreen: VFC<
   const [distance, onChangeDistance] = useState("")
   const [searchTerm, onChangeSearchTerm] = useState("")
 
-  console.log({
-    category,
-    priceFrom: Number(priceFrom) * 100,
-    priceTo: Number(priceTo) * 100,
-    searchTerm,
-    distance: Number(distance),
-  })
+  // console.log({
+  //   category,
+  //   priceFrom: Number(priceFrom) * 100,
+  //   priceTo: Number(priceTo) * 100,
+  //   searchTerm,
+  //   distance: Number(distance),
+  // })
 
   const priceToNumber = numberOrUndefined(priceTo)
   const priceFromNumber = numberOrUndefined(priceFrom)

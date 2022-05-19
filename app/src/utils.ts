@@ -1,10 +1,12 @@
+import { MyAccountDetails } from "@components/AccountScreen"
 import { useNavigation } from "@react-navigation/native"
 import { format, formatISO, parseJSON } from "date-fns"
 import * as Location from "expo-location"
 import React, { useEffect, useReducer, useState } from "react"
 import { Platform } from "react-native"
 import { useMediaQuery } from "react-responsive"
-import { OperationContext } from "urql"
+import { useCurrentUser } from "src/auth"
+import { OperationContext, useQuery } from "urql"
 
 export const isTruthy = <T>(val?: T | null): val is T => !!val
 
@@ -89,4 +91,25 @@ export const numberOrUndefined = (n?: string) => {
   if (!n) return undefined
   const number = Number(n)
   return number === NaN ? undefined : number
+}
+
+export const useUpdateTab = () => {
+  const navigation = useNavigation()
+  const [s, ss] = useState(true)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      ss(!s)
+    })
+    return unsubscribe
+  }, [navigation, s])
+}
+
+export const useUserDetails = () => {
+  const user = useCurrentUser()
+  const [{ data }] = useQuery({
+    query: MyAccountDetails,
+    requestPolicy: "cache-and-network",
+    pause: !user,
+  })
+  return data?.me?.user
 }

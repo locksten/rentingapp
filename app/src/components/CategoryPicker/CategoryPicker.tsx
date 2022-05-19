@@ -5,11 +5,12 @@ import { useTailwind } from "tailwind-rn"
 
 const categoryList = [
   "Other",
-  "Aaaaaa",
-  "Bbbbbbb",
-  "Cccccc",
-  "Ddddddd",
-  "Eeeeee",
+  "Outdoor Gear",
+  "Electronics",
+  "Tools",
+  "Toys & Games",
+  "Sporting Goods",
+  "Music",
 ]
 
 export const CategoryPicker: VFC<{

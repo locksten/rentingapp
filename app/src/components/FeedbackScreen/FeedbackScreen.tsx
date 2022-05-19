@@ -2,6 +2,7 @@ import { AppText } from "@components/AppText"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
+import { Reports } from "@components/Reports"
 import { SeparatedBy } from "@components/SeparatedBy"
 import { CommonStackParams } from "@components/WithCommonStackScreens"
 import { gql } from "@gql/gql"
@@ -19,6 +20,11 @@ export const Feedback = gql(/* GraphQL */ `
       ... on Feedback {
         id
         text
+        reports {
+          id
+          __typename
+          ...ReportFragment
+        }
         ...FeedbackListItemFragment
       }
     }
@@ -44,12 +50,20 @@ export const FeedbackScreen: VFC<
   if (error || !item?.__typename)
     return <AppText>Error {error?.message}</AppText>
 
-  console.log(item)
-
   return (
     <MediumListWidth style={tw("justify-between")}>
       <SeparatedBy separator={<View style={tw("h-2")} />}>
         <FeedbackListItem feedback={item} disableTouchable />
+        {!!item.reports && (
+          <View style={tw("px-4 w-full max-w-md")}>
+            <Reports
+              reports={item.reports}
+              feedbackId={item.id}
+              style={tw("pt-4")}
+              goBackOnRemove
+            />
+          </View>
+        )}
         <View style={tw("px-4")}>
           <MainButton
             text="Report"

@@ -19,7 +19,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useState, VFC } from "react"
 import { View } from "react-native"
 import { imageUploadStateMessage, useUploadImage } from "src/imageUpload"
-import { isWeb, useLocation } from "src/utils"
+import { isWeb, useLocation, useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
 
@@ -40,6 +40,7 @@ export const CreateListingScreen: VFC<
   NativeStackScreenProps<CommonStackParams, "CreateListing">
 > = () => {
   const tw = useTailwind()
+  useUpdateTab()
   const navigation = useNavigation<CommonStackNavigationProp>()
 
   const [title, onChangeTitle] = useState("")

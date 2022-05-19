@@ -22,6 +22,7 @@ create table "Listing" (
     "ownerId" text references "User" ("id") not null,
     "latitude" float not null,
     "longitude" float not null,
+    "isRemoved" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Listing') stored
@@ -33,6 +34,7 @@ create table "Feedback" (
     "id" serial primary key,
     "rating" int not null,
     "text" text,
+    "isRemoved" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Feedback') stored
@@ -44,7 +46,7 @@ create table "Report" (
     "listingId" int references "Listing" ("id"),
     "feedbackId" int references "Feedback" ("id"),
     "reason" text,
-    "isProcessed" boolean not null default FALSE,
+    "isDismissed" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Report') stored

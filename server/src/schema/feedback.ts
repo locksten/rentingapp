@@ -3,6 +3,7 @@ import { db, dc } from "database"
 import { Pool } from "pg"
 import { Listing, QListing } from "schema/listing"
 import { QRenting } from "schema/renting"
+import { Report } from "schema/report"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
 import { TxnClientForSerializable } from "zapatos/db"
@@ -25,6 +26,10 @@ export const Feedback = schemaBuilder.loadableNode(FeedbackRef, {
     createdAt: t.field({
       type: "String",
       resolve: ({ createdAt }) => db.toDate(createdAt).toISOString(),
+    }),
+    updatedAt: t.field({
+      type: "String",
+      resolve: ({ updatedAt }) => db.toDate(updatedAt).toISOString(),
     }),
     listing: t.field({
       type: Listing,
@@ -49,6 +54,14 @@ export const Feedback = schemaBuilder.loadableNode(FeedbackRef, {
   }),
 })
 
+schemaBuilder.objectFields(Feedback, (t) => ({
+  reports: t.field({
+    type: [Report],
+    resolve: ({ id }, _args, { pool }) =>
+      db.select("Report", { feedbackId: id }).run(pool),
+  }),
+}))
+
 export const getFeedbacksReceivedAsOwner = (
   ownerId: string,
   pool: Pool | TxnClientForSerializable,
@@ -57,7 +70,7 @@ export const getFeedbacksReceivedAsOwner = (
         SELECT ${"Feedback"}.*
         FROM ${"Renting"}
         JOIN ${"Feedback"} ON ${"Renting"}.${"renterFeedbackId"} = ${"Feedback"}.${"id"}
-        WHERE ${{ ownerId }}`.run(pool)
+        WHERE ${{ ownerId }} AND ${{ isRemoved: false }}`.run(pool)
 
 export const getFeedbacksReceivedAsRenter = (
   renterId: string,
@@ -67,11 +80,11 @@ export const getFeedbacksReceivedAsRenter = (
         SELECT ${"Feedback"}.*
         FROM ${"Renting"}
         JOIN ${"Feedback"} ON ${"Renting"}.${"ownerFeedbackId"} = ${"Feedback"}.${"id"}
-        WHERE ${{ renterId }}`.run(pool)
+        WHERE ${{ renterId }} AND ${{ isRemoved: false }}`.run(pool)
 
 export const feedbackAvergeRating = (feedbacks: Feedback[]) => {
   const ratings = feedbacks.map(({ rating }) => rating)
-  if (!ratings.length) return 0
+  if (!ratings.length) return undefined
   return ratings.reduce((total, rating) => total + rating, 0) / ratings.length
 }
 
@@ -118,6 +131,40 @@ schemaBuilder.mutationFields((t) => ({
           .run(txn)
         return feedback
       })
+    },
+  }),
+}))
+
+const RemoveFeedbackInput = schemaBuilder.inputType("RemoveFeedbackInput", {
+  fields: (t) => ({
+    feedbackId: t.globalID(),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  removeFeedback: t.authField({
+    authScopes: { admin: true },
+    type: Feedback,
+    args: {
+      input: t.arg({ type: RemoveFeedbackInput, required: true }),
+    },
+    resolve: async (_root, { input: { feedbackId } }, { pool }) => {
+      const feedbackIdNumber = Number(feedbackId?.id)
+        ? Number(feedbackId?.id)
+        : undefined
+      if (!feedbackIdNumber) return
+      await db
+        .update(
+          "Feedback",
+          {
+            isRemoved: true,
+            text: "(Removed Feedback)",
+            rating: 0,
+          },
+          { id: feedbackIdNumber },
+        )
+        .run(pool)
+      return db.selectOne("Feedback", { id: feedbackIdNumber }).run(pool)
     },
   }),
 }))

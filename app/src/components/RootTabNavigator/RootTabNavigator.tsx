@@ -12,6 +12,7 @@ import {
   MyRentalsScreen,
   MyRentalsScreenParams,
 } from "@components/MyRentalsScreen"
+import { ReportsScreen, ReportsScreenParams } from "@components/ReportsScreen"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import {
   BottomTabNavigationProp,
@@ -20,6 +21,7 @@ import {
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { VFC } from "react"
 import { useCurrentUser } from "src/auth"
+import { useUserDetails } from "src/utils"
 
 export type RootTabs = {
   Browse: NavigatorScreenParams<BrowseScreenParams>
@@ -27,6 +29,7 @@ export type RootTabs = {
   Account: NavigatorScreenParams<AccountScreenParams>
   MyListings: NavigatorScreenParams<MyListingsScreenParams>
   MyRentals: NavigatorScreenParams<MyRentalsScreenParams>
+  Reports: NavigatorScreenParams<ReportsScreenParams>
 }
 
 export type RootTabsNavigationProp = BottomTabNavigationProp<RootTabs>
@@ -34,6 +37,8 @@ export type RootTabsNavigationProp = BottomTabNavigationProp<RootTabs>
 export const RootTabNavigator: VFC = () => {
   const Tab = createBottomTabNavigator<RootTabs>()
   const user = useCurrentUser()
+  const userDetails = useUserDetails()
+
   return (
     <Tab.Navigator
       initialRouteName={"Browse"}
@@ -51,6 +56,8 @@ export const RootTabNavigator: VFC = () => {
               return <Ionicons name={"arrow-down"} color={color} size={size} />
             case "Account":
               return <Ionicons name={"person"} color={color} size={size} />
+            case "Reports":
+              return <Ionicons name={"ios-warning"} color={color} size={size} />
           }
         },
       })}
@@ -82,6 +89,15 @@ export const RootTabNavigator: VFC = () => {
             }}
           />
         </>
+      )}
+      {userDetails?.isAdmin && (
+        <Tab.Screen
+          name="Reports"
+          component={ReportsScreen}
+          options={{
+            title: "Reports",
+          }}
+        />
       )}
       <Tab.Screen
         name="Account"

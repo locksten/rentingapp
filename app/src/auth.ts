@@ -7,6 +7,7 @@ import {
   getAuth,
   initializeAuth,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   updateProfile,
@@ -108,6 +109,10 @@ export const emailSignUp = async (
 export const signOut = async () => {
   await firebaseSignOut(auth)
   await clearEmailPassword()
+}
+
+export const resetPassword = async (email: string) => {
+  await sendPasswordResetEmail(auth, email)
 }
 
 export const useForceUpdate = () => {

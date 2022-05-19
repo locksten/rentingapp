@@ -1,9 +1,8 @@
+import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
-import { id } from "date-fns/locale"
-import { Feedback } from "schema/feedback"
-import { Listing } from "schema/listing"
-import { QRenting } from "schema/renting"
+import { Feedback, QFeedback } from "schema/feedback"
+import { Listing, QListing } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { Report as QReport } from "zapatos/schema"
 
@@ -17,10 +16,21 @@ export const Report = schemaBuilder.loadableNode(ReportRef, {
   ...nodeIsTypeOf(ReportRef),
   ...idSort,
   load: (ids: number[], { pool }) =>
-    db.select("Report", { id: dc.isIn(ids) }).run(pool),
+    db
+      .select(
+        "Report",
+        { id: dc.isIn(ids) },
+        {
+          order: [
+            { by: "isDismissed", direction: "ASC" },
+            { by: "updatedAt", direction: "DESC" },
+          ],
+        },
+      )
+      .run(pool),
   fields: (t) => ({
     reason: t.exposeString("reason"),
-    isProcessed: t.exposeBoolean("isProcessed"),
+    isDismissed: t.exposeBoolean("isDismissed"),
     createdAt: t.field({
       type: "String",
       resolve: ({ createdAt }) => db.toDate(createdAt).toISOString(),
@@ -45,6 +55,46 @@ export const Report = schemaBuilder.loadableNode(ReportRef, {
     }),
   }),
 })
+
+schemaBuilder.queryFields((t) => ({
+  reportedListings: t.connection({
+    type: Listing,
+    args: {
+      ...t.arg.connectionArgs(),
+    },
+    resolve: async (_parent, args, { pool }) => {
+      return resolveArrayConnection(
+        { args },
+        await db.sql<QListing.SQL | QReport.SQL, Listing[]>`
+          SELECT DISTINCT ON (id) ${"Listing"}.*
+          FROM ${"Report"}
+          JOIN ${"Listing"} ON ${"Report"}.${"listingId"} = ${"Listing"}.${"id"}
+          WHERE ${"Report"}.${"isDismissed"} = False AND ${"Listing"}.${"isRemoved"} = False
+          `.run(pool),
+      )
+    },
+  }),
+}))
+
+schemaBuilder.queryFields((t) => ({
+  reportedFeedbacks: t.connection({
+    type: Feedback,
+    args: {
+      ...t.arg.connectionArgs(),
+    },
+    resolve: async (_parent, args, { pool }) => {
+      return resolveArrayConnection(
+        { args },
+        await db.sql<QFeedback.SQL | QReport.SQL, Feedback[]>`
+          SELECT DISTINCT ON (id) ${"Feedback"}.*
+          FROM ${"Report"}
+          JOIN ${"Feedback"} ON ${"Report"}.${"feedbackId"} = ${"Feedback"}.${"id"}
+          WHERE ${"Report"}.${"isDismissed"} = False AND ${"Feedback"}.${"isRemoved"} = False
+          `.run(pool),
+      )
+    },
+  }),
+}))
 
 const MakeReportInput = schemaBuilder.inputType("MakeReportInput", {
   fields: (t) => ({
@@ -89,6 +139,45 @@ schemaBuilder.mutationFields((t) => ({
           })
           .run(txn)
       })
+    },
+  }),
+}))
+
+const DismissReportsInput = schemaBuilder.inputType("DismissReportsInput", {
+  fields: (t) => ({
+    listingId: t.globalID(),
+    feedbackId: t.globalID(),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  dismissReports: t.authField({
+    authScopes: { admin: true },
+    type: "Boolean",
+    args: {
+      input: t.arg({ type: DismissReportsInput, required: true }),
+    },
+    resolve: async (_root, { input: { feedbackId, listingId } }, { pool }) => {
+      const listingIdNumber = Number(listingId?.id)
+        ? Number(listingId?.id)
+        : undefined
+      const feedbackIdNumber = Number(feedbackId?.id)
+        ? Number(feedbackId?.id)
+        : undefined
+      console.log("nums:", listingIdNumber, feedbackIdNumber)
+
+      await db
+        .update("Report", { isDismissed: true }, { listingId: listingIdNumber })
+        .run(pool)
+      await db
+        .update(
+          "Report",
+          { isDismissed: true },
+          { feedbackId: feedbackIdNumber },
+        )
+        .run(pool)
+
+      return true
     },
   }),
 }))

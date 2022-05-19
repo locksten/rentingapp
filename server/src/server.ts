@@ -29,7 +29,6 @@ const listen = (app: Express) => {
     fileUpload({
       limits: { fileSize: 5 * 1024 * 1024 },
       abortOnLimit: true,
-      debug: true,
     }),
   )
 

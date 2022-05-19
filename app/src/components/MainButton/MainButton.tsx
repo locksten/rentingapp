@@ -20,7 +20,7 @@ export const MainButton: VFC<MainButtonProps> = ({
   return (
     <AppTouchable
       style={[
-        tw("py-1 px-2 items-center rounded-lg"),
+        tw("py-1 px-2 justify-center rounded-lg"),
         secondary
           ? [tw("bg-primary-100"), isEnabled ? undefined : tw("bg-gray-100")]
           : [tw("bg-primary-500"), isEnabled ? undefined : tw("bg-gray-500")],
@@ -30,13 +30,13 @@ export const MainButton: VFC<MainButtonProps> = ({
     >
       <AppText
         style={[
-          tw("text-lg font-semibold"),
+          tw("text-lg text-center font-semibold"),
           secondary
             ? [
                 tw("text-primary-600"),
-                isEnabled ? undefined : tw("bg-gray-600"),
+                isEnabled ? undefined : tw("text-gray-600"),
               ]
-            : [tw("text-white"), isEnabled ? undefined : tw("bg-gray-500")],
+            : [tw("text-white"), isEnabled ? undefined : tw("text-gray-100")],
         ]}
       >
         {text}

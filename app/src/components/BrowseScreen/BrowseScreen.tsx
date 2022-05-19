@@ -17,7 +17,7 @@ import {
 } from "@react-navigation/native-stack"
 import React, { useEffect, useState, VFC } from "react"
 import { RefreshControl, ScrollView, View } from "react-native"
-import { filterNodes, sortedByUpdatedAt } from "src/utils"
+import { filterNodes, sortedByUpdatedAt, useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -60,6 +60,7 @@ export const Listings = gql(/* GraphQL */ `
 const HomeScreen: VFC<
   NativeStackScreenProps<BrowseScreenParams, "Home">
 > = () => {
+  useUpdateTab()
   const tw = useTailwind()
 
   const [{ data, fetching, error }, refetch] = useQuery({
@@ -104,7 +105,7 @@ const HomeScreen: VFC<
           )}
           keyExtractor={(i) => i.id}
         />
-        <AppFlatList
+        {/* <AppFlatList
           horizontal
           title="Listings"
           data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
@@ -112,7 +113,7 @@ const HomeScreen: VFC<
             <ListingListItem.ListItemHorizontal item={item} />
           )}
           keyExtractor={(i) => i.id}
-        />
+        /> */}
       </SeparatedBy>
     </ScrollView>
   )

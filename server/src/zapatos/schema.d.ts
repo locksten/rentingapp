@@ -325,6 +325,12 @@ declare module 'zapatos/schema' {
       */
       text: string | null;
       /**
+      * **Feedback.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved: boolean;
+      /**
       * **Feedback.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -362,6 +368,12 @@ declare module 'zapatos/schema' {
       * - Nullable, no default
       */
       text: string | null;
+      /**
+      * **Feedback.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved: boolean;
       /**
       * **Feedback.createdAt**
       * - `timestamptz` in database
@@ -401,6 +413,12 @@ declare module 'zapatos/schema' {
       */
       text?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Feedback.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Feedback.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -439,6 +457,12 @@ declare module 'zapatos/schema' {
       */
       text?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
       /**
+      * **Feedback.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
       * **Feedback.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -470,6 +494,12 @@ declare module 'zapatos/schema' {
       * - Nullable, no default
       */
       text?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Feedback.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **Feedback.createdAt**
       * - `timestamptz` in database
@@ -564,6 +594,12 @@ declare module 'zapatos/schema' {
       */
       longitude: number;
       /**
+      * **Listing.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved: boolean;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -649,6 +685,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       longitude: number;
+      /**
+      * **Listing.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved: boolean;
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database
@@ -736,6 +778,12 @@ declare module 'zapatos/schema' {
       */
       longitude?: number | db.Parameter<number> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -822,6 +870,12 @@ declare module 'zapatos/schema' {
       */
       longitude: number | db.Parameter<number> | db.SQLFragment;
       /**
+      * **Listing.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -901,6 +955,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       longitude?: number | db.Parameter<number> | db.SQLFragment | db.SQLFragment<any, number | db.Parameter<number> | db.SQLFragment>;
+      /**
+      * **Listing.isRemoved**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database
@@ -1545,11 +1605,11 @@ declare module 'zapatos/schema' {
       */
       reason: string | null;
       /**
-      * **Report.isProcessed**
+      * **Report.isDismissed**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
       */
-      isProcessed: boolean;
+      isDismissed: boolean;
       /**
       * **Report.createdAt**
       * - `timestamptz` in database
@@ -1595,11 +1655,11 @@ declare module 'zapatos/schema' {
       */
       reason: string | null;
       /**
-      * **Report.isProcessed**
+      * **Report.isDismissed**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
       */
-      isProcessed: boolean;
+      isDismissed: boolean;
       /**
       * **Report.createdAt**
       * - `timestamptz` in database
@@ -1645,11 +1705,11 @@ declare module 'zapatos/schema' {
       */
       reason?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
-      * **Report.isProcessed**
+      * **Report.isDismissed**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
       */
-      isProcessed?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      isDismissed?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
       /**
       * **Report.createdAt**
       * - `timestamptz` in database
@@ -1695,11 +1755,11 @@ declare module 'zapatos/schema' {
       */
       reason?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
       /**
-      * **Report.isProcessed**
+      * **Report.isDismissed**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
       */
-      isProcessed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      isDismissed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
       /**
       * **Report.createdAt**
       * - `timestamptz` in database
@@ -1739,11 +1799,11 @@ declare module 'zapatos/schema' {
       */
       reason?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
       /**
-      * **Report.isProcessed**
+      * **Report.isDismissed**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
       */
-      isProcessed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      isDismissed?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **Report.createdAt**
       * - `timestamptz` in database

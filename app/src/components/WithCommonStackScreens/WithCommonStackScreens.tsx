@@ -5,6 +5,7 @@ import { ListingDetailsScreen } from "@components/ListingDetailsScreen"
 import { MakeRentingRequestScreen } from "@components/MakeRentingRequestScreen"
 import { MakeReportScreen } from "@components/MakeReportScreen"
 import { PayForRentingScreen } from "@components/PayForRentingScreen"
+import { ProfileScreen } from "@components/ProfileScreen"
 import { TypedNavigator } from "@react-navigation/native"
 import {
   createNativeStackNavigator,
@@ -18,6 +19,7 @@ export type CommonStackParams = {
   LeaveFeedback: { rentingId: string }
   Feedback: { feedbackId: string }
   MakeReport: { feedbackId?: string; listingId?: string }
+  Profile: { userId: string }
   PayForRenting: { id: string }
   CreateListing: undefined
 }
@@ -80,6 +82,13 @@ export const WithCommonStackScreens: FC<{
         component={FeedbackScreen}
         options={() => ({
           title: "Feedback",
+        })}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={() => ({
+          title: "User",
         })}
       />
       <Stack.Screen

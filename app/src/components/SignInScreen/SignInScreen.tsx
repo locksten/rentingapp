@@ -3,6 +3,7 @@ import { AppTextInput } from "@components/AppTextInput"
 import { AuthButton } from "@components/AuthButton"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
+import { PasswordResetButton } from "@components/PasswordResetButton"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { View } from "react-native"
@@ -64,6 +65,8 @@ export const SignIn: VFC<
           <View style={tw("w-2")} />
           <AuthButton style={tw("flex-1")} text="Sign in" authFn={signIn} />
         </View>
+        <View style={tw("h-2")} />
+        <PasswordResetButton email={email} />
       </View>
     </MediumListWidth>
   )

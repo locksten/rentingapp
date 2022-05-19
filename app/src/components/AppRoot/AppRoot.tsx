@@ -50,7 +50,10 @@ const Navigation: VFC = () => {
     ListingDetail: `${tab}/listing/:id`,
     MakeRentingRequest: `${tab}/:id/request`,
     LeaveFeedback: `${tab}/:id/leave-feedback`,
+    Feedback: `${tab}/feedback/:feedbackId`,
+    MakeReport: `${tab}/make-report`,
     PayForRenting: `${tab}/:id/pay`,
+    Profile: `${tab}/user/:userId`,
   })
 
   return (
@@ -85,6 +88,12 @@ const Navigation: VFC = () => {
               screens: {
                 Home: "my-listings",
                 ...commonRoutes("my-listings"),
+              },
+            },
+            Reports: {
+              screens: {
+                Home: "reports",
+                ...commonRoutes("reports"),
               },
             },
             Account: {

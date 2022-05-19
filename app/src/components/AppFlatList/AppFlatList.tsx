@@ -10,7 +10,7 @@ export const AppFlatList: <T>(
 ) => React.ReactElement | null = ({ title, ...props }) => {
   const tw = useTailwind()
   const separator = <View style={tw(props.horizontal ? "w-4" : "h-4")} />
-  return props.ListEmptyComponent || (props.data && props.data.length) ? (
+  return (
     <View style={tw("flex-1")}>
       {typeof title === "string" ? <SectionTitle title={title} /> : title?.()}
       <FlatList
@@ -21,5 +21,5 @@ export const AppFlatList: <T>(
         {...props}
       />
     </View>
-  ) : null
+  )
 }

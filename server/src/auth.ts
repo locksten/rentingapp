@@ -23,3 +23,6 @@ export const decodedFirebaseTokenFromHeader = (headers: IncomingHttpHeaders) =>
 
 export const getFirebaseUserById = (id?: string) =>
   id ? getAuth().getUser(id) : undefined
+
+export const disableFirebaseAccount = (id: string) =>
+  getAuth().updateUser(id, { disabled: true })

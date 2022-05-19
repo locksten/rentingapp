@@ -19,6 +19,7 @@ import React, { useEffect, VFC } from "react"
 import { ScrollView, View } from "react-native"
 import { signOut, useCurrentUser } from "src/auth"
 import { useGQLClient } from "src/graphql"
+import { useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -66,6 +67,7 @@ export const MyAccountDetails = gql(/* GraphQL */ `
       user {
         id
         isMe
+        isAdmin
         ...PersonCardFragment
       }
     }
@@ -76,6 +78,7 @@ const HomeScreen: VFC<
   NativeStackScreenProps<AccountScreenParams, "Home">
 > = () => {
   const tw = useTailwind()
+  useUpdateTab()
   const user = useCurrentUser()
   const gqlClient = useGQLClient()
 
@@ -102,6 +105,7 @@ const HomeScreen: VFC<
         <View style={tw("h-4")} />
         <View style={tw("w-full")}>
           <MainButton
+            secondary
             style={tw("w-full")}
             text="Sign out"
             onPress={() => {

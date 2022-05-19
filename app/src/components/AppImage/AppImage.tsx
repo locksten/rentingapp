@@ -49,7 +49,7 @@ export const AppImage: VFC<AppImageProps> = ({
     >
       <Image
         style={[{ borderRadius, resizeMode: "cover" }, tw("h-full")]}
-        source={{ uri: uri ?? undefined }}
+        source={{ uri: uri ? uri : undefined }}
       />
       {!!text && <ImageText text={text} />}
     </AppTouchable>

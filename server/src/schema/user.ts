@@ -1,5 +1,5 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
-import { getFirebaseUserById } from "auth"
+import { disableFirebaseAccount, getFirebaseUserById } from "auth"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
 import {
@@ -7,7 +7,7 @@ import {
   getFeedbacksReceivedAsOwner,
   getFeedbacksReceivedAsRenter,
 } from "schema/feedback"
-import { Listing } from "schema/listing"
+import { Listing, removedListingProperties } from "schema/listing"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User as QUser } from "zapatos/schema"
 
@@ -24,6 +24,8 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     db.select("User", { id: dc.isIn(ids) }).run(pool),
   fields: (t) => ({
     name: t.exposeString("name"),
+    isAdmin: t.exposeBoolean("isAdmin"),
+    isBanned: t.exposeBoolean("isBanned"),
     isMe: t.boolean({
       resolve: ({ id }, _args, { auth }) => id === auth?.id,
     }),
@@ -32,7 +34,7 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     }),
     listingCount: t.int({
       resolve: ({ id }, _args, { pool }) =>
-        db.count("Listing", { ownerId: id }).run(pool),
+        db.count("Listing", { ownerId: id, isRemoved: false }).run(pool),
     }),
     rentingOwnerCount: t.int({
       resolve: ({ id }, _args, { pool }) =>
@@ -67,7 +69,9 @@ schemaBuilder.objectField(User, "listings", (t) =>
     resolve: (user) => user.id,
     load: (ids: string[], { pool }) =>
       Promise.all(
-        ids.map((id) => db.select("Listing", { ownerId: id }).run(pool)),
+        ids.map((id) =>
+          db.select("Listing", { ownerId: id, isRemoved: false }).run(pool),
+        ),
       ),
   }),
 )
@@ -80,6 +84,44 @@ schemaBuilder.queryFields((t) => ({
         { args },
         await db.select("User", db.all).run(pool),
       )
+    },
+  }),
+}))
+
+const BanUserInput = schemaBuilder.inputType("BanUserInput", {
+  fields: (t) => ({
+    userId: t.globalID({ required: true }),
+  }),
+})
+
+schemaBuilder.mutationFields((t) => ({
+  banUser: t.authField({
+    authScopes: { admin: true },
+    type: User,
+    args: {
+      input: t.arg({ type: BanUserInput, required: true }),
+    },
+    resolve: async (_root, { input: { userId } }, { pool }) => {
+      await disableFirebaseAccount(userId.id)
+      try {
+        await db
+          .update(
+            "User",
+            { isBanned: true, isAdmin: false, name: "(Banned User)" },
+            { id: userId.id },
+          )
+          .run(pool)
+        await db
+          .update(
+            "Listing",
+            { ...removedListingProperties },
+            { ownerId: userId.id },
+          )
+          .run(pool)
+        return db.selectOne("User", { id: userId.id }).run(pool)
+      } catch (e) {
+        console.log(e)
+      }
     },
   }),
 }))
