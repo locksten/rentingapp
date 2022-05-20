@@ -25,10 +25,10 @@ export type ReportsScreenParams = CommonStackParams & {
   Home: undefined
 }
 
+const Stack = createNativeStackNavigator<ReportsScreenParams>()
 export const ReportsScreen: VFC<
   BottomTabScreenProps<RootTabs, "Account">
 > = () => {
-  const Stack = createNativeStackNavigator<ReportsScreenParams>()
   return (
     <WithCommonStackScreens stack={Stack}>
       <Stack.Screen

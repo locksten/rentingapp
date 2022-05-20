@@ -30,10 +30,10 @@ export type AccountScreenParams = CommonStackParams & {
   SignUp: undefined
 }
 
+const Stack = createNativeStackNavigator<AccountScreenParams>()
 export const AccountScreen: VFC<
   BottomTabScreenProps<RootTabs, "Account">
 > = () => {
-  const Stack = createNativeStackNavigator<AccountScreenParams>()
   const user = useCurrentUser()
   return (
     <WithCommonStackScreens stack={Stack}>

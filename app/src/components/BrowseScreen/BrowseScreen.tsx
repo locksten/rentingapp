@@ -26,10 +26,10 @@ export type BrowseScreenParams = CommonStackParams & {
   Search: undefined
 }
 
+const Stack = createNativeStackNavigator<BrowseScreenParams>()
 export const BrowseScreen: VFC<
   BottomTabScreenProps<RootTabs, "Browse">
 > = () => {
-  const Stack = createNativeStackNavigator<BrowseScreenParams>()
   return (
     <WithCommonStackScreens stack={Stack}>
       <Stack.Screen

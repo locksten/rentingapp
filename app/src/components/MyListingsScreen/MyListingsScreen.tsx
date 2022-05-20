@@ -30,11 +30,10 @@ export type MyListingsScreenParams = CommonStackParams & {
   Home: undefined
 }
 
+const Stack = createNativeStackNavigator<MyListingsScreenParams>()
 export const MyListingsScreen: VFC<
   BottomTabScreenProps<RootTabs, "MyListings">
 > = () => {
-  const Stack = createNativeStackNavigator<MyListingsScreenParams>()
-
   return (
     <WithCommonStackScreens stack={Stack}>
       <Stack.Screen
