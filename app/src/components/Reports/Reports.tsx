@@ -32,7 +32,6 @@ export const RemoveListing = gql(/* GraphQL */ `
       description
       imageUrl
       dayPriceEuroCents
-      depositEuroCents
       category
       latitude
       longitude

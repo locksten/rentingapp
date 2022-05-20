@@ -27,7 +27,6 @@ export const Listing = gql(/* GraphQL */ `
         description
         imageUrl
         dayPriceEuroCents
-        depositEuroCents
         rating
         category
         latitude

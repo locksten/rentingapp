@@ -20,7 +20,6 @@ create table "Listing" (
     "category" text not null,
     "imageUrl" text not null,
     "dayPriceEuroCents" int not null,
-    "depositEuroCents" int,
     "ownerId" text references "User" ("id") not null,
     "latitude" float not null,
     "longitude" float not null,

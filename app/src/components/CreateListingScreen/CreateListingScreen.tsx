@@ -31,7 +31,6 @@ export const createListing = gql(/* GraphQL */ `
       imageUrl
       title
       dayPriceEuroCents
-      depositEuroCents
     }
   }
 `)
@@ -46,7 +45,6 @@ export const CreateListingScreen: VFC<
   const [title, onChangeTitle] = useState("")
   const [description, onChangeDescription] = useState("")
   const [price, onChangePrice] = useState("")
-  const [deposit, onChangeDeposit] = useState("")
 
   const [category, setCategory] = useState("Other")
 
@@ -110,12 +108,6 @@ export const CreateListingScreen: VFC<
                   value={price}
                   onChange={onChangePrice}
                 />
-                <CurrencyInput
-                  label="Deposit"
-                  value={deposit}
-                  onChange={onChangeDeposit}
-                  returnKeyType="done"
-                />
                 <CategoryPicker category={category} onSelected={setCategory} />
                 {!!AppMapView && (
                   <>
@@ -159,7 +151,6 @@ export const CreateListingScreen: VFC<
                           description,
                           category,
                           dayPriceEuroCents: Number(price) * 100,
-                          depositEuroCents: Number(deposit) * 100,
                           latitude: coord.latitude,
                           longitude: coord.longitude,
                         },
