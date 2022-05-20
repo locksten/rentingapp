@@ -6,6 +6,7 @@ import React, { createContext, FC, useContext, useState } from "react"
 import { getAuthState } from "src/auth"
 import { serverUrl } from "src/utils"
 import {
+  Client,
   createClient,
   dedupExchange,
   fetchExchange,
@@ -87,7 +88,11 @@ const makeClient = () =>
     ],
   })
 
-const GQLClientContext = createContext<{ resetClient: () => void }>({
+const GQLClientContext = createContext<{
+  client: () => Client
+  resetClient: () => void
+}>({
+  client: () => undefined as unknown as Client,
   resetClient: () => {},
 })
 
@@ -96,6 +101,7 @@ export const GraphQLProvider: FC = ({ children }) => {
   return (
     <GQLClientContext.Provider
       value={{
+        client: () => client,
         resetClient: () => setClient(makeClient()),
       }}
     >

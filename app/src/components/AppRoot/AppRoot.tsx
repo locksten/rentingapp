@@ -14,6 +14,9 @@ import { onAuthStateChange } from "src/auth"
 import { GraphQLProvider } from "src/graphql"
 import { TailwindProvider, useTailwind } from "tailwind-rn"
 import utilities from "tailwind.json"
+import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native"
+import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider"
+const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>
 
 export const AppRoot: VFC = () => {
   const [authIsInitialized, setAuthIsInitialized] = useState(false)
@@ -23,13 +26,18 @@ export const AppRoot: VFC = () => {
     })
   }, [])
   return (
-    <GraphQLProvider>
-      <TailwindProvider utilities={utilities}>
-        <SafeAreaProvider>
-          {authIsInitialized && <Navigation />}
-        </SafeAreaProvider>
-      </TailwindProvider>
-    </GraphQLProvider>
+    <StripeProvider
+      publishableKey="pk_test_51KVLEkIqIJMDgnKE7mVnBA8RDtkRNfYOCQCIEocwyCFfw7LPXgFXyU5ANKbZg8QvHLjbkZut9nqTGluvisSt21vj00cERnPHnK"
+      urlScheme="rentingapp"
+    >
+      <GraphQLProvider>
+        <TailwindProvider utilities={utilities}>
+          <SafeAreaProvider>
+            {authIsInitialized && <Navigation />}
+          </SafeAreaProvider>
+        </TailwindProvider>
+      </GraphQLProvider>
+    </StripeProvider>
   )
 }
 

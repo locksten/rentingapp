@@ -3,7 +3,7 @@ import { RootTabs } from "@components/RootTabNavigator"
 import { gql } from "@gql/gql"
 import { useLinkTo } from "@react-navigation/native"
 import React, { VFC } from "react"
-import { useUserDetails } from "src/utils"
+import { useUserDetails } from "src/auth"
 import { useMutation } from "urql"
 
 export const CreateSupportConversation = gql(/* GraphQL */ `

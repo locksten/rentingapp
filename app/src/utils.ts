@@ -1,12 +1,12 @@
-import { MyAccountDetails } from "@components/AccountScreen"
 import { useNavigation } from "@react-navigation/native"
 import { format, formatISO, parseJSON } from "date-fns"
 import * as Location from "expo-location"
 import React, { useEffect, useReducer, useState } from "react"
-import { Platform } from "react-native"
+import { LogBox, Platform } from "react-native"
 import { useMediaQuery } from "react-responsive"
-import { useCurrentUser } from "src/auth"
-import { OperationContext, useQuery } from "urql"
+import { OperationContext } from "urql"
+
+LogBox.ignoreLogs(["Linking requires a build-time setting `scheme`"])
 
 export const isTruthy = <T>(val?: T | null): val is T => !!val
 
@@ -102,14 +102,4 @@ export const useUpdateTab = () => {
     })
     return unsubscribe
   }, [navigation, s])
-}
-
-export const useUserDetails = () => {
-  const user = useCurrentUser()
-  const [{ data }] = useQuery({
-    query: MyAccountDetails,
-    requestPolicy: "cache-and-network",
-    pause: !user,
-  })
-  return data?.me?.user
 }

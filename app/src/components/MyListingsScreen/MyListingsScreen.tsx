@@ -178,6 +178,17 @@ export const acceptRentingReturn = gql(/* GraphQL */ `
   }
 `)
 
+export const settleRentingOutsideApp = gql(/* GraphQL */ `
+  mutation settleRentingOutsideApp($input: SettleRentingOutsideAppInput!) {
+    settleRentingOutsideApp(input: $input) {
+      __typename
+      rentingStatus
+      updatedAt
+      id
+    }
+  }
+`)
+
 export const OwnerRenting: VFC<{
   renting?: DocumentType<typeof OwnerRentingFragment> | null
 }> = ({ renting }) => {
@@ -186,6 +197,7 @@ export const OwnerRenting: VFC<{
   const [_, declineRequest] = useMutation(declineRentingRequest)
   const [__, acceptRequest] = useMutation(acceptRentingRequest)
   const [___, acceptReturn] = useMutation(acceptRentingReturn)
+  const [____, settleOutsideApp] = useMutation(settleRentingOutsideApp)
 
   if (!renting) return null
   const { id: rentingId, renter, rentingStatus, ownerFeedback } = renting
@@ -210,10 +222,24 @@ export const OwnerRenting: VFC<{
       </View>
     ),
     RequestDeclined: <Pill color="gray">Declined</Pill>,
-    PaymentPending: <Pill color="green">Awaiting Payment</Pill>,
+    PaymentPending: (
+      <View style={tw("flex-row items-center")}>
+        <Pill color="green">Awaiting Payment</Pill>
+        {!ownerFeedback && (
+          <View style={tw("pl-2")}>
+            <MainButton
+              text="Settle Outside App"
+              onPress={async () => {
+                await settleOutsideApp({ input: { rentingId } })
+              }}
+            />
+          </View>
+        )}
+      </View>
+    ),
     ReturnPending: (
       <MainButton
-        text="Accept Return"
+        text="Confirm Returned"
         onPress={async () => {
           await acceptReturn({ input: { rentingId } })
         }}

@@ -1,5 +1,5 @@
 import { AppText } from "@components/AppText"
-import { formatDistanceStrict } from "date-fns"
+import { eachDayOfInterval } from "date-fns"
 import React, { VFC } from "react"
 import { formatMonthDayNumbers, parseJSONDate } from "src/utils"
 import { useTailwind } from "tailwind-rn"
@@ -14,13 +14,17 @@ export const RentingPeriod: VFC<{
   const startDate = parseJSONDate(scheduledStartTime)
   const endDate = parseJSONDate(scheduledEndTime)
   if (!startDate || !endDate) return null
+  const durationDays = eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  }).length
   return (
     <AppText numberOfLines={1}>
       {startDate.getTime() === endDate.getTime()
         ? `for ${formatMonthDayNumbers(endDate)}`
-        : `for ${formatDistanceStrict(startDate, endDate, {
-            unit: "day",
-          })} from ${formatMonthDayNumbers(
+        : `for ${durationDays} day${
+            durationDays === 1 ? "" : "s"
+          } from ${formatMonthDayNumbers(
             scheduledStartTime,
           )} to ${formatMonthDayNumbers(scheduledEndTime)}`}
     </AppText>

@@ -7,11 +7,10 @@ import { newAppContext } from "context"
 import fetch from "cross-fetch"
 import express, { Express } from "express"
 import fileUpload from "express-fileupload"
-import { fromBuffer as fileTypeFromBuffer } from "file-type"
 import * as fs from "fs"
 import { getIntrospectionQuery } from "graphql"
 import { schema } from "schema/schema"
-import { fileUploadHandler, uploadImage } from "storage"
+import { fileUploadHandler } from "storage"
 
 const server = new ApolloServer({
   schema,

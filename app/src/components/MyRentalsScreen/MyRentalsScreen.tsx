@@ -4,6 +4,7 @@ import { CancelRentingButton } from "@components/CancelRenting"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
+import { PayForRentingButton } from "@components/PayForRentingButton"
 import { Pill } from "@components/Pill"
 import { RentingPeriod } from "@components/RentingPeriod"
 import { RootTabs } from "@components/RootTabNavigator"
@@ -109,13 +110,7 @@ const HomeScreen: VFC<
                     <View style={tw("flex-row")}>
                       <CancelRentingButton rentingId={item.id} />
                       <View style={tw("w-1")} />
-                      <MainButton
-                        text="Pay"
-                        toCommon={{
-                          screen: "PayForRenting",
-                          params: { id: item.id },
-                        }}
-                      />
+                      <PayForRentingButton rentingId={item.id} />
                     </View>
                   ),
                   ReturnPending: !!endDate && (

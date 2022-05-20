@@ -48,7 +48,7 @@ export const SignUp: VFC<
         autoCorrect={false}
         textContentType="name"
         autoCapitalize="words"
-        autoCompleteType="name"
+        autoComplete="name"
         returnKeyType="next"
         onSubmitEditing={signUp}
       />

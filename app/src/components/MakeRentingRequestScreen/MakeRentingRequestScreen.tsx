@@ -1,3 +1,4 @@
+import { AppText } from "@components/AppText"
 import {
   CalendarRangeSelect,
   useCalendarRangeSelect,
@@ -20,6 +21,11 @@ export const ListingRentalRequest = gql(/* GraphQL */ `
       ... on Listing {
         dayPriceEuroCents
         unavailableDays
+        owner {
+          __typename
+          id
+          isStripeAccountOnboarded
+        }
       }
     }
   }
@@ -64,6 +70,13 @@ export const MakeRentingRequestScreen: VFC<
         disabledDates={item?.unavailableDays}
       />
       <View style={tw("p-2")}>
+        {item?.owner && !item.owner.isStripeAccountOnboarded && (
+          <View style={tw("p-2")}>
+            <AppText style={tw("text-center")}>
+              Owner cannot accept payments through the app
+            </AppText>
+          </View>
+        )}
         <MainButton
           onPress={async () => {
             if (!(start && end)) return

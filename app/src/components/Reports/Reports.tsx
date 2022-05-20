@@ -4,7 +4,7 @@ import { DocumentType, gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
 import React, { useState, VFC } from "react"
 import { FlatList, View, ViewStyle } from "react-native"
-import { useUserDetails } from "src/utils"
+import { useUserDetails } from "src/auth"
 import { useTailwind } from "tailwind-rn"
 import { useMutation } from "urql"
 

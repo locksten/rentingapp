@@ -15,13 +15,14 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack"
+import * as WebBrowser from "expo-web-browser"
 import React, { useEffect, VFC } from "react"
 import { ScrollView, View } from "react-native"
 import { signOut, useCurrentUser } from "src/auth"
 import { useGQLClient } from "src/graphql"
 import { useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
-import { useQuery } from "urql"
+import { useClient, useQuery } from "urql"
 
 export type AccountScreenParams = CommonStackParams & {
   Home: undefined
@@ -68,8 +69,27 @@ export const MyAccountDetails = gql(/* GraphQL */ `
         id
         isMe
         isAdmin
+        isStripeAccountOnboarded
         ...PersonCardFragment
       }
+    }
+  }
+`)
+
+export const MyStripeOnboardingLink = gql(/* GraphQL */ `
+  query MyStripeOnboardingLink {
+    me {
+      id
+      stripeOnboardingLink
+    }
+  }
+`)
+
+export const MyStripeAccountLoginLink = gql(/* GraphQL */ `
+  query MyStripeAccountLoginLink {
+    me {
+      id
+      stripeAccountLoginLink
     }
   }
 `)
@@ -80,7 +100,8 @@ const HomeScreen: VFC<
   const tw = useTailwind()
   useUpdateTab()
   const user = useCurrentUser()
-  const gqlClient = useGQLClient()
+  const client = useClient()
+  const resetClient = useGQLClient().resetClient
 
   const [{ data, error }, refetch] = useQuery({
     query: MyAccountDetails,
@@ -110,13 +131,52 @@ const HomeScreen: VFC<
             text="Sign out"
             onPress={() => {
               signOut()
-              gqlClient.resetClient()
+              resetClient()
             }}
           />
         </View>
         <View style={tw("h-4")} />
-        <View style={tw("w-full max-w-md")}>
-          {!!details && <PersonCard person={details} />}
+        {!!details && (
+          <View style={tw("w-full max-w-md")}>
+            <PersonCard person={details} />
+          </View>
+        )}
+        <View style={tw("pt-4 w-full")}>
+          {details?.isStripeAccountOnboarded ? (
+            <MainButton
+              secondary
+              style={tw("w-full")}
+              text="Payments Dashboard"
+              onPress={async () => {
+                const stripeAccountLoginLink = (
+                  await client
+                    .query(MyStripeAccountLoginLink, undefined, {
+                      requestPolicy: "network-only",
+                    })
+                    .toPromise()
+                ).data?.me?.stripeAccountLoginLink
+                if (!stripeAccountLoginLink) return
+                WebBrowser.openBrowserAsync(stripeAccountLoginLink)
+              }}
+            />
+          ) : (
+            <MainButton
+              secondary
+              style={tw("w-full")}
+              text="Complete registration to accept payments through the app"
+              onPress={async () => {
+                const stripeOnboardingLink = (
+                  await client
+                    .query(MyStripeOnboardingLink, undefined, {
+                      requestPolicy: "network-only",
+                    })
+                    .toPromise()
+                ).data?.me?.stripeOnboardingLink
+                if (!stripeOnboardingLink) return
+                WebBrowser.openBrowserAsync(stripeOnboardingLink)
+              }}
+            />
+          )}
         </View>
       </ScrollView>
     </MediumListWidth>

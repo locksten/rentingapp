@@ -20,8 +20,7 @@ import {
 } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import { VFC } from "react"
-import { useCurrentUser } from "src/auth"
-import { useUserDetails } from "src/utils"
+import { useCurrentUser, useUserDetails } from "src/auth"
 
 export type RootTabs = {
   Browse: NavigatorScreenParams<BrowseScreenParams>

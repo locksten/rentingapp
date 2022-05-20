@@ -1234,6 +1234,12 @@ declare module 'zapatos/schema' {
       */
       renterId: string;
       /**
+      * **Renting.stripePaymentIntentId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripePaymentIntentId: string | null;
+      /**
       * **Renting.ownerFeedbackId**
       * - `int4` in database
       * - Nullable, no default
@@ -1307,6 +1313,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       renterId: string;
+      /**
+      * **Renting.stripePaymentIntentId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripePaymentIntentId: string | null;
       /**
       * **Renting.ownerFeedbackId**
       * - `int4` in database
@@ -1382,6 +1394,12 @@ declare module 'zapatos/schema' {
       */
       renterId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Renting.stripePaymentIntentId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripePaymentIntentId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Renting.ownerFeedbackId**
       * - `int4` in database
       * - Nullable, no default
@@ -1456,6 +1474,12 @@ declare module 'zapatos/schema' {
       */
       renterId: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **Renting.stripePaymentIntentId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripePaymentIntentId?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+      /**
       * **Renting.ownerFeedbackId**
       * - `int4` in database
       * - Nullable, no default
@@ -1523,6 +1547,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       renterId?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **Renting.stripePaymentIntentId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripePaymentIntentId?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
       /**
       * **Renting.ownerFeedbackId**
       * - `int4` in database
@@ -1844,6 +1874,18 @@ declare module 'zapatos/schema' {
       */
       name: string;
       /**
+      * **User.stripeAccountId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripeAccountId: string | null;
+      /**
+      * **User.isStripeAccountOnboarded**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isStripeAccountOnboarded: boolean;
+      /**
       * **User.isAdmin**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
@@ -1887,6 +1929,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       name: string;
+      /**
+      * **User.stripeAccountId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripeAccountId: string | null;
+      /**
+      * **User.isStripeAccountOnboarded**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isStripeAccountOnboarded: boolean;
       /**
       * **User.isAdmin**
       * - `bool` in database
@@ -1932,6 +1986,18 @@ declare module 'zapatos/schema' {
       */
       name?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **User.stripeAccountId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripeAccountId?: string | db.Parameter<string> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment | db.ParentColumn>;
+      /**
+      * **User.isStripeAccountOnboarded**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isStripeAccountOnboarded?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **User.isAdmin**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
@@ -1976,6 +2042,18 @@ declare module 'zapatos/schema' {
       */
       name: string | db.Parameter<string> | db.SQLFragment;
       /**
+      * **User.stripeAccountId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripeAccountId?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment;
+      /**
+      * **User.isStripeAccountOnboarded**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isStripeAccountOnboarded?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
+      /**
       * **User.isAdmin**
       * - `bool` in database
       * - `NOT NULL`, default: `false`
@@ -2013,6 +2091,18 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, no default
       */
       name?: string | db.Parameter<string> | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | db.SQLFragment>;
+      /**
+      * **User.stripeAccountId**
+      * - `text` in database
+      * - Nullable, no default
+      */
+      stripeAccountId?: string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment | db.SQLFragment<any, string | db.Parameter<string> | null | db.DefaultType | db.SQLFragment>;
+      /**
+      * **User.isStripeAccountOnboarded**
+      * - `bool` in database
+      * - `NOT NULL`, default: `false`
+      */
+      isStripeAccountOnboarded?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
       /**
       * **User.isAdmin**
       * - `bool` in database

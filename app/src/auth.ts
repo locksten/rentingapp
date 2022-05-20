@@ -1,3 +1,4 @@
+import { MyAccountDetails } from "@components/AccountScreen"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as SecureStore from "expo-secure-store"
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app"
@@ -15,6 +16,7 @@ import {
 import { getReactNativePersistence } from "firebase/auth/react-native"
 import { useEffect, useReducer, useRef } from "react"
 import { isWeb } from "src/utils"
+import { useQuery } from "urql"
 
 export const registrationDetails = {
   email: "",
@@ -139,3 +141,13 @@ export const useAuthState = () => {
 }
 
 export const useCurrentUser = () => useAuthState().currentUser
+
+export const useUserDetails = () => {
+  const user = useCurrentUser()
+  const [{ data }] = useQuery({
+    query: MyAccountDetails,
+    requestPolicy: "cache-and-network",
+    pause: !user,
+  })
+  return data?.me?.user
+}

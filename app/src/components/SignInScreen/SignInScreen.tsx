@@ -34,7 +34,7 @@ export const SignIn: VFC<
         textContentType="username"
         keyboardType="email-address"
         autoCapitalize="none"
-        autoCompleteType="username"
+        autoComplete="email"
         returnKeyType="next"
       />
       <View style={tw("h-2")} />
@@ -46,7 +46,7 @@ export const SignIn: VFC<
         label="Password"
         secureTextEntry
         textContentType="password"
-        autoCompleteType="password"
+        autoComplete="password"
         returnKeyType="done"
         onSubmitEditing={signIn}
       />

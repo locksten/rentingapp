@@ -2,6 +2,7 @@ import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { disableFirebaseAccount, getFirebaseUserById } from "auth"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
+import { retrieveStripeAccount } from "payments"
 import {
   feedbackAvergeRating,
   getFeedbacksReceivedAsOwner,
@@ -23,6 +24,22 @@ export const User = schemaBuilder.loadableNode(UserRef, {
   load: (ids: string[], { pool }) =>
     db.select("User", { id: dc.isIn(ids) }).run(pool),
   fields: (t) => ({
+    isStripeAccountOnboarded: t.boolean({
+      resolve: async ({ id }, _args, { pool }) => {
+        const user = await db.selectOne("User", { id }).run(pool)
+        if (!user || !user.stripeAccountId) return
+        if (user.isStripeAccountOnboarded) return true
+
+        const stripeAccount = await retrieveStripeAccount(user.stripeAccountId)
+        if (stripeAccount.capabilities?.transfers === "active") {
+          await db
+            .update("User", { isStripeAccountOnboarded: true }, { id })
+            .run(pool)
+          return true
+        }
+        return false
+      },
+    }),
     name: t.exposeString("name"),
     isAdmin: t.exposeBoolean("isAdmin"),
     isBanned: t.exposeBoolean("isBanned"),

@@ -6,7 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons"
 import { DocumentType, gql } from "@gql/gql"
 import React, { VFC } from "react"
 import { View } from "react-native"
-import { useUserDetails } from "src/utils"
+import { useUserDetails } from "src/auth"
 import { useTailwind } from "tailwind-rn"
 import { useMutation } from "urql"
 
@@ -24,6 +24,7 @@ const PersonCardFragment = gql(/* GraphQL */ `
     rentingRenterCount
     ratingCount
     rating
+    isStripeAccountOnboarded
   }
 `)
 
@@ -55,6 +56,7 @@ export const PersonCard: VFC<{
     ratingCount,
     rating,
     id,
+    isStripeAccountOnboarded,
   } = person
 
   const NameAndPic = (
@@ -64,7 +66,14 @@ export const PersonCard: VFC<{
         numberOfLines={2}
         style={tw("pt-1 text-center text-2xl font-semibold")}
       >
-        {name}
+        {isStripeAccountOnboarded && (
+          <Ionicons
+            name={"ios-checkmark-circle-outline"}
+            color={"black"}
+            size={21}
+          />
+        )}
+        {`${isStripeAccountOnboarded ? " " : ""}${name}`}
       </AppText>
     </View>
   )

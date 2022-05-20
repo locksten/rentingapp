@@ -2,6 +2,8 @@ drop table if exists "User" cascade;
 create table "User" (
     "id" text primary key,
     "name" text not null,
+    "stripeAccountId" text,
+    "isStripeAccountOnboarded" boolean not null default FALSE,
     "isAdmin" boolean not null default FALSE,
     "isBanned" boolean not null default FALSE,
     "createdAt" timestamp with time zone not null default now(),
@@ -61,6 +63,7 @@ create table "Renting" (
     "listingId" int references "Listing" ("id") not null,
     "ownerId" text references "User" ("id") not null,
     "renterId" text references "User" ("id") not null,
+    "stripePaymentIntentId" text,
     "ownerFeedbackId" int references "Feedback" ("id"),
     "renterFeedbackId" int references "Feedback" ("id"),
     "scheduledStartTime" timestamp with time zone not null,

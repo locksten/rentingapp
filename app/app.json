@@ -16,7 +16,8 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you upload images."
-        }
+        },
+        "@stripe/stripe-react-native"
       ]
     ],
     "updates": {

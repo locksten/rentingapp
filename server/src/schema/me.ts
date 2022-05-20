@@ -1,6 +1,11 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { objectIsTypeOf } from "common"
 import { db } from "database"
+import {
+  createStripeAccount,
+  createStripeAccountOnboardingLink,
+  getStripeAccountLoginLink,
+} from "payments"
 import { Conversation, QConversation } from "schema/conversation"
 import { Listing } from "schema/listing"
 import { Renting } from "schema/renting"
@@ -14,6 +19,26 @@ export const MeRef = schemaBuilder.objectRef<Me>("Me")
 export const Me = schemaBuilder.objectType(MeRef, {
   ...objectIsTypeOf(MeRef),
   fields: (t) => ({
+    stripeOnboardingLink: t.string({
+      resolve: async ({ id }, _args, { pool }) => {
+        const user = await db.selectOne("User", { id }).run(pool)
+        if (!user || user.isStripeAccountOnboarded) return
+        let stripeAccountId = user.stripeAccountId
+
+        if (!stripeAccountId) {
+          stripeAccountId = (await createStripeAccount()).id
+          await db.update("User", { stripeAccountId }, { id }).run(pool)
+        }
+        return await createStripeAccountOnboardingLink(stripeAccountId)
+      },
+    }),
+    stripeAccountLoginLink: t.string({
+      resolve: async ({ id }, _args, { pool }) => {
+        const user = await db.selectOne("User", { id }).run(pool)
+        if (!user?.stripeAccountId || !user?.isStripeAccountOnboarded) return
+        return await getStripeAccountLoginLink(user.stripeAccountId)
+      },
+    }),
     id: t.exposeString("id"),
     user: t.field({
       type: User,
