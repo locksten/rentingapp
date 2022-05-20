@@ -25,6 +25,10 @@ const PersonCardFragment = gql(/* GraphQL */ `
     ratingCount
     rating
     isStripeAccountOnboarded
+    conversation {
+      __typename
+      id
+    }
   }
 `)
 
@@ -57,6 +61,7 @@ export const PersonCard: VFC<{
     rating,
     id,
     isStripeAccountOnboarded,
+    conversation,
   } = person
 
   const NameAndPic = (
@@ -90,9 +95,10 @@ export const PersonCard: VFC<{
       )}
     >
       <View style={tw("w-full")}>
+        {NameAndPic}
         {!!isAdmin && (
-          <View style={tw("px-2 pb-4")}>
-            <View style={tw("py-1 px-2 rounded-lg w-full bg-orange-100")}>
+          <View style={tw("pt-2 px-2 items-center")}>
+            <View style={tw("py-1 px-4 rounded-full bg-orange-100")}>
               <AppText
                 style={tw("text-orange-600 text-lg font-semibold text-center")}
               >
@@ -101,7 +107,6 @@ export const PersonCard: VFC<{
             </View>
           </View>
         )}
-        {NameAndPic}
         <View style={tw("h-4")} />
         <View style={tw("flex-row justify-around pb-4")}>
           <Ratings rating={rating} ratingCount={ratingCount} />
@@ -116,7 +121,9 @@ export const PersonCard: VFC<{
               screen: "Messages",
               params: {
                 screen: "Chat",
-                params: { recipientId: person.id },
+                params: conversation?.id
+                  ? { conversationId: conversation.id }
+                  : { recipientId: person.id },
                 initial: false,
               },
             }}

@@ -33,10 +33,10 @@ export type MessagesScreenParams = CommonStackParams & {
 export type MessagesStackNavigationProp =
   NativeStackNavigationProp<MessagesScreenParams>
 
+const Stack = createNativeStackNavigator<MessagesScreenParams>()
 export const MessagesScreen: VFC<
   BottomTabScreenProps<RootTabs, "Messages">
 > = () => {
-  const Stack = createNativeStackNavigator<MessagesScreenParams>()
   return (
     <WithCommonStackScreens stack={Stack}>
       <Stack.Screen
@@ -68,17 +68,12 @@ export const MyConversations = gql(/* GraphQL */ `
             __typename
             id
             createdAt
-            participants {
+            otherParticipant {
               __typename
               id
-              isMe
               imageUrl
               name
-            }
-            listing {
-              __typename
-              id
-              imageUrl
+              isAdmin
             }
             latestMessage {
               __typename
@@ -119,8 +114,7 @@ const HomeScreen: VFC<
         contentContainerStyle={tw("flex-grow")}
         data={items?.map((i) => i?.node).filter(isTruthy)}
         renderItem={({ item }) => {
-          const { latestMessage, listing } = item
-          const otherParticipant = item.participants?.filter((p) => !p.isMe)[0]
+          const { latestMessage } = item
           const lastMessageDate = parseJSONDate(latestMessage?.createdAt)
           const readStyle = true
             ? tw("text-gray-600")
@@ -133,29 +127,28 @@ const HomeScreen: VFC<
               }}
               style={tw("h-16 flex-row pr-2")}
             >
-              {isWeb ? (
+              <View style={tw("pl-4")}>
                 <ProfilePicture
-                  uri={otherParticipant?.imageUrl}
+                  uri={item.otherParticipant?.imageUrl}
                   style={tw("h-full")}
                 />
-              ) : (
-                <View style={tw("-ml-16 pr-8 relative items-end")}>
-                  <View style={!listing?.imageUrl && tw("opacity-0")}>
-                    <AppImage
-                      uri={listing?.imageUrl}
-                      aspectRatio={16 / 9}
-                      style={tw("h-full rounded-r-none")}
-                    />
-                  </View>
-                  <ProfilePicture
-                    uri={otherParticipant?.imageUrl}
-                    style={tw("h-full absolute border-white")}
-                  />
-                </View>
-              )}
+              </View>
+
               <View style={tw("h-full flex-1 px-4 pb-2 justify-center")}>
                 <AppText style={tw("text-lg font-semibold")}>
-                  {otherParticipant?.name}
+                  {item.otherParticipant?.isAdmin && (
+                    <View style={tw("justify-end pr-2")}>
+                      <View style={tw("px-1 rounded-lg bg-orange-100")}>
+                        <AppText
+                          numberOfLines={1}
+                          style={tw("text-sm font-semibold text-orange-700")}
+                        >
+                          {"Admin"}
+                        </AppText>
+                      </View>
+                    </View>
+                  )}
+                  {item.otherParticipant?.name}
                 </AppText>
                 <View style={tw("flex-row")}>
                   <View style={tw("flex-shrink")}>

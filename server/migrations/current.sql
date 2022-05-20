@@ -78,17 +78,11 @@ create table "Renting" (
 drop table if exists "Conversation" cascade;
 create table "Conversation" (
     "id" serial primary key,
-    "listingId" int references "Listing" ("id"),
+    "participantA" text references "User" ("id") not null,
+    "participantB" text references "User" ("id") not null,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Conversation') stored
-);
-
-drop table if exists "ConversationUser" cascade;
-create table "ConversationUser" (
-    "conversationId" int references "Conversation" ("id") not null,
-    "userId" text references "User" ("id") not null,
-    "lastViewed" timestamp with time zone not null default now()
 );
 
 drop table if exists "Message" cascade;

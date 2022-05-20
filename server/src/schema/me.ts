@@ -11,7 +11,6 @@ import { Listing } from "schema/listing"
 import { Renting } from "schema/renting"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
-import { ConversationUser } from "zapatos/schema"
 
 export type Me = { id: string }
 export const MeRef = schemaBuilder.objectRef<Me>("Me")
@@ -47,14 +46,10 @@ export const Me = schemaBuilder.objectType(MeRef, {
     conversations: t.connection({
       type: Conversation,
       resolve: async ({ id }, args, { pool }) => {
-        const conversations = await db.sql<
-          QConversation.SQL | ConversationUser.SQL,
-          Conversation[]
-        >`
+        const conversations = await db.sql<QConversation.SQL, Conversation[]>`
           SELECT ${"Conversation"}.*
-          FROM ${"ConversationUser"}
-          JOIN ${"Conversation"} ON ${"ConversationUser"}.${"conversationId"} = ${"Conversation"}.${"id"}
-          WHERE ${{ userId: id }}`.run(pool)
+          FROM ${"Conversation"}
+          WHERE ${{ participantA: id }} OR ${{ participantB: id }}`.run(pool)
         return resolveArrayConnection({ args }, conversations)
       },
     }),

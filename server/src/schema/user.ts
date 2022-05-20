@@ -3,6 +3,7 @@ import { disableFirebaseAccount, getFirebaseUserById } from "auth"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
 import { retrieveStripeAccount } from "payments"
+import { Conversation, findConversation } from "schema/conversation"
 import {
   feedbackAvergeRating,
   getFeedbacksReceivedAsOwner,
@@ -79,6 +80,16 @@ export const User = schemaBuilder.loadableNode(UserRef, {
     }),
   }),
 })
+
+schemaBuilder.objectFields(User, (t) => ({
+  conversation: t.field({
+    type: Conversation,
+    resolve: async ({ id }, _args, { auth, pool }) => {
+      if (!auth?.id) return
+      return (await findConversation({ participants: [id, auth.id], pool }))?.id
+    },
+  }),
+}))
 
 schemaBuilder.objectField(User, "listings", (t) =>
   t.loadableList({

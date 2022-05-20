@@ -33,11 +33,10 @@ export type RootTabs = {
 
 export type RootTabsNavigationProp = BottomTabNavigationProp<RootTabs>
 
+const Tab = createBottomTabNavigator<RootTabs>()
 export const RootTabNavigator: VFC = () => {
-  const Tab = createBottomTabNavigator<RootTabs>()
   const user = useCurrentUser()
   const userDetails = useUserDetails()
-
   return (
     <Tab.Navigator
       initialRouteName={"Browse"}

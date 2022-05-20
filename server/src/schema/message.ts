@@ -1,6 +1,6 @@
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
-import { ConversationRef } from "schema/conversation"
+import { ConversationRef, findConversation } from "schema/conversation"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
 import { Message as QMessage } from "zapatos/schema"
@@ -38,7 +38,6 @@ export const Message = schemaBuilder.loadableNode(MessageRef, {
 const SendMessageInput = schemaBuilder.inputType("SendMessageInput", {
   fields: (t) => ({
     conversationId: t.globalID(),
-    listingId: t.globalID(),
     recipientId: t.globalID(),
     text: t.string({ required: true }),
   }),
@@ -53,34 +52,27 @@ schemaBuilder.mutationFields((t) => ({
     },
     resolve: async (
       _root,
-      { input: { conversationId, listingId, recipientId, text } },
+      { input: { conversationId, recipientId, text } },
       { pool, auth },
     ) => {
       return db.serializable(pool, async (txn) => {
-        const convoId =
-          Number(conversationId?.id) ||
-          (
-            await db
-              .insert("Conversation", {
-                listingId: Number(listingId?.id) || null,
-              })
-              .run(txn)
-          ).id
+        const convoId = Number(conversationId?.id)
+          ? Number(conversationId?.id)
+          : recipientId
+          ? (
+              (await findConversation({
+                participants: [auth.id, recipientId.id],
+                pool,
+              })) ??
+              (await db
+                .insert("Conversation", {
+                  participantA: auth.id,
+                  participantB: recipientId.id,
+                })
+                .run(txn))
+            )?.id
+          : undefined
         if (!convoId) return
-
-        if (!Number(conversationId?.id)) {
-          if (!recipientId) return
-          db.insert("ConversationUser", [
-            {
-              conversationId: convoId,
-              userId: recipientId.id,
-            },
-            {
-              conversationId: convoId,
-              userId: auth.id,
-            },
-          ]).run(txn)
-        }
 
         return db
           .insert("Message", {

@@ -1,10 +1,11 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
 import { db, dc } from "database"
-import { Listing } from "schema/listing"
+import { Pool } from "pg"
 import { Message, MessageRef } from "schema/message"
 import { schemaBuilder } from "schema/schemaBuilder"
 import { User } from "schema/user"
+import { TxnClientForSerializable } from "zapatos/db"
 import { Conversation as QConversation } from "zapatos/schema"
 
 export { Conversation as QConversation } from "zapatos/schema"
@@ -51,22 +52,21 @@ export const Conversation = schemaBuilder.loadableNode(ConversationRef, {
           .run(pool)
       },
     }),
-    participants: t.field({
-      type: [User],
-      resolve: async ({ id: conversationId }, _args, { pool }) => {
-        const conversationUser = await db
-          .select("ConversationUser", { conversationId })
+    otherParticipant: t.field({
+      type: User,
+      resolve: async ({ id: conversationId }, _args, { auth, pool }) => {
+        const conversation = await db
+          .selectOne("Conversation", {
+            id: conversationId,
+          })
           .run(pool)
-        const userIds = conversationUser.map((cu) => cu.userId)
-        return await db.select("User", { id: dc.isIn(userIds) }).run(pool)
+        if (!conversation) return
+        const otherParticipantId =
+          conversation.participantA === auth?.id
+            ? conversation.participantB
+            : conversation.participantA
+        return await db.selectOne("User", { id: otherParticipantId }).run(pool)
       },
-    }),
-    listing: t.field({
-      type: Listing,
-      resolve: async ({ listingId }, _args, { pool }) =>
-        listingId
-          ? await db.selectOne("Listing", { id: listingId }).run(pool)
-          : undefined,
     }),
   }),
 })
@@ -82,23 +82,39 @@ schemaBuilder.mutationFields((t) => ({
       if (admins.length === 0) return undefined
       const randomAdmin = admins[Math.floor(Math.random() * admins.length)]
 
-      const conversation = await db
-        .insert("Conversation", { listingId: undefined })
-        .run(pool)
-      await db
-        .insert("ConversationUser", {
-          conversationId: conversation.id,
-          userId: auth.id,
-        })
-        .run(pool),
-        await db
-          .insert("ConversationUser", {
-            conversationId: conversation.id,
-            userId: randomAdmin.id,
-          })
-          .run(pool)
+      const existingConversation = await findConversation({
+        participants: [randomAdmin.id, auth.id],
+        pool,
+      })
+      if (existingConversation) return existingConversation
 
-      return conversation
+      return await db
+        .insert("Conversation", {
+          participantA: randomAdmin.id,
+          participantB: auth.id,
+        })
+        .run(pool)
     },
   }),
 }))
+
+export const findConversation = async (args: {
+  participants: [string, string]
+  pool: Pool | TxnClientForSerializable
+}) => {
+  const { participants, pool } = args
+  return (
+    (await db
+      .selectOne("Conversation", {
+        participantA: participants[0],
+        participantB: participants[1],
+      })
+      .run(pool)) ??
+    (await db
+      .selectOne("Conversation", {
+        participantA: participants[1],
+        participantB: participants[0],
+      })
+      .run(pool))
+  )
+}

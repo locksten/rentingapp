@@ -76,7 +76,7 @@ export const ChatScreen: VFC<
   const submit = async () => {
     if (!text) return
     const submittedConversationId = (
-      await send({ input: { conversationId, recipientId, listingId, text } })
+      await send({ input: { conversationId, recipientId, text } })
     ).data?.sendMessage?.conversation?.id
     onChangeText("")
     !conversationId && setConversationId(submittedConversationId)
