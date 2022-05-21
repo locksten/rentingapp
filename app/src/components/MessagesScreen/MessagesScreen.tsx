@@ -1,9 +1,9 @@
 import { AppFlatList } from "@components/AppFlatList"
-import { AppImage } from "@components/AppImage"
 import { AppText } from "@components/AppText"
 import { AppTouchable } from "@components/AppTouchable"
 import { ChatScreen } from "@components/ChatScreen"
 import { ContactSupportButton } from "@components/ContactSupportButton"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { RootTabs } from "@components/RootTabNavigator"
@@ -21,7 +21,7 @@ import {
 import { formatDistanceToNowStrict } from "date-fns"
 import React, { VFC } from "react"
 import { View } from "react-native"
-import { isTruthy, isWeb, parseJSONDate, useRefetchOnFocus } from "src/utils"
+import { isTruthy, parseJSONDate, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -111,6 +111,7 @@ const HomeScreen: VFC<
       <AppFlatList
         ListHeaderComponentStyle={tw("px-4 py-4")}
         ListHeaderComponent={<ContactSupportButton />}
+        ListEmptyComponent={EmptyListIndicator}
         contentContainerStyle={tw("flex-grow")}
         data={items?.map((i) => i?.node).filter(isTruthy)}
         renderItem={({ item }) => {

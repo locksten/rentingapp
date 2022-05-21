@@ -1,4 +1,5 @@
 import { AppText } from "@components/AppText"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { MainButton } from "@components/MainButton"
 import { DocumentType, gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"

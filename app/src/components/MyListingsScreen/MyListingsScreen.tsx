@@ -1,5 +1,6 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
@@ -97,9 +98,9 @@ const HomeScreen: VFC<
   return (
     <MediumListWidth>
       <AppFlatList
-        ListHeaderComponent={items?.length ? createListing : undefined}
+        ListHeaderComponent={createListing}
         contentContainerStyle={tw("flex-grow")}
-        ListEmptyComponent={<View style={tw("flex-1")}>{createListing}</View>}
+        ListEmptyComponent={EmptyListIndicator}
         data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
         renderItem={({ item }) => (
           <ListingListItem.ListItemVertical

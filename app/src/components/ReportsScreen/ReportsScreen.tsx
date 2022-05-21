@@ -1,5 +1,6 @@
 import { AccountScreenParams } from "@components/AccountScreen"
 import { AppFlatList } from "@components/AppFlatList"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { FeedbackListItem } from "@components/FeedbackListItem"
 import { ListingListItem } from "@components/ListingListItem"
 import { MediumListWidth } from "@components/MediumListWidth"
@@ -103,6 +104,8 @@ const HomeScreen: VFC<
   return (
     <MediumListWidth>
       <AppFlatList
+        ListEmptyComponent={EmptyListIndicator}
+        contentContainerStyle={tw("flex-grow")}
         data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
         renderItem={({ item }) => (
           <View style={tw("py-2")}>

@@ -1,6 +1,7 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
 import { CancelRentingButton } from "@components/CancelRenting"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
@@ -95,6 +96,8 @@ const HomeScreen: VFC<
   return (
     <MediumListWidth>
       <AppFlatList
+        ListEmptyComponent={EmptyListIndicator}
+        contentContainerStyle={tw("flex-grow")}
         data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
         renderItem={({ item }) => {
           const endDate = parseJSONDate(item.scheduledEndTime)

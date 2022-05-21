@@ -1,5 +1,6 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppText } from "@components/AppText"
+import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { ListingListItem } from "@components/ListingListItem"
 import { MainButton } from "@components/MainButton"
 import { RootTabs } from "@components/RootTabNavigator"
@@ -98,6 +99,7 @@ const HomeScreen: VFC<
         </View>
         <AppFlatList
           horizontal
+          ListEmptyComponent={EmptyListIndicator}
           title="Listings"
           data={sortedByUpdatedAt(filterNodes(items)?.map((i) => i.node))}
           renderItem={({ item }) => (
