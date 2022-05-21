@@ -1,22 +1,26 @@
 import { AppText } from "@components/AppText"
 import { AppTouchable, AppTouchableProps } from "@components/AppTouchable"
-import React, { VFC } from "react"
+import React, { useState, VFC } from "react"
 import { useTailwind } from "tailwind-rn"
 
 export type MainButtonProps = {
   text?: string
   secondary?: boolean
   onPress?: () => void
+  shouldConfirm?: boolean
 } & AppTouchableProps
 
 export const MainButton: VFC<MainButtonProps> = ({
   text,
   secondary,
   style,
+  onPress,
+  shouldConfirm,
   ...props
 }) => {
   const tw = useTailwind()
-  const isEnabled = props.onPress || props.to || props.toCommon
+  const isEnabled = onPress || props.to || props.toCommon
+  const [isConfirmation, setIsConfirmation] = useState(false)
   return (
     <AppTouchable
       style={[
@@ -26,6 +30,20 @@ export const MainButton: VFC<MainButtonProps> = ({
           : [tw("bg-primary-500"), isEnabled ? undefined : tw("bg-gray-500")],
         style,
       ]}
+      onPress={
+        shouldConfirm
+          ? onPress
+            ? () => {
+                if (isConfirmation) {
+                  onPress?.()
+                  setIsConfirmation(false)
+                } else {
+                  setIsConfirmation(true)
+                }
+              }
+            : undefined
+          : onPress
+      }
       {...props}
     >
       <AppText
@@ -39,7 +57,7 @@ export const MainButton: VFC<MainButtonProps> = ({
             : [tw("text-white"), isEnabled ? undefined : tw("text-gray-100")],
         ]}
       >
-        {text}
+        {isConfirmation ? "Really?" : text}
       </AppText>
     </AppTouchable>
   )

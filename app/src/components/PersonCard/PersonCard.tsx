@@ -146,6 +146,7 @@ const BanButton: VFC<{
       {userDetails?.isAdmin && !person.isMe && (
         <View style={tw("pt-2")}>
           <MainButton
+            shouldConfirm
             secondary
             text={person.isBanned ? "User Banned" : "Ban User"}
             onPress={

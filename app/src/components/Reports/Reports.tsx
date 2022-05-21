@@ -1,5 +1,4 @@
 import { AppText } from "@components/AppText"
-import { EmptyListIndicator } from "@components/EmptyListIndicator"
 import { MainButton } from "@components/MainButton"
 import { DocumentType, gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
@@ -86,6 +85,7 @@ export const Reports: VFC<{
         <View>
           <View style={tw("flex-row")}>
             <MainButton
+              shouldConfirm
               secondary
               text={
                 localIsRemoved
