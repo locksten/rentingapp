@@ -511,6 +511,12 @@ declare module 'zapatos/schema' {
       */
       isRemoved: boolean;
       /**
+      * **Listing.unavailableDates**
+      * - `_timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      unavailableDates: Date[];
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -596,6 +602,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
       isRemoved: boolean;
+      /**
+      * **Listing.unavailableDates**
+      * - `_timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      unavailableDates: db.TimestampTzString[];
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database
@@ -683,6 +695,12 @@ declare module 'zapatos/schema' {
       */
       isRemoved?: boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.SQLFragment | db.ParentColumn>;
       /**
+      * **Listing.unavailableDates**
+      * - `_timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      unavailableDates?: (db.TimestampTzString | Date)[] | db.Parameter<(db.TimestampTzString | Date)[]> | db.SQLFragment | db.ParentColumn | db.SQLFragment<any, (db.TimestampTzString | Date)[] | db.Parameter<(db.TimestampTzString | Date)[]> | db.SQLFragment | db.ParentColumn>;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -769,6 +787,12 @@ declare module 'zapatos/schema' {
       */
       isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment;
       /**
+      * **Listing.unavailableDates**
+      * - `_timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      unavailableDates: (db.TimestampTzString | Date)[] | db.Parameter<(db.TimestampTzString | Date)[]> | db.SQLFragment;
+      /**
       * **Listing.createdAt**
       * - `timestamptz` in database
       * - `NOT NULL`, default: `now()`
@@ -848,6 +872,12 @@ declare module 'zapatos/schema' {
       * - `NOT NULL`, default: `false`
       */
       isRemoved?: boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment | db.SQLFragment<any, boolean | db.Parameter<boolean> | db.DefaultType | db.SQLFragment>;
+      /**
+      * **Listing.unavailableDates**
+      * - `_timestamptz` in database
+      * - `NOT NULL`, no default
+      */
+      unavailableDates?: (db.TimestampTzString | Date)[] | db.Parameter<(db.TimestampTzString | Date)[]> | db.SQLFragment | db.SQLFragment<any, (db.TimestampTzString | Date)[] | db.Parameter<(db.TimestampTzString | Date)[]> | db.SQLFragment>;
       /**
       * **Listing.createdAt**
       * - `timestamptz` in database

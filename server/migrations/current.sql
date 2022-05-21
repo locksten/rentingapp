@@ -24,11 +24,11 @@ create table "Listing" (
     "latitude" float not null,
     "longitude" float not null,
     "isRemoved" boolean not null default FALSE,
+    "unavailableDates" timestamp with time zone[] not null,
     "createdAt" timestamp with time zone not null default now(),
     "updatedAt" timestamp with time zone not null default now(),
     "_type" text not null generated always as ('Listing') stored
 );
-
 
 drop table if exists "Feedback" cascade;
 create table "Feedback" (

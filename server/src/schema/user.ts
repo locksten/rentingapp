@@ -131,25 +131,21 @@ schemaBuilder.mutationFields((t) => ({
     },
     resolve: async (_root, { input: { userId } }, { pool }) => {
       await disableFirebaseAccount(userId.id)
-      try {
-        await db
-          .update(
-            "User",
-            { isBanned: true, isAdmin: false, name: "(Banned User)" },
-            { id: userId.id },
-          )
-          .run(pool)
-        await db
-          .update(
-            "Listing",
-            { ...removedListingProperties },
-            { ownerId: userId.id },
-          )
-          .run(pool)
-        return db.selectOne("User", { id: userId.id }).run(pool)
-      } catch (e) {
-        console.log(e)
-      }
+      await db
+        .update(
+          "User",
+          { isBanned: true, isAdmin: false, name: "(Banned User)" },
+          { id: userId.id },
+        )
+        .run(pool)
+      await db
+        .update(
+          "Listing",
+          { ...removedListingProperties },
+          { ownerId: userId.id },
+        )
+        .run(pool)
+      return db.selectOne("User", { id: userId.id }).run(pool)
     },
   }),
 }))

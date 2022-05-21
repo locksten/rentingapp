@@ -105,7 +105,16 @@ const HomeScreen: VFC<
         renderItem={({ item }) => (
           <ListingListItem.ListItemVertical
             item={item}
-            renderStatus={() => <></>}
+            renderStatus={() => (
+              <MainButton
+                secondary
+                text="Update Availability"
+                toCommon={{
+                  screen: "UpdateAvailability",
+                  params: { listingId: item.id },
+                }}
+              />
+            )}
             renderStatuses={() => {
               return (
                 <View>

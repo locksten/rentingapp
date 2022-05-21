@@ -39,15 +39,20 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
     unavailableDays: t.field({
       type: ["String"],
       resolve: async ({ id }, _args, { pool }) => {
+        const listing = await db.selectOne("Listing", { id }).run(pool)
         const rentings = await db
           .select("Renting", {
             listingId: id,
             rentingStatus: dc.isIn(["PaymentPending", "ReturnPending"]),
           })
           .run(pool)
+        const ownerUnavailableDates =
+          listing?.unavailableDates.map((d) =>
+            formatISO(db.toDate(d), { representation: "date" }),
+          ) ?? []
         return [
-          ...new Set(
-            rentings
+          ...new Set([
+            ...rentings
               .flatMap(({ scheduledStartTime, scheduledEndTime }) =>
                 eachDayOfInterval({
                   start: db.toDate(scheduledStartTime),
@@ -55,9 +60,15 @@ export const Listing = schemaBuilder.loadableNode(ListingRef, {
                 }),
               )
               .map((d) => formatISO(d, { representation: "date" })),
-          ),
+            ...ownerUnavailableDates,
+          ]),
         ]
       },
+    }),
+    ownerUnavailableDays: t.field({
+      type: ["String"],
+      resolve: async ({ id }, _args, { pool }) =>
+        (await db.selectOne("Listing", { id }).run(pool))?.unavailableDates,
     }),
     owner: t.field({
       type: User,
@@ -218,6 +229,7 @@ schemaBuilder.mutationFields((t) => ({
           category,
           ownerId: auth.id,
           imageUrl,
+          unavailableDates: [],
           dayPriceEuroCents,
           fullText: `${title} ${description}`,
           latitude: Number(
@@ -273,4 +285,56 @@ export const removedListingProperties = {
   dayPriceEuroCents: 0,
   latitude: 0,
   longitude: 0,
+  unavailableDates: [],
 }
+
+const UpdateListingUnavailableDatesInput = schemaBuilder.inputType(
+  "UpdateListingUnavailableDatesInput",
+  {
+    fields: (t) => ({
+      listingId: t.globalID(),
+      unavailableDates: t.stringList({ required: true }),
+    }),
+  },
+)
+
+schemaBuilder.mutationFields((t) => ({
+  updateListingUnavailableDates: t.authField({
+    authScopes: { user: true },
+    type: Listing,
+    args: {
+      input: t.arg({
+        type: UpdateListingUnavailableDatesInput,
+        required: true,
+      }),
+    },
+    resolve: async (
+      _root,
+      { input: { listingId, unavailableDates } },
+      { auth, pool },
+    ) => {
+      const listingIdNumber = Number(listingId?.id)
+        ? Number(listingId?.id)
+        : undefined
+      if (!listingIdNumber) return
+      const listing = await db
+        .selectOne("Listing", { id: listingIdNumber })
+        .run(pool)
+      if (auth.id !== listing?.ownerId) return
+
+      await db
+        .update(
+          "Listing",
+          {
+            unavailableDates: unavailableDates.map((d) =>
+              db.toString(new Date(d), "timestamptz"),
+            ),
+          },
+          { id: listingIdNumber },
+        )
+        .run(pool)
+
+      return db.selectOne("Listing", { id: listingIdNumber }).run(pool)
+    },
+  }),
+}))

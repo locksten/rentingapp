@@ -164,7 +164,6 @@ schemaBuilder.mutationFields((t) => ({
       const feedbackIdNumber = Number(feedbackId?.id)
         ? Number(feedbackId?.id)
         : undefined
-      console.log("nums:", listingIdNumber, feedbackIdNumber)
 
       await db
         .update("Report", { isDismissed: true }, { listingId: listingIdNumber })
