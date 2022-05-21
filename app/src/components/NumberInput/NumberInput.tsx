@@ -2,7 +2,7 @@ import { AppTextInput, AppTextInputProps } from "@components/AppTextInput"
 import React, { VFC } from "react"
 
 export type NumberInputProps = Omit<AppTextInputProps, "onChange"> & {
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
 }
 
 export const NumberInput: VFC<NumberInputProps> = ({
@@ -14,9 +14,7 @@ export const NumberInput: VFC<NumberInputProps> = ({
     <AppTextInput
       value={`${value === "" ? "" : value}`}
       keyboardType="decimal-pad"
-      onChangeText={(input) =>
-        onChange(`${Number.parseInt(input.slice(2)) || ""}`)
-      }
+      onChangeText={(input) => onChange?.(`${Number.parseInt(input) || ""}`)}
       {...props}
     />
   )

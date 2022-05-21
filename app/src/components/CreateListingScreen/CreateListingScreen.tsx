@@ -19,6 +19,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useState, VFC } from "react"
 import { View } from "react-native"
 import { imageUploadStateMessage, useUploadImage } from "src/imageUpload"
+import { errorToast } from "src/toast"
 import { isWeb, useLocation, useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
@@ -142,8 +143,26 @@ export const CreateListingScreen: VFC<
                 <MainButton
                   text="Create"
                   onPress={async () => {
+                    const cents = Math.floor(Number(price) * 100)
+                    console.log(cents)
+                    if (imageUpload.status !== "uploaded") {
+                      errorToast("Image is required")
+                      return
+                    }
+                    if (!title) {
+                      errorToast("Title is required")
+                      return
+                    }
+                    if (isNaN(cents)) {
+                      errorToast("Invalid price")
+                      return
+                    }
+                    if (cents < 50) {
+                      errorToast("Price must be at least 0.50 €")
+                      return
+                    }
+                    console.log("ok^")
                     coord &&
-                      imageUpload.status === "uploaded" &&
                       (await create({
                         input: {
                           title,
