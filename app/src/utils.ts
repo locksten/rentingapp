@@ -103,3 +103,6 @@ export const useUpdateTab = () => {
     return unsubscribe
   }, [navigation, s])
 }
+
+export const centsToEuroString = (cents: number) =>
+  cents % 100 === 0 ? (cents / 100).toString() : (cents / 100).toFixed(2)

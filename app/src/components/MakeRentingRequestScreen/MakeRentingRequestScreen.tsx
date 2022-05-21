@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { SafeAreaView, View } from "react-native"
+import { centsToEuroString } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
 
@@ -93,7 +94,9 @@ export const MakeRentingRequestScreen: VFC<
             durationDays && item?.dayPriceEuroCents
               ? `Request for ${
                   durationDays === 1 ? "a day" : `${durationDays} days`
-                } for ${(item.dayPriceEuroCents * durationDays) / 100}€`
+                } for ${centsToEuroString(
+                  item.dayPriceEuroCents * durationDays,
+                )}€`
               : `Pick a Date`
           }
         />

@@ -12,7 +12,12 @@ import { DocumentType, gql } from "@gql/gql"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { FlatList, StyleSheet, View } from "react-native"
-import { isWeb, useRefetchOnFocus, useUpdateTab } from "src/utils"
+import {
+  centsToEuroString,
+  isWeb,
+  useRefetchOnFocus,
+  useUpdateTab,
+} from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useQuery } from "urql"
 
@@ -91,7 +96,9 @@ export const ListingDetailsScreen: VFC<
       {!item.owner?.isMe && !!item.dayPriceEuroCents && (
         <View style={tw("p-2 bg-white")}>
           <MainButton
-            text={`Rent for ${item.dayPriceEuroCents / 100}€ per day`}
+            text={`Rent for ${centsToEuroString(
+              item.dayPriceEuroCents,
+            )}€ per day`}
             toCommon={{ screen: "MakeRentingRequest", params: { id: item.id } }}
           />
         </View>

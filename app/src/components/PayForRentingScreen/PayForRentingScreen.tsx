@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { VFC } from "react"
 import { SafeAreaView, View } from "react-native"
+import { centsToEuroString } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
 
@@ -76,7 +77,7 @@ export const PayForRentingScreen: VFC<
             })
             navigtion.goBack()
           }}
-          text={`Pay ${(item?.dayPriceEuroCents ?? 0) / 100}€ for ${
+          text={`Pay ${centsToEuroString(item?.dayPriceEuroCents ?? 0)}€ for ${
             item?.title
           }`}
         />
