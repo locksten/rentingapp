@@ -133,6 +133,7 @@ const HomeScreen: VFC<
                             onPress={() => {
                               navigate("LeaveFeedback", {
                                 rentingId: item.id,
+                                withReason: true,
                               })
                             }}
                           />

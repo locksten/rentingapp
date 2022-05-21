@@ -1,12 +1,14 @@
 import { AppKeyboardAvoidingView } from "@components/AppKeyboardAvoidingView"
 import { AppKeyboardAvoidingViewScrollView } from "@components/AppKeyboardAvoidingViewScrollView"
 import { AppTextInput } from "@components/AppTextInput"
+import { AppTouchable } from "@components/AppTouchable"
 import { MainButton } from "@components/MainButton"
 import { SeparatedBy } from "@components/SeparatedBy"
 import {
   CommonStackNavigationProp,
   CommonStackParams,
 } from "@components/WithCommonStackScreens"
+import Ionicons from "@expo/vector-icons/Ionicons"
 import { gql } from "@gql/gql"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -28,14 +30,14 @@ export const LeaveFeedbackScreen: VFC<
   NativeStackScreenProps<CommonStackParams, "LeaveFeedback">
 > = ({
   route: {
-    params: { rentingId },
+    params: { rentingId, withReason },
   },
 }) => {
   const tw = useTailwind()
   const navigation = useNavigation<CommonStackNavigationProp>()
 
   const [text, onChangeText] = useState("")
-  const [rating, onChangeRating] = useState("")
+  const [rating, setrating] = useState(5)
 
   const [_, leave] = useMutation(leaveFeedback)
 
@@ -46,22 +48,32 @@ export const LeaveFeedbackScreen: VFC<
           <View style={tw("justify-between")}>
             <View style={tw("p-4")}>
               <SeparatedBy separator={<View style={tw("h-2")} />}>
-                <AppTextInput
-                  label="Text"
-                  value={text}
-                  returnKeyType="next"
-                  multiline
-                  onChangeText={onChangeText}
-                />
-                <AppTextInput
-                  label="Rating"
-                  keyboardType="decimal-pad"
-                  value={`⭑ ${rating}`}
-                  returnKeyType="next"
-                  onChangeText={(input) =>
-                    onChangeRating(`${Number.parseInt(input.slice(2)) || ""}`)
-                  }
-                />
+                {withReason && (
+                  <AppTextInput
+                    label="Feedback"
+                    value={text}
+                    returnKeyType="next"
+                    multiline
+                    onChangeText={onChangeText}
+                  />
+                )}
+                <View style={tw("flex-row justify-center py-4")}>
+                  {[...Array(5)].map((_, idx) => (
+                    <AppTouchable
+                      key={idx}
+                      onPress={() => {
+                        setrating(idx + 1)
+                      }}
+                    >
+                      <Ionicons
+                        style={tw("px-2")}
+                        name={"ios-star"}
+                        color={idx < rating ? "gold" : "#dddddd"}
+                        size={32}
+                      />
+                    </AppTouchable>
+                  ))}
+                </View>
                 <MainButton
                   text="Leave Feedback"
                   onPress={async () => {

@@ -17,7 +17,7 @@ import React, { FC } from "react"
 export type CommonStackParams = {
   ListingDetail: { id: string }
   MakeRentingRequest: { id: string }
-  LeaveFeedback: { rentingId: string }
+  LeaveFeedback: { rentingId: string; withReason?: boolean }
   Feedback: { feedbackId: string }
   MakeReport: { feedbackId?: string; listingId?: string }
   Profile: { userId: string }
@@ -76,6 +76,7 @@ export const WithCommonStackScreens: FC<{
         name="MakeReport"
         component={MakeReportScreen}
         options={() => ({
+          presentation: "modal",
           title: "Make Report",
         })}
       />
@@ -105,6 +106,7 @@ export const WithCommonStackScreens: FC<{
         name="LeaveFeedback"
         component={LeaveFeedbackScreen}
         options={() => ({
+          presentation: "modal",
           title: "Leave Feedback",
         })}
       />

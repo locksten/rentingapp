@@ -10,7 +10,7 @@ export const Stars: VFC<{ stars?: number | null }> = ({ stars }) => {
       {[...Array(5)].map((_, i) => (
         <Ionicons
           key={i}
-          name={"star"}
+          name={"ios-star"}
           color={(stars ?? 0) - 1 >= i ? "gold" : "#dddddd"}
           size={20}
         />

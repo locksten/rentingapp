@@ -20,6 +20,7 @@ export const AuthButton: VFC<
               "auth/weak-password": "Password too weak",
               "auth/invalid-email": "Invalid email",
               "auth/email-already-in-use": "Email already in-use",
+              "auth/user-not-found": "User not found",
             }[(errMsg as string) ?? ""],
           )
         }
