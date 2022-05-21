@@ -8,6 +8,18 @@ services:
       - ./postgres/volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - my_app
     environment:
       POSTGRES_PASSWORD: "password"
     command: ["postgres", "-c", "log_statement=all"]
+  backend:
+    build:
+      context: ./../../
+    ports:
+      - "4000:4000"
+    networks:
+      - my_app
+networks:
+  my_app:
+    driver: bridge

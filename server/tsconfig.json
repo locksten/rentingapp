@@ -11,8 +11,7 @@
     "rootDir": "src",
     "declaration": true,
     "declarationMap": true,
-    "strictNullChecks": true,
-    "composite": true
+    "strictNullChecks": true
   },
   "lib": ["es2015"],
   "include": ["src"]

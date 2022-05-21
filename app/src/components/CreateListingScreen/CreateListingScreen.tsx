@@ -144,7 +144,6 @@ export const CreateListingScreen: VFC<
                   text="Create"
                   onPress={async () => {
                     const cents = Math.floor(Number(price) * 100)
-                    console.log(cents)
                     if (imageUpload.status !== "uploaded") {
                       errorToast("Image is required")
                       return
@@ -161,7 +160,6 @@ export const CreateListingScreen: VFC<
                       errorToast("Price must be at least 0.50 €")
                       return
                     }
-                    console.log("ok^")
                     coord &&
                       (await create({
                         input: {

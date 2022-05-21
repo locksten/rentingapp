@@ -8,6 +8,7 @@
     "watch": "tsc-watch --onSuccess \"npm run start\"",
     "start": "JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET:-$(node -p 'require(\"./package.json\").config.jwt_access_secret')} DATABASE=${DATABASE:-$(node -p 'require(\"./package.json\").config.dev_db')} NODE_PATH=dist node ./dist/server.js",
     "build": "tsc",
+    "build-start": "yarn build && yarn start",
     "gen:db-types": "DATABASE=$(node -p 'require(\"./package.json\").config.dev_db') npx zapatos",
     "compose:up": "docker-compose -f docker/rentingapp/docker-compose.yml up -d",
     "compose:build": "docker-compose -f docker/rentingapp/docker-compose.yml build",
