@@ -234,16 +234,14 @@ export const OwnerRenting: VFC<{
     PaymentPending: (
       <View style={tw("flex-row items-center")}>
         <Pill color="green">Awaiting Payment</Pill>
-        {!ownerFeedback && (
-          <View style={tw("pl-2")}>
-            <MainButton
-              text="Settle Outside App"
-              onPress={async () => {
-                await settleOutsideApp({ input: { rentingId } })
-              }}
-            />
-          </View>
-        )}
+        <View style={tw("pl-2")}>
+          <MainButton
+            text="Settle Outside App"
+            onPress={async () => {
+              await settleOutsideApp({ input: { rentingId } })
+            }}
+          />
+        </View>
       </View>
     ),
     ReturnPending: (
