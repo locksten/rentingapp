@@ -167,7 +167,7 @@ export const CreateListingScreen: VFC<
                           imageUrl: imageUpload.uri,
                           description,
                           category,
-                          dayPriceEuroCents: Number(price) * 100,
+                          dayPriceEuroCents: cents,
                           latitude: coord.latitude,
                           longitude: coord.longitude,
                         },

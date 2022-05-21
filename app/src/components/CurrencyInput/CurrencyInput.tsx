@@ -10,13 +10,6 @@ export const CurrencyInput: VFC<NumberInputProps> = ({
     <NumberInput
       value={`€ ${value === "" ? "" : value}`}
       onChangeText={(input) => {
-        const p = `${
-          input
-            .slice(2)
-            .split("")
-            .filter((c) => /[0-9\.]/.test(c))
-            .join("") || ""
-        }`
         onChange?.(
           `${
             input
