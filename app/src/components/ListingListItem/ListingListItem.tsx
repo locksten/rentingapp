@@ -14,23 +14,6 @@ export type ListingListItemType = {
   cost: number
 }
 
-export const items: ListingListItemType[] = [
-  {
-    id: "0",
-    imageUri:
-      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    title: "Some camera or something or other",
-    cost: 5,
-  },
-  {
-    id: "1",
-    imageUri:
-      "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80",
-    title: "Electra Townie Beach Cruiser Bike",
-    cost: 5,
-  },
-]
-
 const ListingListItemFragment = gql(/* GraphQL */ `
   fragment ListingListItemFragment on Listing {
     __typename
