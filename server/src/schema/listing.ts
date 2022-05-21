@@ -124,7 +124,10 @@ schemaBuilder.queryFields((t) => ({
       toPriceEuroCents: t.arg({ type: "Int" }),
       searchTerm: t.arg({ type: "String" }),
       category: t.arg({ type: "String" }),
-      // distance: Number(distance),
+      latitudeMin: t.arg({ type: "Float" }),
+      latitudeMax: t.arg({ type: "Float" }),
+      longitudeMin: t.arg({ type: "Float" }),
+      longitudeMax: t.arg({ type: "Float" }),
     },
     resolve: async (_parent, args, { pool }) => {
       return resolveArrayConnection(
@@ -143,6 +146,25 @@ schemaBuilder.queryFields((t) => ({
                 : undefined),
               ...(args.category && args.category !== "All Categories"
                 ? { category: dc.eq(`${args.category}`) }
+                : undefined),
+              ...(args.latitudeMin !== null &&
+              args.latitudeMin !== undefined &&
+              args.latitudeMax !== null &&
+              args.latitudeMax !== undefined &&
+              args.longitudeMin !== null &&
+              args.longitudeMin !== undefined &&
+              args.longitudeMax !== null &&
+              args.longitudeMax !== undefined
+                ? {
+                    latitude: dc.and(
+                      dc.gte(args.latitudeMin),
+                      dc.lte(args.latitudeMax),
+                    ),
+                    longitude: dc.and(
+                      dc.gte(args.longitudeMin),
+                      dc.lte(args.longitudeMax),
+                    ),
+                  }
                 : undefined),
             },
             {
@@ -198,8 +220,12 @@ schemaBuilder.mutationFields((t) => ({
           imageUrl,
           dayPriceEuroCents,
           fullText: `${title} ${description}`,
-          latitude: Number(latitude.toFixed(2)),
-          longitude: Number(longitude.toFixed(2)),
+          latitude: Number(
+            latitude.toFixed(2) + Math.floor(Math.random() * 10),
+          ),
+          longitude: Number(
+            longitude.toFixed(2) + Math.floor(Math.random() * 10),
+          ),
         })
         .run(pool),
   }),

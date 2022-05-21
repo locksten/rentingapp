@@ -1,5 +1,6 @@
 import { AppFlatList } from "@components/AppFlatList"
 import { AppMapView } from "@components/AppMapView"
+import { AppMapViewMarker } from "@components/AppMapViewMarker"
 import { AppText } from "@components/AppText"
 import { AppTextInput } from "@components/AppTextInput"
 import { BrowseScreenParams } from "@components/BrowseScreen"
@@ -8,13 +9,24 @@ import { CurrencyInput } from "@components/CurrencyInput"
 import { ListingListItem } from "@components/ListingListItem"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { SeparatedBy } from "@components/SeparatedBy"
-import { gql } from "@gql/gql"
+import { DocumentType, gql } from "@gql/gql"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useState, VFC } from "react"
+import { VFC, useState } from "react"
 import { View } from "react-native"
 import { filterNodes, numberOrUndefined, sortedByUpdatedAt } from "src/utils"
 import { useTailwind } from "tailwind-rn"
 import { useQuery } from "urql"
+
+const ListingMapMarkerFragment = gql(/* GraphQL */ `
+  fragment ListingMapMarkerFragment on Listing {
+    __typename
+    id
+    title
+    dayPriceEuroCents
+    latitude
+    longitude
+  }
+`)
 
 export const SearchListings = gql(/* GraphQL */ `
   query SearchListings(
@@ -22,12 +34,20 @@ export const SearchListings = gql(/* GraphQL */ `
     $toPriceEuroCents: Int
     $fromPriceEuroCents: Int
     $category: String
+    $latitudeMin: Float
+    $latitudeMax: Float
+    $longitudeMin: Float
+    $longitudeMax: Float
   ) {
     listings(
       searchTerm: $searchTerm
       toPriceEuroCents: $toPriceEuroCents
       fromPriceEuroCents: $fromPriceEuroCents
       category: $category
+      latitudeMin: $latitudeMin
+      latitudeMax: $latitudeMax
+      longitudeMin: $longitudeMin
+      longitudeMax: $longitudeMax
     ) {
       edges {
         node {
@@ -35,6 +55,7 @@ export const SearchListings = gql(/* GraphQL */ `
           id
           updatedAt
           ...ListingListItemFragment
+          ...ListingMapMarkerFragment
         }
       }
     }
@@ -49,16 +70,8 @@ export const SearchScreen: VFC<
   const [category, setCategory] = useState("All Categories")
   const [priceFrom, onChangePriceFrom] = useState("")
   const [priceTo, onChangePriceTo] = useState("")
-  const [distance, onChangeDistance] = useState("")
+  const [area, onChangeArea] = useState<Area>()
   const [searchTerm, onChangeSearchTerm] = useState("")
-
-  // console.log({
-  //   category,
-  //   priceFrom: Number(priceFrom) * 100,
-  //   priceTo: Number(priceTo) * 100,
-  //   searchTerm,
-  //   distance: Number(distance),
-  // })
 
   const priceToNumber = numberOrUndefined(priceTo)
   const priceFromNumber = numberOrUndefined(priceFrom)
@@ -69,11 +82,14 @@ export const SearchScreen: VFC<
       fromPriceEuroCents: priceFromNumber ? priceFromNumber * 100 : undefined,
       toPriceEuroCents: priceToNumber ? priceToNumber * 100 : undefined,
       category,
+      latitudeMin: area?.latitudeMin,
+      latitudeMax: area?.latitudeMax,
+      longitudeMin: area?.longitudeMin,
+      longitudeMax: area?.longitudeMax,
     },
     requestPolicy: "cache-and-network",
   })
   const items = data?.listings?.edges
-
   if (error) return <AppText>Error {error.message}</AppText>
 
   return (
@@ -113,7 +129,10 @@ export const SearchScreen: VFC<
               autoCapitalize="sentences"
               onChangeText={onChangeSearchTerm}
             />
-            <SearchMap />
+            <SearchMap
+              listings={filterNodes(items)?.map((i) => i.node) ?? []}
+              onAreaChange={onChangeArea}
+            />
           </SeparatedBy>
         }
         contentContainerStyle={tw("flex-grow")}
@@ -134,11 +153,56 @@ export const SearchScreen: VFC<
   )
 }
 
-const SearchMap: VFC<{}> = () => {
+type Area = {
+  latitudeMin: number
+  latitudeMax: number
+  longitudeMin: number
+  longitudeMax: number
+}
+
+const SearchMap: VFC<{
+  listings: DocumentType<typeof ListingMapMarkerFragment>[]
+  onAreaChange?: (value: Area) => void
+}> = ({ listings, onAreaChange }) => {
   const tw = useTailwind()
   return AppMapView ? (
     <View style={tw("w-full h-48")}>
-      {<AppMapView showsUserLocation showsPointsOfInterest />}
+      {
+        <AppMapView
+          showsUserLocation
+          showsPointsOfInterest
+          onRegionChangeComplete={(e) => {
+            onAreaChange?.({
+              latitudeMin: e.latitude - e.latitudeDelta / 2,
+              latitudeMax: e.latitude + e.latitudeDelta / 2,
+              longitudeMin: e.longitude - e.longitudeDelta / 2,
+              longitudeMax: e.longitude + e.longitudeDelta / 2,
+            })
+          }}
+        >
+          {listings.map(
+            ({ id, latitude, longitude, title, dayPriceEuroCents }) =>
+              !!AppMapViewMarker &&
+              latitude !== undefined &&
+              latitude !== null &&
+              longitude !== undefined &&
+              longitude !== null &&
+              dayPriceEuroCents !== undefined &&
+              dayPriceEuroCents !== null &&
+              title !== undefined &&
+              title !== null && (
+                <AppMapViewMarker
+                  key={id}
+                  coordinate={{
+                    latitude,
+                    longitude,
+                  }}
+                  title={`${dayPriceEuroCents / 100}€ ${title}`}
+                />
+              ),
+          )}
+        </AppMapView>
+      }
     </View>
   ) : null
 }
