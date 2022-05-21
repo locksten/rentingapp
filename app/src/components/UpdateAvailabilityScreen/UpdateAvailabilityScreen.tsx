@@ -101,6 +101,7 @@ export const AvailabilityCalendar: VFC<{
   )
   return (
     <CalendarList
+      firstDay={1}
       minDate={new Date().toISOString()}
       markedDates={{
         ...days,

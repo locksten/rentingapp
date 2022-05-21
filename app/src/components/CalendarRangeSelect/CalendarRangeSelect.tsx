@@ -65,6 +65,7 @@ export const CalendarRangeSelect: VFC<{
   return (
     <View style={tw("flex-1")}>
       <CalendarList
+        firstDay={1}
         onDayPress={({ timestamp }) => {
           if (timestamp === start?.getTime()) {
             update(undefined, end)
