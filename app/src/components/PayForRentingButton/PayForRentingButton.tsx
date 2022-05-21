@@ -2,7 +2,7 @@ import { MainButton } from "@components/MainButton"
 import { gql } from "@gql/gql"
 import { useStripe } from "@stripe/stripe-react-native"
 import React, { useState, VFC } from "react"
-import { errorToast } from "src/toast"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn/dist"
 import { useClient } from "urql"
 
@@ -54,7 +54,7 @@ export const PayForRentingButton: VFC<{ rentingId: string }> = ({
 
   const openPaymentSheet = async () => {
     const { error } = await presentPaymentSheet()
-    error ? errorToast(error.message) : setIsSuccess(true)
+    error ? toastError(error.message) : setIsSuccess(true)
   }
 
   return (

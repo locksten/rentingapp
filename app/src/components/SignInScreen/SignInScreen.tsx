@@ -7,7 +7,8 @@ import { PasswordResetButton } from "@components/PasswordResetButton"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { View } from "react-native"
-import { emailSignIn, registrationDetails } from "src/auth"
+import { emailSignIn, handleAuthErrors, registrationDetails } from "src/auth"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn"
 
 export const SignIn: VFC<
@@ -18,7 +19,14 @@ export const SignIn: VFC<
   const [password, onChangePassword] = useState("")
 
   const signIn = async () => {
-    await emailSignIn(email, password)
+    if (!email) {
+      toastError("Email is required")
+      return
+    } else if (!password) {
+      toastError("Password is required")
+      return
+    }
+    handleAuthErrors(() => emailSignIn(email, password))
   }
 
   return (

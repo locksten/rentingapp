@@ -4,7 +4,7 @@ import { gql } from "@gql/gql"
 import { useLinkTo } from "@react-navigation/native"
 import React, { VFC } from "react"
 import { useUserDetails } from "src/auth"
-import { errorToast } from "src/toast"
+import { toastError } from "src/toast"
 import { useMutation } from "urql"
 
 export const CreateSupportConversation = gql(/* GraphQL */ `
@@ -26,7 +26,7 @@ export const ContactSupportButton: VFC = () => {
       secondary
       onPress={async () => {
         if (userDetails?.isAdmin) {
-          errorToast("You are support")
+          toastError("You are support")
           return
         }
         const conversationId = (await contactSupport())?.data

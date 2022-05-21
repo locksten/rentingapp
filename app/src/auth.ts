@@ -15,6 +15,7 @@ import {
 } from "firebase/auth"
 import { getReactNativePersistence } from "firebase/auth/react-native"
 import { useEffect, useReducer, useRef } from "react"
+import { toastError } from "src/toast"
 import { isWeb } from "src/utils"
 import { useQuery } from "urql"
 
@@ -98,7 +99,6 @@ export const emailSignUp = async (
   displayName: string,
   photoURL: string,
 ) => {
-  if (!displayName) throw new Error("Name is required")
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, {
     displayName,
@@ -150,4 +150,23 @@ export const useUserDetails = () => {
     pause: !user,
   })
   return data?.me?.user
+}
+
+export const handleAuthErrors = async (authFn: () => Promise<void>) => {
+  try {
+    await authFn()
+  } catch (e: any) {
+    console.log(JSON.stringify(e))
+    console.log(`>${e.message}<`)
+    const errMsg = (e.message as string).match(/\(([^)]+)\)/)?.[1]
+    toastError(
+      {
+        "auth/wrong-password": "Incorrect password",
+        "auth/weak-password": "Password too weak",
+        "auth/invalid-email": "Invalid email",
+        "auth/email-already-in-use": "Email already in-use",
+        "auth/user-not-found": "User not found",
+      }[(errMsg as string) ?? ""],
+    )
+  }
 }

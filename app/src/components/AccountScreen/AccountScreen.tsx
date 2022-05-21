@@ -20,6 +20,7 @@ import React, { useEffect, VFC } from "react"
 import { ScrollView, View } from "react-native"
 import { signOut, useCurrentUser } from "src/auth"
 import { useGQLClient } from "src/graphql"
+import { toastError } from "src/toast"
 import { useUpdateTab } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useClient, useQuery } from "urql"
@@ -172,7 +173,10 @@ const HomeScreen: VFC<
                     })
                     .toPromise()
                 ).data?.me?.stripeOnboardingLink
-                if (!stripeOnboardingLink) return
+                if (!stripeOnboardingLink) {
+                  toastError()
+                  return
+                }
                 WebBrowser.openBrowserAsync(stripeOnboardingLink)
               }}
             />

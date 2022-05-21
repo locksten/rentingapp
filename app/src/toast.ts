@@ -1,6 +1,6 @@
 import Toast from "react-native-root-toast"
 
-export const errorToast = (message?: string) =>
+export const toastError = (message?: string) =>
   Toast.show(message ?? "Something went wrong", {
     duration: Toast.durations.LONG,
     position: Toast.positions.BOTTOM,

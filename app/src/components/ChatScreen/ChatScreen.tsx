@@ -8,6 +8,7 @@ import { gql } from "@gql/gql"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { TextInput, TouchableOpacity, View } from "react-native"
+import { toastError } from "src/toast"
 import { isTruthy, useRefetchOnFocus } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation, useQuery } from "urql"
@@ -74,11 +75,18 @@ export const ChatScreen: VFC<
   const [_, send] = useMutation(sendMessage)
   const [text, onChangeText] = useState("")
   const submit = async () => {
-    if (!text) return
+    if (!text) {
+      toastError("Message cannot be empty")
+      return
+    }
     const submittedConversationId = (
       await send({ input: { conversationId, recipientId, text } })
     ).data?.sendMessage?.conversation?.id
     onChangeText("")
+    if (!submittedConversationId) {
+      toastError()
+      return
+    }
     !conversationId && setConversationId(submittedConversationId)
     refetch({ requestPolicy: "network-only" })
   }

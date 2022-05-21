@@ -1,8 +1,10 @@
 import { AppText } from "@components/AppText"
-import { MainButton, MainButtonProps } from "@components/MainButton"
-import React, { VFC, useState } from "react"
+import { AuthButton } from "@components/AuthButton"
+import { MainButtonProps } from "@components/MainButton"
+import React, { useState, VFC } from "react"
 import { View } from "react-native"
 import { resetPassword } from "src/auth"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn/dist"
 
 export const PasswordResetButton: VFC<MainButtonProps & { email: string }> = ({
@@ -10,25 +12,26 @@ export const PasswordResetButton: VFC<MainButtonProps & { email: string }> = ({
   ...props
 }) => {
   const tw = useTailwind()
-  const [done, setDone] = useState(false)
+  const [isSent, setIsSent] = useState(false)
   return (
     <View>
-      <MainButton
+      <AuthButton
         secondary
         style={tw("w-full")}
         text={"Forgot Password"}
-        onPress={async () => {
-          try {
-            await resetPassword(email)
-          } catch (e) {
-            console.log(e)
+        authFn={async () => {
+          if (!email) {
+            toastError("Email is required")
+            return
           }
-          setDone(true)
+          setIsSent(false)
+          await resetPassword(email)
+          setIsSent(true)
         }}
         {...props}
       />
       <View style={tw("pt-4 h-12")}>
-        {done && (
+        {isSent && (
           <AppText style={tw("font-semibold text-center text-gray-600")}>
             Password Reset Email Sent
           </AppText>

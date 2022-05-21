@@ -6,8 +6,9 @@ import { ProfilePicture } from "@components/ProfilePicture"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { View } from "react-native"
-import { emailSignUp, registrationDetails } from "src/auth"
+import { emailSignUp, handleAuthErrors, registrationDetails } from "src/auth"
 import { imageUploadStateMessage, useUploadImage } from "src/imageUpload"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn"
 
 export const SignUp: VFC<
@@ -18,12 +19,30 @@ export const SignUp: VFC<
   const { imageUpload, pickImage } = useUploadImage("user")
 
   const signUp = async () => {
-    if (imageUpload.status !== "uploaded") return
-    await emailSignUp(
-      registrationDetails.email,
-      registrationDetails.password,
-      name,
-      imageUpload.uri,
+    if (!registrationDetails.email) {
+      toastError("Email is required")
+      return
+    } else if (!registrationDetails.password) {
+      toastError("Password is required")
+      return
+    }
+    if (imageUpload.status !== "uploaded") {
+      toastError("Image is required")
+      return
+    } else if (!name) {
+      toastError("Name is required")
+      return
+    } else if (name.length > 50) {
+      toastError("Name must not be more than 50 characters long")
+      return
+    }
+    handleAuthErrors(() =>
+      emailSignUp(
+        registrationDetails.email,
+        registrationDetails.password,
+        name,
+        imageUpload.uri,
+      ),
     )
   }
 

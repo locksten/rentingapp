@@ -222,29 +222,24 @@ schemaBuilder.mutationFields((t) => ({
       },
       { pool, auth },
     ) => {
-      try {
-        console.log("cerate")
-        return await db
-          .insert("Listing", {
-            title,
-            description,
-            category,
-            ownerId: auth.id,
-            imageUrl,
-            unavailableDates: [],
-            dayPriceEuroCents,
-            fullText: `${title} ${description}`,
-            latitude: Number(
-              latitude.toFixed(2) + Math.floor(Math.random() * 10),
-            ),
-            longitude: Number(
-              longitude.toFixed(2) + Math.floor(Math.random() * 10),
-            ),
-          })
-          .run(pool)
-      } catch (e) {
-        console.log(e)
-      }
+      return await db
+        .insert("Listing", {
+          title,
+          description,
+          category,
+          ownerId: auth.id,
+          imageUrl,
+          unavailableDates: [],
+          dayPriceEuroCents,
+          fullText: `${title} ${description}`,
+          latitude: Number(
+            latitude.toFixed(2) + Math.floor(Math.random() * 10),
+          ),
+          longitude: Number(
+            longitude.toFixed(2) + Math.floor(Math.random() * 10),
+          ),
+        })
+        .run(pool)
     },
   }),
 }))

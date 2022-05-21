@@ -2,6 +2,7 @@ import { manipulateAsync, SaveFormat } from "expo-image-manipulator"
 import * as ImagePicker from "expo-image-picker"
 import { useState } from "react"
 import { Platform } from "react-native"
+import { toastError } from "src/toast"
 import { isWeb, serverUrl } from "src/utils"
 
 export const imageUploadStateMessage: {
@@ -92,5 +93,6 @@ const uploadNative = async (
     setState({ status: "uploaded", uri: (await response.json()).url })
   } catch (e) {
     setState({ status: "error" })
+    toastError("Image upload failed")
   }
 }
