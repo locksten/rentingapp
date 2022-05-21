@@ -9,8 +9,11 @@ const categoryList = [
   "Electronics",
   "Tools",
   "Toys & Games",
+  "Clothes",
+  "Camping Gear",
+  "Vehicles",
   "Sporting Goods",
-  "Music",
+  "Music Gear",
 ]
 
 export const CategoryPicker: VFC<{
