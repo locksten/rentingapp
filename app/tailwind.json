@@ -157,6 +157,11 @@
 			"flexDirection": "row-reverse"
 		}
 	},
+	"content-between": {
+		"style": {
+			"alignContent": "space-between"
+		}
+	},
 	"items-start": {
 		"style": {
 			"alignItems": "flex-start"

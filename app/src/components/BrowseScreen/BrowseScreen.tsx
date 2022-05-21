@@ -47,7 +47,7 @@ const HomeScreen: VFC<
   return (
     <ScrollView>
       <SeparatedBy separator={<View style={tw("h-2")} />} start end>
-        <View style={tw("px-4")}>
+        <View style={tw("px-4 py-2")}>
           <MainButton
             text="Search"
             to={{ screen: "Browse", params: { screen: "Search" } }}

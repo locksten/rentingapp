@@ -123,6 +123,10 @@
   flex-direction: row-reverse
 }
 
+.content-between {
+  align-content: space-between
+}
+
 .items-start {
   align-items: flex-start
 }
