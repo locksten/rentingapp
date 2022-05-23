@@ -33,6 +33,22 @@ export const Renting = schemaBuilder.loadableNode(RentingRef, {
   load: (ids: number[], { pool }) =>
     db.select("Renting", { id: dc.isIn(ids) }).run(pool),
   fields: (t) => ({
+    totalPriceEuroCents: t.field({
+      type: "Int",
+      resolve: async (renting, _args, { auth, pool }) => {
+        const listing = await db
+          .selectOne("Listing", { id: renting.listingId })
+          .run(pool)
+        if (!listing || renting.renterId !== auth?.id) return
+
+        const durationDays = eachDayOfInterval({
+          start: db.toDate(renting.scheduledStartTime),
+          end: db.toDate(renting.scheduledEndTime),
+        }).length
+
+        return durationDays * listing.dayPriceEuroCents
+      },
+    }),
     paymentIntentClientSecret: t.field({
       type: "String",
       resolve: async (renting, _args, { auth, pool }) => {

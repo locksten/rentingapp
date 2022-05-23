@@ -64,9 +64,11 @@ export const FeedbackScreen: VFC<
             />
           </View>
         )}
-        <View style={tw("px-4")}>
+        <View style={tw("items-center")}>
           <MainButton
-            text="Report"
+            style={tw("px-4")}
+            secondary
+            text="Report Feedback"
             toCommon={{ screen: "MakeReport", params: { feedbackId } }}
           />
         </View>

@@ -9,6 +9,59 @@
 			"position": "relative"
 		}
 	},
+	"inset-0": {
+		"style": {
+			"top": 0,
+			"right": 0,
+			"bottom": 0,
+			"left": 0
+		}
+	},
+	"top-0": {
+		"style": {
+			"top": 0
+		}
+	},
+	"left-0": {
+		"style": {
+			"left": 0
+		}
+	},
+	"top-8": {
+		"style": {
+			"top": 32
+		}
+	},
+	"-top-8": {
+		"style": {
+			"top": -32
+		}
+	},
+	"-top-3": {
+		"style": {
+			"top": -12
+		}
+	},
+	"-top-2": {
+		"style": {
+			"top": -8
+		}
+	},
+	"-top-4": {
+		"style": {
+			"top": -16
+		}
+	},
+	"-left-1": {
+		"style": {
+			"left": -4
+		}
+	},
+	"-top-1": {
+		"style": {
+			"top": -4
+		}
+	},
 	"mx-2": {
 		"style": {
 			"marginLeft": 8,
@@ -113,6 +166,11 @@
 	"w-24": {
 		"style": {
 			"width": 96
+		}
+	},
+	"w-8": {
+		"style": {
+			"width": 32
 		}
 	},
 	"max-w-xl": {
@@ -468,9 +526,54 @@
 			"backgroundColor": "rgb(204 251 241 / var(--tw-bg-opacity))"
 		}
 	},
+	"bg-red-400": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(248 113 113 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-red-800": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(153 27 27 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-primary-700": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(15 118 110 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-black": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(0 0 0 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-blue-800": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(30 64 175 / var(--tw-bg-opacity))"
+		}
+	},
 	"bg-opacity-70": {
 		"style": {
 			"--tw-bg-opacity": 0.7
+		}
+	},
+	"bg-opacity-50": {
+		"style": {
+			"--tw-bg-opacity": 0.5
+		}
+	},
+	"bg-opacity-20": {
+		"style": {
+			"--tw-bg-opacity": 0.2
+		}
+	},
+	"bg-opacity-30": {
+		"style": {
+			"--tw-bg-opacity": 0.3
 		}
 	},
 	"p-2": {
@@ -703,6 +806,16 @@
 			"fontWeight": "500"
 		}
 	},
+	"font-light": {
+		"style": {
+			"fontWeight": "300"
+		}
+	},
+	"font-extralight": {
+		"style": {
+			"fontWeight": "200"
+		}
+	},
 	"leading-none": {
 		"style": {
 			"lineHeight": 1
@@ -820,6 +933,18 @@
 		"style": {
 			"--tw-text-opacity": 1,
 			"color": "rgb(194 65 12 / var(--tw-text-opacity))"
+		}
+	},
+	"text-gray-300": {
+		"style": {
+			"--tw-text-opacity": 1,
+			"color": "rgb(209 213 219 / var(--tw-text-opacity))"
+		}
+	},
+	"text-gray-900": {
+		"style": {
+			"--tw-text-opacity": 1,
+			"color": "rgb(17 24 39 / var(--tw-text-opacity))"
 		}
 	},
 	"opacity-0": {

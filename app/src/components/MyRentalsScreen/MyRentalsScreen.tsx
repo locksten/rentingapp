@@ -64,6 +64,7 @@ export const MyRentals = gql(/* GraphQL */ `
             scheduledStartTime
             scheduledEndTime
             rentingStatus
+            totalPriceEuroCents
             updatedAt
             renterFeedback {
               __typename
@@ -113,7 +114,10 @@ const HomeScreen: VFC<
                     <View style={tw("flex-row")}>
                       <CancelRentingButton rentingId={item.id} />
                       <View style={tw("w-1")} />
-                      <PayForRentingButton rentingId={item.id} />
+                      <PayForRentingButton
+                        rentingId={item.id}
+                        totalPrice={item.totalPriceEuroCents}
+                      />
                     </View>
                   ),
                   ReturnPending: !!endDate && (

@@ -3,6 +3,7 @@ import { gql } from "@gql/gql"
 import { useStripe } from "@stripe/stripe-react-native"
 import React, { useState, VFC } from "react"
 import { toastError } from "src/toast"
+import { centsToEuroString } from "src/utils"
 import { useTailwind } from "tailwind-rn/dist"
 import { useClient } from "urql"
 
@@ -18,9 +19,10 @@ export const RentingPaymentIntent = gql(/* GraphQL */ `
   }
 `)
 
-export const PayForRentingButton: VFC<{ rentingId: string }> = ({
-  rentingId,
-}) => {
+export const PayForRentingButton: VFC<{
+  rentingId: string
+  totalPrice?: number | null
+}> = ({ rentingId, totalPrice }) => {
   const tw = useTailwind()
   const client = useClient()
   const [isSuccess, setIsSuccess] = useState(false)
@@ -47,6 +49,7 @@ export const PayForRentingButton: VFC<{ rentingId: string }> = ({
     const { error } = await initPaymentSheet({
       paymentIntentClientSecret,
       allowsDelayedPaymentMethods: true,
+      merchantDisplayName: "Rentingapp",
     })
     console.log(error)
     openPaymentSheet()
@@ -54,12 +57,20 @@ export const PayForRentingButton: VFC<{ rentingId: string }> = ({
 
   const openPaymentSheet = async () => {
     const { error } = await presentPaymentSheet()
-    error ? toastError(error.message) : setIsSuccess(true)
+    error && error.code !== "Canceled"
+      ? toastError(error.message)
+      : setIsSuccess(true)
   }
 
   return (
     <MainButton
-      text={isSuccess ? "Paid" : "Pay"}
+      text={
+        isSuccess
+          ? "Paid"
+          : totalPrice
+          ? `Pay ${centsToEuroString(totalPrice)}€`
+          : "Pay"
+      }
       onPress={
         isSuccess
           ? undefined

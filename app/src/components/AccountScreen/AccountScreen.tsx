@@ -177,7 +177,8 @@ const HomeScreen: VFC<
                   toastError()
                   return
                 }
-                WebBrowser.openBrowserAsync(stripeOnboardingLink)
+                await WebBrowser.openBrowserAsync(stripeOnboardingLink)
+                refetch()
               }}
             />
           )}

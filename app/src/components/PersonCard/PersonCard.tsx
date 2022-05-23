@@ -199,7 +199,7 @@ const Rentings: VFC<{ asOwner?: number | null; asRenter?: number | null }> = ({
     <Fact
       name="Rentings"
       icon={"repeat"}
-      value={`${asOwner ?? 0}↑ ${asRenter ?? 0}↓`}
+      value={`${asRenter ?? 0}↓ ${asOwner ?? 0}↑`}
     />
   )
 }

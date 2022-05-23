@@ -56,6 +56,8 @@ export const SignUp: VFC<
           text={
             imageUpload.status === "uploaded"
               ? undefined
+              : imageUpload.status === "waiting"
+              ? "Select Profile Picture"
               : imageUploadStateMessage[imageUpload.status]
           }
           style={tw("w-24")}

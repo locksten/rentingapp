@@ -78,6 +78,9 @@ export const ChatScreen: VFC<
     if (!text) {
       toastError("Message cannot be empty")
       return
+    } else if (text.length > 1000) {
+      toastError("Message cannot exceed 1000 characters")
+      return
     }
     const submittedConversationId = (
       await send({ input: { conversationId, recipientId, text } })

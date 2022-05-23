@@ -56,11 +56,11 @@ const uploadNative = async (
           [
             {
               resize: {
-                width: type === "listing" ? 1920 : 256,
+                width: type === "listing" ? 960 : 256,
               },
             },
           ],
-          { compress: 0.7, format: SaveFormat.JPEG },
+          { compress: 0.8, format: SaveFormat.JPEG },
         )
       : selected
 
