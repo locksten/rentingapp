@@ -154,17 +154,15 @@ schemaBuilder.mutationFields((t) => ({
         : undefined
       if (!feedbackIdNumber) return
       await db
-        .update(
-          "Feedback",
-          {
-            isRemoved: true,
-            text: "(Removed Feedback)",
-            rating: 0,
-          },
-          { id: feedbackIdNumber },
-        )
+        .update("Feedback", removedFeedbackProperties, { id: feedbackIdNumber })
         .run(pool)
       return db.selectOne("Feedback", { id: feedbackIdNumber }).run(pool)
     },
   }),
 }))
+
+const removedFeedbackProperties = {
+  isRemoved: true,
+  text: "(Removed Feedback)",
+  rating: 0,
+}

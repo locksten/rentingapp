@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { View } from "react-native"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
 
@@ -37,6 +38,10 @@ export const MakeReportScreen: VFC<
   const [_, report] = useMutation(makeReport)
 
   const onReport = async () => {
+    if (reason.length > 1000) {
+      toastError("Report reason cannot exceed 1000 characters")
+      return
+    }
     await report({
       input: {
         reason,

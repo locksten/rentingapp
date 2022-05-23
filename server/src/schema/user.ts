@@ -139,11 +139,7 @@ schemaBuilder.mutationFields((t) => ({
         )
         .run(pool)
       await db
-        .update(
-          "Listing",
-          { ...removedListingProperties },
-          { ownerId: userId.id },
-        )
+        .update("Listing", removedListingProperties, { ownerId: userId.id })
         .run(pool)
       return db.selectOne("User", { id: userId.id }).run(pool)
     },

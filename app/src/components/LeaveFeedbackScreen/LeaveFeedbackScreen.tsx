@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useState, VFC } from "react"
 import { SafeAreaView, View } from "react-native"
+import { toastError } from "src/toast"
 import { useTailwind } from "tailwind-rn/dist"
 import { useMutation } from "urql"
 
@@ -77,6 +78,10 @@ export const LeaveFeedbackScreen: VFC<
             <MainButton
               text="Leave Feedback"
               onPress={async () => {
+                if (text.length > 1000) {
+                  toastError("Feedback text cannot exceed 1000 characters")
+                  return
+                }
                 await leave({
                   input: {
                     text,
