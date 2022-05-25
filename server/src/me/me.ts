@@ -1,16 +1,17 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
 import { objectIsTypeOf } from "common"
+import { AppContext } from "context"
+import { Conversation, QConversation } from "conversation/conversation"
 import { db } from "database"
+import { Listing } from "listing/listing"
 import {
   createStripeAccount,
   createStripeAccountOnboardingLink,
   getStripeAccountLoginLink,
 } from "payments"
-import { Conversation, QConversation } from "schema/conversation"
-import { Listing } from "schema/listing"
-import { Renting } from "schema/renting"
-import { schemaBuilder } from "schema/schemaBuilder"
-import { User } from "schema/user"
+import { Renting } from "renting/renting"
+import { schemaBuilder } from "schemaBuilder"
+import { User } from "user/user"
 
 export type Me = { id: string }
 export const MeRef = schemaBuilder.objectRef<Me>("Me")
@@ -45,12 +46,11 @@ export const Me = schemaBuilder.objectType(MeRef, {
     }),
     conversations: t.connection({
       type: Conversation,
-      resolve: async ({ id }, args, { pool }) => {
-        const conversations = await db.sql<QConversation.SQL, Conversation[]>`
-          SELECT ${"Conversation"}.*
-          FROM ${"Conversation"}
-          WHERE ${{ participantA: id }} OR ${{ participantB: id }}`.run(pool)
-        return resolveArrayConnection({ args }, conversations)
+      resolve: async (_, args, context) => {
+        return resolveArrayConnection(
+          { args },
+          await getMyConversations({ context }),
+        )
       },
     }),
     myRentals: t.connection({
@@ -80,3 +80,15 @@ schemaBuilder.queryFields((t) => ({
       auth ? { _type: "Me", id: auth.id } : undefined,
   }),
 }))
+
+export const getMyConversations = async ({
+  context: { auth, pool },
+}: {
+  context: AppContext
+}) =>
+  db.sql<QConversation.SQL, Conversation[]>`
+          SELECT ${"Conversation"}.*
+          FROM ${"Conversation"}
+          WHERE ${{ participantA: auth?.id }} OR ${{
+    participantB: auth?.id,
+  }}`.run(pool)

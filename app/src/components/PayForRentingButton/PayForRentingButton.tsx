@@ -51,7 +51,7 @@ export const PayForRentingButton: VFC<{
       allowsDelayedPaymentMethods: true,
       merchantDisplayName: "Rentingapp",
     })
-    console.log(error)
+    error && toastError(error.message)
     openPaymentSheet()
   }
 

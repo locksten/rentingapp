@@ -38,7 +38,15 @@ export const FeedbackListItem: VFC<{
           : { screen: "Feedback", params: { feedbackId: id } }
       }
     >
-      <ProfilePicture uri={renter?.imageUrl} style={tw("h-14")} />
+      <AppTouchable
+        toCommon={
+          renter
+            ? { screen: "Profile", params: { userId: renter.id } }
+            : undefined
+        }
+      >
+        <ProfilePicture uri={renter?.imageUrl} style={tw("h-14")} />
+      </AppTouchable>
       <View style={tw("flex-1 pl-4")}>
         <AppText style={tw("text-lg font-semibold")}>{renter?.name}</AppText>
         <Stars stars={rating} />

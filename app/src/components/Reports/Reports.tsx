@@ -19,7 +19,9 @@ const ReportFragment = gql(/* GraphQL */ `
 
 export const DismissReports = gql(/* GraphQL */ `
   mutation dismissReports($input: DismissReportsInput!) {
-    dismissReports(input: $input)
+    dismissReports(input: $input) {
+      ...ReportFragment
+    }
   }
 `)
 

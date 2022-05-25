@@ -1,16 +1,13 @@
 import { resolveArrayConnection } from "@pothos/plugin-relay"
-import { disableFirebaseAccount, getFirebaseUserById } from "auth"
-import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
+import { getFirebaseUserById } from "auth/auth"
+import { nodeResolveId, nodeIsTypeOf, idSort } from "common"
+import { Conversation, findConversation } from "conversation/conversation"
 import { db, dc } from "database"
+import { getUserRatingCount, getUserRating } from "feedback/feedback"
+import { Listing } from "listing/listing"
 import { retrieveStripeAccount } from "payments"
-import { Conversation, findConversation } from "schema/conversation"
-import {
-  feedbackAvergeRating,
-  getFeedbacksReceivedAsOwner,
-  getFeedbacksReceivedAsRenter,
-} from "schema/feedback"
-import { Listing, removedListingProperties } from "schema/listing"
-import { schemaBuilder } from "schema/schemaBuilder"
+import { banUser } from "report/report"
+import { schemaBuilder } from "schemaBuilder"
 import { User as QUser } from "zapatos/schema"
 
 export { User as QUser } from "zapatos/schema"
@@ -67,16 +64,11 @@ export const User = schemaBuilder.loadableNode(UserRef, {
           .run(pool),
     }),
     ratingCount: t.int({
-      resolve: async ({ id }, _args, { pool }) =>
-        (await getFeedbacksReceivedAsOwner(id, pool)).length +
-        (await getFeedbacksReceivedAsRenter(id, pool)).length,
+      resolve: async ({ id }, _args, context) =>
+        getUserRatingCount({ context, id }),
     }),
     rating: t.float({
-      resolve: async ({ id }, _args, { pool }) =>
-        feedbackAvergeRating([
-          ...(await getFeedbacksReceivedAsOwner(id, pool)),
-          ...(await getFeedbacksReceivedAsRenter(id, pool)),
-        ]),
+      resolve: async ({ id }, _args, context) => getUserRating({ context, id }),
     }),
   }),
 })
@@ -129,19 +121,11 @@ schemaBuilder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: BanUserInput, required: true }),
     },
-    resolve: async (_root, { input: { userId } }, { pool }) => {
-      await disableFirebaseAccount(userId.id)
-      await db
-        .update(
-          "User",
-          { isBanned: true, isAdmin: false, name: "(Banned User)" },
-          { id: userId.id },
-        )
-        .run(pool)
-      await db
-        .update("Listing", removedListingProperties, { ownerId: userId.id })
-        .run(pool)
-      return db.selectOne("User", { id: userId.id }).run(pool)
-    },
+    resolve: async (_root, { input: { userId } }, context) =>
+      banUser({
+        context,
+        id: userId.id,
+        shouldDisableFirebaseAccount: true,
+      }),
   }),
 }))

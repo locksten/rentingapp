@@ -88,7 +88,7 @@ export const RootTabNavigator: VFC = () => {
           />
         </>
       )}
-      {userDetails?.isAdmin && (
+      {user && userDetails?.isAdmin && (
         <Tab.Screen
           name="Reports"
           component={ReportsScreen}

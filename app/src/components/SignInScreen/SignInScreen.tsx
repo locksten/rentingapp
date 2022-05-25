@@ -67,7 +67,7 @@ export const SignIn: VFC<
             secondary
             to={{
               screen: "Account",
-              params: { screen: "SignUp" },
+              params: { screen: "SignUp", params: { email, password } },
             }}
           />
           <View style={tw("w-2")} />

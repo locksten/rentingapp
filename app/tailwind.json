@@ -9,6 +9,11 @@
 			"position": "relative"
 		}
 	},
+	"-ml-2": {
+		"style": {
+			"marginLeft": -8
+		}
+	},
 	"h-4": {
 		"style": {
 			"height": 16

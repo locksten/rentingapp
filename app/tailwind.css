@@ -6,6 +6,10 @@
   position: relative
 }
 
+.-ml-2 {
+  margin-left: -0.5rem
+}
+
 .h-4 {
   height: 1rem
 }

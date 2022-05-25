@@ -7,6 +7,7 @@ import { useMediaQuery } from "react-responsive"
 import { OperationContext } from "urql"
 
 LogBox.ignoreLogs(["Linking requires a build-time setting `scheme`"])
+LogBox.ignoreAllLogs()
 
 export const isTruthy = <T>(val?: T | null): val is T => !!val
 

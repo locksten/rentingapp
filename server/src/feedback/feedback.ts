@@ -1,11 +1,12 @@
-import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
+import { nodeResolveId, nodeIsTypeOf, idSort } from "common"
+import { AppContext } from "context"
 import { db, dc } from "database"
+import { Listing, QListing } from "listing/listing"
 import { Pool } from "pg"
-import { Listing, QListing } from "schema/listing"
-import { QRenting } from "schema/renting"
-import { Report } from "schema/report"
-import { schemaBuilder } from "schema/schemaBuilder"
-import { User } from "schema/user"
+import { QRenting } from "renting/renting"
+import { Report } from "report/report"
+import { schemaBuilder } from "schemaBuilder"
+import { User } from "user/user"
 import { TxnClientForSerializable } from "zapatos/db"
 import { Feedback as QFeedback } from "zapatos/schema"
 
@@ -33,11 +34,8 @@ export const Feedback = schemaBuilder.loadableNode(FeedbackRef, {
     }),
     listing: t.field({
       type: Listing,
-      resolve: async ({ id }, _args, { pool }) =>
-        (await db.selectOne("Renting", { ownerFeedbackId: id }).run(pool))
-          ?.listingId ??
-        (await db.selectOne("Renting", { renterFeedbackId: id }).run(pool))
-          ?.listingId,
+      resolve: async ({ id }, _args, context) =>
+        getFeedbackListingId({ feedbackId: id, context }),
     }),
     owner: t.field({
       type: User,
@@ -53,6 +51,18 @@ export const Feedback = schemaBuilder.loadableNode(FeedbackRef, {
     }),
   }),
 })
+
+export const getFeedbackListingId = async ({
+  feedbackId,
+  context: { pool },
+}: {
+  feedbackId: number
+  context: AppContext
+}) =>
+  (await db.selectOne("Renting", { ownerFeedbackId: feedbackId }).run(pool))
+    ?.listingId ??
+  (await db.selectOne("Renting", { renterFeedbackId: feedbackId }).run(pool))
+    ?.listingId
 
 schemaBuilder.objectFields(Feedback, (t) => ({
   reports: t.field({
@@ -88,6 +98,44 @@ export const feedbackAvergeRating = (feedbacks: Feedback[]) => {
   return ratings.reduce((total, rating) => total + rating, 0) / ratings.length
 }
 
+export const average = (numbers: number[]) => {
+  if (!numbers.length) return undefined
+  return numbers.reduce((total, rating) => total + rating, 0) / numbers.length
+}
+
+export const leaveFeedback = async ({
+  rentingId,
+  rating,
+  text,
+  context: { auth, pool },
+}: {
+  rentingId: number
+  rating: number
+  text?: string | null
+  context: AppContext
+}) => {
+  if (rating < 1 || rating > 5) return
+  return await db.serializable(pool, async (txn) => {
+    const feedback = await db
+      .insert("Feedback", {
+        rating,
+        text,
+      })
+      .run(txn)
+    const renting = await db.selectOne("Renting", { id: rentingId }).run(txn)
+    if (!renting) return
+    const update: QRenting.Updatable | undefined =
+      auth?.id === renting.renterId
+        ? { renterFeedbackId: feedback.id }
+        : auth?.id === renting.ownerId
+        ? { ownerFeedbackId: feedback.id }
+        : undefined
+    if (!update) return
+    await db.update("Renting", update, { id: rentingId }).run(txn)
+    return feedback
+  })
+}
+
 const LeaveFeedbackInput = schemaBuilder.inputType("LeaveFeedbackInput", {
   fields: (t) => ({
     rentingId: t.globalID({ required: true }),
@@ -103,41 +151,25 @@ schemaBuilder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: LeaveFeedbackInput, required: true }),
     },
-    resolve: async (
-      _root,
-      { input: { rentingId, rating, text } },
-      { pool, auth },
-    ) => {
-      return await db.serializable(pool, async (txn) => {
-        const feedback = await db
-          .insert("Feedback", {
-            rating,
-            text,
-          })
-          .run(txn)
-        const renting = await db
-          .selectOne("Renting", { id: Number(rentingId.id) })
-          .run(txn)
-        if (!renting) return
-        const update: QRenting.Updatable | undefined =
-          auth.id === renting.renterId
-            ? { renterFeedbackId: feedback.id }
-            : auth.id === renting.ownerId
-            ? { ownerFeedbackId: feedback.id }
-            : undefined
-        if (!update) return
-        await db
-          .update("Renting", update, { id: Number(rentingId.id) })
-          .run(txn)
-        return feedback
-      })
-    },
+    resolve: async (_root, { input: { rentingId, rating, text } }, context) =>
+      leaveFeedback({ rentingId: Number(rentingId.id), context, rating, text }),
   }),
 }))
 
+export const removeFeedback = async ({
+  id,
+  context: { pool },
+}: {
+  id: number
+  context: AppContext
+}) => {
+  await db.update("Feedback", removedFeedbackProperties, { id }).run(pool)
+  return db.selectOne("Feedback", { id }).run(pool)
+}
+
 const RemoveFeedbackInput = schemaBuilder.inputType("RemoveFeedbackInput", {
   fields: (t) => ({
-    feedbackId: t.globalID(),
+    feedbackId: t.globalID({ required: true }),
   }),
 })
 
@@ -148,16 +180,8 @@ schemaBuilder.mutationFields((t) => ({
     args: {
       input: t.arg({ type: RemoveFeedbackInput, required: true }),
     },
-    resolve: async (_root, { input: { feedbackId } }, { pool }) => {
-      const feedbackIdNumber = Number(feedbackId?.id)
-        ? Number(feedbackId?.id)
-        : undefined
-      if (!feedbackIdNumber) return
-      await db
-        .update("Feedback", removedFeedbackProperties, { id: feedbackIdNumber })
-        .run(pool)
-      return db.selectOne("Feedback", { id: feedbackIdNumber }).run(pool)
-    },
+    resolve: async (_root, { input: { feedbackId } }, context) =>
+      removeFeedback({ id: Number(feedbackId.id), context }),
   }),
 }))
 
@@ -166,3 +190,25 @@ const removedFeedbackProperties = {
   text: "(Removed Feedback)",
   rating: 0,
 }
+
+export const getUserRatingCount = async ({
+  id,
+  context: { pool },
+}: {
+  id: string
+  context: AppContext
+}) =>
+  (await getFeedbacksReceivedAsOwner(id, pool)).length +
+  (await getFeedbacksReceivedAsRenter(id, pool)).length
+
+export const getUserRating = async ({
+  id,
+  context: { pool },
+}: {
+  id: string
+  context: AppContext
+}) =>
+  feedbackAvergeRating([
+    ...(await getFeedbacksReceivedAsOwner(id, pool)),
+    ...(await getFeedbacksReceivedAsRenter(id, pool)),
+  ])

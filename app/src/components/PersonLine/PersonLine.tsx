@@ -1,4 +1,5 @@
 import { AppText } from "@components/AppText"
+import { AppTouchable } from "@components/AppTouchable"
 import { ProfilePicture } from "@components/ProfilePicture"
 import { DocumentType, gql } from "@gql/gql"
 import React, { VFC } from "react"
@@ -21,17 +22,21 @@ export const PersonLine: VFC<{
 }> = ({ person, pfpLeft }) => {
   const tw = useTailwind()
   return person ? (
-    <View
-      style={[
-        pfpLeft ? tw("flex-row-reverse") : tw("flex-row"),
-        tw("items-center flex-shrink"),
-      ]}
+    <AppTouchable
+      toCommon={{ screen: "Profile", params: { userId: person.id } }}
     >
-      <AppText numberOfLines={1} style={tw("flex-shrink text-gray-600")}>
-        {person.name}
-      </AppText>
-      <View style={tw("w-1")} />
-      <ProfilePicture uri={person.imageUrl} style={tw("h-8")} />
-    </View>
+      <View
+        style={[
+          pfpLeft ? tw("flex-row-reverse") : tw("flex-row"),
+          tw("items-center flex-shrink"),
+        ]}
+      >
+        <AppText numberOfLines={1} style={tw("flex-shrink text-gray-600")}>
+          {person.name}
+        </AppText>
+        <View style={tw("w-1")} />
+        <ProfilePicture uri={person.imageUrl} style={tw("h-8")} />
+      </View>
+    </AppTouchable>
   ) : null
 }

@@ -1,11 +1,7 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  testEnvironment: "node",
   preset: "ts-jest",
+  testEnvironment: "node",
   moduleDirectories: ["node_modules", "src"],
-  roots: ["<rootDir>/src"],
+  testMatch: ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(spec|test).ts?(x)"],
 }
-
-process.env = Object.assign(process.env, {
-  DATABASE: "postgres://postgres:password@localhost:5432/rentingapp_test",
-})

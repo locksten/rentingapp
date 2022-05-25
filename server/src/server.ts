@@ -9,7 +9,7 @@ import express, { Express } from "express"
 import fileUpload from "express-fileupload"
 import * as fs from "fs"
 import { getIntrospectionQuery } from "graphql"
-import { schema } from "schema/schema"
+import { schema } from "schema"
 import { fileUploadHandler } from "storage"
 
 const server = new ApolloServer({

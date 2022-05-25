@@ -13,16 +13,20 @@ import { useTailwind } from "tailwind-rn"
 
 export const SignUp: VFC<
   NativeStackScreenProps<AccountScreenParams, "SignUp">
-> = () => {
+> = ({
+  route: {
+    params: { email, password },
+  },
+}) => {
   const tw = useTailwind()
   const [name, onChangeName] = useState("")
   const { imageUpload, pickImage } = useUploadImage("user")
 
   const signUp = async () => {
-    if (!registrationDetails.email) {
+    if (!email) {
       toastError("Email is required")
       return
-    } else if (!registrationDetails.password) {
+    } else if (!password) {
       toastError("Password is required")
       return
     }
@@ -36,14 +40,7 @@ export const SignUp: VFC<
       toastError("Name must not be more than 50 characters long")
       return
     }
-    handleAuthErrors(() =>
-      emailSignUp(
-        registrationDetails.email,
-        registrationDetails.password,
-        name,
-        imageUpload.uri,
-      ),
-    )
+    handleAuthErrors(() => emailSignUp(email, password, name, imageUpload.uri))
   }
 
   return (

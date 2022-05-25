@@ -156,8 +156,6 @@ export const handleAuthErrors = async (authFn: () => Promise<void>) => {
   try {
     await authFn()
   } catch (e: any) {
-    console.log(JSON.stringify(e))
-    console.log(`>${e.message}<`)
     const errMsg = (e.message as string).match(/\(([^)]+)\)/)?.[1]
     toastError(
       {

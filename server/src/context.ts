@@ -1,13 +1,11 @@
 import { ExpressContext } from "apollo-server-express/dist/ApolloServer"
-import { decodedFirebaseTokenFromHeader, getFirebaseUserById } from "auth"
-import { db } from "database"
+import { decodedFirebaseTokenFromHeader, getFirebaseUserById } from "auth/auth"
+import { createDatabasePool, db } from "database"
 import { DecodedIdToken } from "firebase-admin/auth"
 import { Pool } from "pg"
 import { TxnClientForSerializable } from "zapatos/db"
 
-export const pool = new Pool({
-  connectionString: process.env.DATABASE,
-})
+export const pool = createDatabasePool()
 
 export type LoggedInAuthContext = {
   id: string

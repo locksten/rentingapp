@@ -2,7 +2,7 @@ import { AppText } from "@components/AppText"
 import { MainButton } from "@components/MainButton"
 import { MediumListWidth } from "@components/MediumListWidth"
 import { PersonCard } from "@components/PersonCard"
-import { RootTabs } from "@components/RootTabNavigator"
+import { RootTabs, RootTabsNavigationProp } from "@components/RootTabNavigator"
 import { SignIn } from "@components/SignInScreen"
 import { SignUp } from "@components/SignUpScreen"
 import {
@@ -11,6 +11,7 @@ import {
 } from "@components/WithCommonStackScreens"
 import { gql } from "@gql/gql"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import { useNavigation, CommonActions } from "@react-navigation/native"
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -28,7 +29,7 @@ import { useClient, useQuery } from "urql"
 export type AccountScreenParams = CommonStackParams & {
   Home: undefined
   SignIn: undefined
-  SignUp: undefined
+  SignUp: { email: string; password: string }
 }
 
 const Stack = createNativeStackNavigator<AccountScreenParams>()
@@ -103,6 +104,7 @@ const HomeScreen: VFC<
   const user = useCurrentUser()
   const client = useClient()
   const resetClient = useGQLClient().resetClient
+  const navigation = useNavigation<RootTabsNavigationProp>()
 
   const [{ data, error }, refetch] = useQuery({
     query: MyAccountDetails,
@@ -133,6 +135,17 @@ const HomeScreen: VFC<
             onPress={() => {
               signOut()
               resetClient()
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [
+                    { name: "Browse" },
+                    {
+                      name: "Account",
+                    },
+                  ],
+                }),
+              )
             }}
           />
         </View>

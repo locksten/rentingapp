@@ -20,6 +20,7 @@ services:
       - "4000:4000"
     networks:
       - my_app
+    env_file: config.env
 networks:
   my_app:
     driver: bridge

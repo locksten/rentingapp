@@ -232,7 +232,7 @@ export const OwnerRenting: VFC<{
     ),
     RequestDeclined: <Pill color="gray">Declined</Pill>,
     PaymentPending: (
-      <View style={tw("flex-row items-center")}>
+      <View style={tw("-ml-2 flex-row items-center")}>
         <Pill color="green">Awaiting Payment</Pill>
         <View style={tw("pl-2")}>
           <MainButton
@@ -245,12 +245,17 @@ export const OwnerRenting: VFC<{
       </View>
     ),
     ReturnPending: (
-      <MainButton
-        text="Confirm Returned"
-        onPress={async () => {
-          await acceptReturn({ input: { rentingId } })
-        }}
-      />
+      <View style={tw("-ml-2 flex-row items-center")}>
+        <Pill color="green">Awaiting Return</Pill>
+        <View style={tw("pl-2")}>
+          <MainButton
+            text="Confirm Returned"
+            onPress={async () => {
+              await acceptReturn({ input: { rentingId } })
+            }}
+          />
+        </View>
+      </View>
     ),
     Returned: (
       <View style={tw("flex-row items-center")}>

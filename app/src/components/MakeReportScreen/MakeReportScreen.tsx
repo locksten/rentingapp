@@ -56,6 +56,7 @@ export const MakeReportScreen: VFC<
     <MediumListWidth style={tw("justify-between px-4 py-4")}>
       <SeparatedBy separator={<View style={tw("h-2")} />}>
         <AppTextInput
+          multiline
           label="Reason"
           value={reason}
           onChangeText={onChangeReason}

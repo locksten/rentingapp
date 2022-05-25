@@ -3,7 +3,7 @@ import { getAuth } from "firebase-admin/auth"
 import { IncomingHttpHeaders } from "http"
 
 initializeApp({
-  credential: cert(require("../firebaseAdminKey.json")),
+  credential: cert(require("../../firebaseAdminKey.json")),
 })
 
 export const decodeFirebaseToken = async (token?: string) => {

@@ -1,8 +1,9 @@
-import { idSort, nodeIsTypeOf, nodeResolveId } from "common"
+import { nodeResolveId, nodeIsTypeOf, idSort } from "common"
+import { AppContext } from "context"
+import { ConversationRef, findConversation } from "conversation/conversation"
 import { db, dc } from "database"
-import { ConversationRef, findConversation } from "schema/conversation"
-import { schemaBuilder } from "schema/schemaBuilder"
-import { User } from "schema/user"
+import { schemaBuilder } from "schemaBuilder"
+import { User } from "user/user"
 import { Message as QMessage } from "zapatos/schema"
 
 export { Message as QMessage } from "zapatos/schema"
@@ -35,6 +36,46 @@ export const Message = schemaBuilder.loadableNode(MessageRef, {
   }),
 })
 
+export const sendMessage = async ({
+  recipientId,
+  conversationId,
+  text,
+  context: { auth, pool },
+}: {
+  recipientId?: string
+  conversationId?: number
+  text: string
+  context: AppContext
+}) => {
+  return db.serializable(pool, async (txn) => {
+    if (!auth) return
+    const convoId = conversationId
+      ? conversationId
+      : recipientId
+      ? (
+          (await findConversation({
+            participants: [auth.id, recipientId],
+            pool,
+          })) ??
+          (await db
+            .insert("Conversation", {
+              participantA: auth.id,
+              participantB: recipientId,
+            })
+            .run(txn))
+        )?.id
+      : undefined
+    if (!convoId) return
+    return db
+      .insert("Message", {
+        senderId: auth.id,
+        conversationId: convoId,
+        text: text,
+      })
+      .run(txn)
+  })
+}
+
 const SendMessageInput = schemaBuilder.inputType("SendMessageInput", {
   fields: (t) => ({
     conversationId: t.globalID(),
@@ -53,35 +94,13 @@ schemaBuilder.mutationFields((t) => ({
     resolve: async (
       _root,
       { input: { conversationId, recipientId, text } },
-      { pool, auth },
-    ) => {
-      return db.serializable(pool, async (txn) => {
-        const convoId = Number(conversationId?.id)
-          ? Number(conversationId?.id)
-          : recipientId
-          ? (
-              (await findConversation({
-                participants: [auth.id, recipientId.id],
-                pool,
-              })) ??
-              (await db
-                .insert("Conversation", {
-                  participantA: auth.id,
-                  participantB: recipientId.id,
-                })
-                .run(txn))
-            )?.id
-          : undefined
-        if (!convoId) return
-
-        return db
-          .insert("Message", {
-            senderId: auth.id,
-            conversationId: convoId,
-            text: text,
-          })
-          .run(txn)
-      })
-    },
+      context,
+    ) =>
+      sendMessage({
+        conversationId: Number(conversationId?.id),
+        recipientId: recipientId?.id,
+        text,
+        context,
+      }),
   }),
 }))
